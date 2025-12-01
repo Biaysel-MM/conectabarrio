@@ -1,5 +1,5 @@
 # conectabarrio
- conectabarrio-frontend/
+conectabarrio-frontend/
 │
 ├── 📄 index.html                      (Página Principal)
 ├── 🔐 auth/                           (Autenticación)
@@ -43,3 +43,4 @@
 │   └── main.js                        (Lógica de la aplicación)
 └── 🖼️ assets/
     └── (Imágenes, iconos y recursos)
+    
