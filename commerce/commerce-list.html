@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comercios - ConectaBarrio</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* ESTILOS ESPECÍFICOS PARA COMMERCE-LIST */
+        :root {
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #fff;
+        }
+
+        /* MAIN CONTENT */
+        .commerce-list-page {
+            padding: 2rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-header h1 {
+            color: var(--dark);
+            font-size: 2.2rem;
+        }
+
+        .search-bar {
+            display: flex;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 50px;
+            padding: 0.5rem;
+            min-width: 300px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .search-bar input {
+            flex: 1;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            outline: none;
+            background: transparent;
+        }
+
+        .btn-search {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-search:hover {
+            background: #1a6a8f;
+        }
+
+        /* FILTROS */
+        .filters-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .filters-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .filters-header h3 {
+            color: var(--dark);
+            font-size: 1.2rem;
+        }
+
+        .clear-filters {
+            color: var(--primary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-decoration: underline;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .filter-select {
+            padding: 0.75rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .advanced-filters {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .advanced-filters.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1rem;
+        }
+
+        .btn-filter {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .btn-filter:hover {
+            background: #d97d01;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* RESULTADOS */
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .results-count {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .sort-options {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sort-select {
+            padding: 0.5rem;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            background: white;
+            cursor: pointer;
+        }
+
+        /* COMERCIOS GRID */
+        .commerce-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .commerce-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .commerce-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .commerce-image {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .commerce-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .commerce-card:hover .commerce-image img {
+            transform: scale(1.05);
+        }
+
+        .status {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status.open {
+            background: var(--success);
+            color: white;
+        }
+
+        .status.closed {
+            background: var(--danger);
+            color: white;
+        }
+
+        .status.closing {
+            background: var(--warning);
+            color: var(--dark);
+        }
+
+        .favorite-btn {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .favorite-btn:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .favorite-btn.active {
+            color: var(--danger);
+        }
+
+        .commerce-info {
+            padding: 1.5rem;
+        }
+
+        .commerce-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .commerce-info h3 {
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stars {
+            color: var(--accent);
+        }
+
+        .rating-count {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .category {
+            display: inline-block;
+            background: var(--light);
+            color: var(--primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .address {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .description {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: var(--light);
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .commerce-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            background: #1a6a8f;
+            transform: translateY(-1px);
+        }
+
+        .btn-icon {
+            background: var(--light);
+            border: none;
+            border-radius: 8px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .btn-icon:hover {
+            background: #e9ecef;
+            transform: scale(1.1);
+        }
+
+        /* PAGINACIÓN */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .pagination-btn {
+            background: white;
+            border: 2px solid #e9ecef;
+            color: var(--dark);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .pagination-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .pagination-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .pagination-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-btn.disabled:hover {
+            border-color: #e9ecef;
+            color: var(--dark);
+        }
+
+        /* MAPA MINI */
+        .map-toggle {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(46, 134, 171, 0.3);
+            transition: all 0.3s;
+        }
+
+        .map-toggle:hover {
+            background: #1a6a8f;
+            transform: translateY(-2px);
+        }
+
+        .mini-map {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 400px;
+            height: 300px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 1001;
+            display: none;
+            overflow: hidden;
+        }
+
+        .mini-map.show {
+            display: block;
+            animation: slideInUp 0.3s ease;
+        }
+
+        .map-header {
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .map-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .map-content {
+            height: calc(100% - 60px);
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+        }
+
+        /* LOADING */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e9ecef;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        /* NO RESULTS */
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray);
+        }
+
+        .no-results img {
+            width: 200px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* ANIMACIONES */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-bar {
+                min-width: auto;
+            }
+
+            .commerce-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mini-map {
+                width: calc(100vw - 2rem);
+                right: 1rem;
+                left: 1rem;
+            }
+
+            .map-toggle {
+                right: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .commerce-list-page {
+                padding: 1rem;
+            }
+
+            .commerce-actions {
+                flex-direction: column;
+            }
+
+            .filter-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+<!-- En el body de cada página -->
+<div id="dynamic-navbar"></div>
+<!-- El resto del contenido de tu página -->
+
+    <!-- MAIN CONTENT -->
+    <main class="commerce-list-page">
+        <!-- HEADER Y BÚSQUEDA -->
+        <div class="page-header">
+            <h1>Comercios en tu zona</h1>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Buscar comercios, productos...">
+                <button class="btn-search" id="searchBtn">🔍</button>
+            </div>
+        </div>
+
+        <!-- FILTROS -->
+        <section class="filters-section">
+            <div class="filters-header">
+                <h3>Filtros</h3>
+                <button class="clear-filters" id="clearFilters">Limpiar filtros</button>
+            </div>
+
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label for="categoryFilter">Categoría</label>
+                    <select class="filter-select" id="categoryFilter">
+                        <option value="">Todas las categorías</option>
+                        <option value="colmado">Colmados</option>
+                        <option value="panaderia">Panaderías</option>
+                        <option value="farmacia">Farmacias</option>
+                        <option value="restaurante">Restaurantes</option>
+                        <option value="peluqueria">Peluquerías</option>
+                        <option value="otros">Otros</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="neighborhoodFilter">Barrio</label>
+                    <select class="filter-select" id="neighborhoodFilter">
+                        <option value="">Todos los barrios</option>
+                        <option value="colonial">Zona Colonial</option>
+                        <option value="gazcue">Gazcue</option>
+                        <option value="naco">Naco</option>
+                        <option value="piantini">Piantini</option>
+                        <option value="bella-vista">Bella Vista</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="statusFilter">Estado</label>
+                    <select class="filter-select" id="statusFilter">
+                        <option value="">Todos</option>
+                        <option value="open">Abierto ahora</option>
+                        <option value="delivery">Con delivery</option>
+                        <option value="pickup">Recoge en tienda</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="ratingFilter">Calificación mínima</label>
+                    <select class="filter-select" id="ratingFilter">
+                        <option value="0">Todas</option>
+                        <option value="4">4+ estrellas</option>
+                        <option value="4.5">4.5+ estrellas</option>
+                        <option value="5">5 estrellas</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- FILTROS AVANZADOS -->
+            <button class="btn-filter" id="toggleAdvancedFilters">+ Filtros Avanzados</button>
+
+            <div class="advanced-filters" id="advancedFilters">
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label for="priceRange">Rango de precios</label>
+                        <select class="filter-select" id="priceRange">
+                            <option value="">Todos</option>
+                            <option value="low">$ (Económico)</option>
+                            <option value="medium">$$ (Moderado)</option>
+                            <option value="high">$$$ (Premium)</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="deliveryTime">Tiempo de delivery</label>
+                        <select class="filter-select" id="deliveryTime">
+                            <option value="">Cualquiera</option>
+                            <option value="30">Hasta 30 min</option>
+                            <option value="45">Hasta 45 min</option>
+                            <option value="60">Hasta 60 min</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="paymentMethods">Métodos de pago</label>
+                        <select class="filter-select" id="paymentMethods">
+                            <option value="">Todos</option>
+                            <option value="cash">Efectivo</option>
+                            <option value="card">Tarjeta</option>
+                            <option value="transfer">Transferencia</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="distance">Distancia máxima</label>
+                        <select class="filter-select" id="distance">
+                            <option value="">Cualquiera</option>
+                            <option value="1">1 km</option>
+                            <option value="3">3 km</option>
+                            <option value="5">5 km</option>
+                            <option value="10">10 km</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="filter-actions">
+                    <button class="btn-secondary" id="applyFilters">Aplicar Filtros</button>
+                    <button class="btn-filter" id="resetAdvancedFilters">Restablecer</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- RESULTADOS -->
+        <section class="results-section">
+            <div class="results-header">
+                <div class="results-count" id="resultsCount">
+                    Mostrando <span id="count">12</span> de <span id="total">47</span> comercios
+                </div>
+                <div class="sort-options">
+                    <label for="sortSelect">Ordenar por:</label>
+                    <select class="sort-select" id="sortSelect">
+                        <option value="relevance">Relevancia</option>
+                        <option value="rating">Mejor calificados</option>
+                        <option value="distance">Más cercanos</option>
+                        <option value="delivery">Mejor delivery</option>
+                        <option value="name">Nombre A-Z</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- COMERCIOS GRID -->
+            <div class="commerce-grid" id="commerceGrid">
+                <!-- Los comercios se cargan dinámicamente aquí -->
+            </div>
+
+            <!-- PAGINACIÓN -->
+            <div class="pagination" id="pagination">
+                <button class="pagination-btn disabled" id="prevPage">‹ Anterior</button>
+                <button class="pagination-btn active">1</button>
+                <button class="pagination-btn">2</button>
+                <button class="pagination-btn">3</button>
+                <button class="pagination-btn" id="nextPage">Siguiente ›</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- BOTÓN MAPA -->
+    <button class="map-toggle" id="mapToggle">🗺️ Ver Mapa</button>
+
+    <!-- MINI MAPA -->
+    <div class="mini-map" id="miniMap">
+        <div class="map-header">
+            <h4>Comercios en el mapa</h4>
+            <button class="map-close" id="mapClose">×</button>
+        </div>
+        <div class="map-content">
+            🗺️ Mapa interactivo de comercios
+        </div>
+    </div>
+
+    <script>
+        // DATOS DE EJEMPLO - COMERCIOS
+        const commerceData = [
+            {
+                id: 1,
+                name: "Colmado San Miguel",
+                category: "colmado",
+                neighborhood: "colonial",
+                rating: 4.2,
+                reviewCount: 128,
+                address: "Calle Principal #123, Zona Colonial",
+                description: "Productos frescos y delivery rápido en toda la zona. Especialistas en abarrotes y víveres.",
+                image: "../assets/colmado-miguel.jpg",
+                status: "open",
+                features: ["delivery", "pickup", "24h"],
+                deliveryTime: "30-45 min",
+                priceRange: "low"
+            },
+            {
+                id: 2,
+                name: "Panadería Doña Rosa",
+                category: "panaderia",
+                neighborhood: "gazcue",
+                rating: 4.8,
+                reviewCount: 89,
+                address: "Av. Independencia #456, Gazcue",
+                description: "Pan recién horneado todos los días. Especialistas en postres tradicionales y pasteles.",
+                image: "../assets/panaderia-rosa.jpg",
+                status: "open",
+                features: ["delivery", "pickup", "fresh"],
+                deliveryTime: "20-30 min",
+                priceRange: "low"
+            },
+            {
+                id: 3,
+                name: "Farmacia La Esperanza",
+                category: "farmacia",
+                neighborhood: "naco",
+                rating: 4.5,
+                reviewCount: 67,
+                address: "Calle Dr. Delgado #789, Naco",
+                description: "Farmacia completa con delivery de medicamentos y productos de cuidado personal.",
+                image: "../assets/farmacia.jpg",
+                status: "open",
+                features: ["delivery", "24h", "prescriptions"],
+                deliveryTime: "25-40 min",
+                priceRange: "medium"
+            },
+            {
+                id: 4,
+                name: "Restaurante Sabores Criollos",
+                category: "restaurante",
+                neighborhood: "colonial",
+                rating: 4.6,
+                reviewCount: 203,
+                address: "Calle Las Damas #321, Zona Colonial",
+                description: "Auténtica comida dominicana con los sabores tradicionales de nuestra tierra.",
+                image: "../assets/supermercado.jpg",
+                status: "closing",
+                features: ["delivery", "reservations", "family"],
+                deliveryTime: "40-60 min",
+                priceRange: "medium"
+            },
+            {
+                id: 5,
+                name: "Peluquería Estilo Moderno",
+                category: "peluqueria",
+                neighborhood: "piantini",
+                rating: 4.3,
+                reviewCount: 45,
+                address: "Plaza Piantini Local #15, Piantini",
+                description: "Cortes modernos y servicios de belleza profesional. Estilistas certificados.",
+                image: "../assets/peluqueria-estilo.jpg",
+                status: "open",
+                features: ["appointments", "styling", "beauty"],
+                deliveryTime: null,
+                priceRange: "medium"
+            },
+            {
+                id: 6,
+                name: "Supermercado El Ahorro",
+                category: "colmado",
+                neighborhood: "bella-vista",
+                rating: 4.1,
+                reviewCount: 156,
+                address: "Av. Sarasota #234, Bella Vista",
+                description: "Supermercado con gran variedad de productos y precios competitivos.",
+                image: "../assets/supermercado.jpg",
+                status: "open",
+                features: ["delivery", "pickup", "groceries"],
+                deliveryTime: "45-60 min",
+                priceRange: "low"
+            },
+            {
+                id: 7,
+                name: "Cafetería La Barista",
+                category: "restaurante",
+                neighborhood: "naco",
+                rating: 4.7,
+                reviewCount: 92,
+                address: "Calle Roberto Pastoriza #567, Naco",
+                description: "Café de especialidad y deliciosos postres en un ambiente acogedor.",
+                image: "../assets/cafeteria.avif",
+                status: "open",
+                features: ["wifi", "takeout", "coffee"],
+                deliveryTime: "25-35 min",
+                priceRange: "medium"
+            },
+            {
+                id: 8,
+                name: "Lavandería Express",
+                category: "otros",
+                neighborhood: "gazcue",
+                rating: 4.0,
+                reviewCount: 34,
+                address: "Calle José Reyes #890, Gazcue",
+                description: "Servicio rápido de lavandería y planchado con recogida y entrega.",
+                image: "../assets/lavanderia.jpg",
+                status: "closed",
+                features: ["pickup", "delivery", "express"],
+                deliveryTime: "24 horas",
+                priceRange: "low"
+            }
+        ];
+
+        // VARIABLES GLOBALES
+        let currentPage = 1;
+        const itemsPerPage = 8;
+        let filteredCommerce = [...commerceData];
+        let favorites = JSON.parse(localStorage.getItem('commerceFavorites')) || [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar la aplicación
+            initCommerceList();
+            setupEventListeners();
+            renderCommerceGrid();
+            updateResultsCount();
+        });
+
+        function initCommerceList() {
+            // Aplicar filtros iniciales desde URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const category = urlParams.get('category');
+            const search = urlParams.get('search');
+            
+            if (category) {
+                document.getElementById('categoryFilter').value = category;
+            }
+            
+            if (search) {
+                document.getElementById('searchInput').value = search;
+                performSearch(search);
+            }
+        }
+
+        function setupEventListeners() {
+            // Navegación móvil
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+
+            // Búsqueda
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch(this.value);
+                }
+            });
+            
+            searchBtn.addEventListener('click', function() {
+                performSearch(searchInput.value);
+            });
+
+            // Filtros básicos
+            const filterSelects = document.querySelectorAll('.filter-select');
+            filterSelects.forEach(select => {
+                select.addEventListener('change', function() {
+                    applyFilters();
+                });
+            });
+
+            // Filtros avanzados
+            const toggleAdvancedBtn = document.getElementById('toggleAdvancedFilters');
+            const advancedFilters = document.getElementById('advancedFilters');
+            
+            toggleAdvancedBtn.addEventListener('click', function() {
+                advancedFilters.classList.toggle('show');
+                this.textContent = advancedFilters.classList.contains('show') ? 
+                    '- Ocultar Filtros' : '+ Filtros Avanzados';
+            });
+
+            // Botones de filtros
+            document.getElementById('applyFilters').addEventListener('click', applyFilters);
+            document.getElementById('resetAdvancedFilters').addEventListener('click', resetAdvancedFilters);
+            document.getElementById('clearFilters').addEventListener('click', clearAllFilters);
+
+            // Ordenamiento
+            document.getElementById('sortSelect').addEventListener('change', function() {
+                applySorting(this.value);
+                renderCommerceGrid();
+            });
+
+            // Paginación
+            document.getElementById('prevPage').addEventListener('click', goToPrevPage);
+            document.getElementById('nextPage').addEventListener('click', goToNextPage);
+
+            // Mapa
+            document.getElementById('mapToggle').addEventListener('click', toggleMap);
+            document.getElementById('mapClose').addEventListener('click', toggleMap);
+        }
+
+        function performSearch(query) {
+            const searchTerm = query.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                filteredCommerce = [...commerceData];
+            } else {
+                filteredCommerce = commerceData.filter(commerce => 
+                    commerce.name.toLowerCase().includes(searchTerm) ||
+                    commerce.description.toLowerCase().includes(searchTerm) ||
+                    commerce.category.toLowerCase().includes(searchTerm) ||
+                    commerce.neighborhood.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            currentPage = 1;
+            renderCommerceGrid();
+            updateResultsCount();
+            updatePagination();
+        }
+
+        function applyFilters() {
+            const category = document.getElementById('categoryFilter').value;
+            const neighborhood = document.getElementById('neighborhoodFilter').value;
+            const status = document.getElementById('statusFilter').value;
+            const rating = parseFloat(document.getElementById('ratingFilter').value);
+            const priceRange = document.getElementById('priceRange').value;
+            const deliveryTime = document.getElementById('deliveryTime').value;
+            const paymentMethods = document.getElementById('paymentMethods').value;
+            const distance = document.getElementById('distance').value;
+
+            filteredCommerce = commerceData.filter(commerce => {
+                // Filtro por categoría
+                if (category && commerce.category !== category) return false;
+                
+                // Filtro por barrio
+                if (neighborhood && commerce.neighborhood !== neighborhood) return false;
+                
+                // Filtro por estado
+                if (status === 'open' && commerce.status !== 'open') return false;
+                if (status === 'delivery' && !commerce.features.includes('delivery')) return false;
+                if (status === 'pickup' && !commerce.features.includes('pickup')) return false;
+                
+                // Filtro por calificación
+                if (rating > 0 && commerce.rating < rating) return false;
+                
+                // Filtros avanzados
+                if (priceRange && commerce.priceRange !== priceRange) return false;
+                if (deliveryTime && !commerce.deliveryTime) return false;
+                if (paymentMethods === 'cash' && !commerce.features.includes('cash')) return false;
+                if (paymentMethods === 'card' && !commerce.features.includes('card')) return false;
+                
+                return true;
+            });
+
+            currentPage = 1;
+            renderCommerceGrid();
+            updateResultsCount();
+            updatePagination();
+        }
+
+        function applySorting(sortBy) {
+            switch(sortBy) {
+                case 'rating':
+                    filteredCommerce.sort((a, b) => b.rating - a.rating);
+                    break;
+                case 'distance':
+                    // Simular distancia (en una app real vendría de geolocalización)
+                    filteredCommerce.sort((a, b) => a.id - b.id);
+                    break;
+                case 'delivery':
+                    filteredCommerce.sort((a, b) => {
+                        if (a.deliveryTime && !b.deliveryTime) return -1;
+                        if (!a.deliveryTime && b.deliveryTime) return 1;
+                        return 0;
+                    });
+                    break;
+                case 'name':
+                    filteredCommerce.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'relevance':
+                default:
+                    // Orden por defecto (podría ser por popularidad, etc.)
+                    filteredCommerce.sort((a, b) => b.reviewCount - a.reviewCount);
+                    break;
+            }
+        }
+
+        function resetAdvancedFilters() {
+            document.getElementById('priceRange').value = '';
+            document.getElementById('deliveryTime').value = '';
+            document.getElementById('paymentMethods').value = '';
+            document.getElementById('distance').value = '';
+        }
+
+        function clearAllFilters() {
+            // Limpiar todos los filtros
+            document.getElementById('categoryFilter').value = '';
+            document.getElementById('neighborhoodFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('ratingFilter').value = '0';
+            resetAdvancedFilters();
+            
+            // Resetear búsqueda
+            document.getElementById('searchInput').value = '';
+            
+            // Aplicar cambios
+            filteredCommerce = [...commerceData];
+            currentPage = 1;
+            renderCommerceGrid();
+            updateResultsCount();
+            updatePagination();
+        }
+
+        function renderCommerceGrid() {
+            const grid = document.getElementById('commerceGrid');
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const currentItems = filteredCommerce.slice(startIndex, endIndex);
+
+            if (currentItems.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-results">
+                        <img src="../assets/icons/no-results.svg" alt="Sin resultados">
+                        <h3>No se encontraron comercios</h3>
+                        <p>Intenta ajustar tus filtros o términos de búsqueda</p>
+                        <button class="btn-primary" onclick="clearAllFilters()">Ver todos los comercios</button>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = currentItems.map(commerce => `
+                <div class="commerce-card" data-commerce-id="${commerce.id}">
+                    <div class="commerce-image">
+                        <img src="${commerce.image}" alt="${commerce.name}" onerror="this.src='../assets/commerce/default.jpg'">
+                        <span class="status ${commerce.status}">
+                            ${getStatusText(commerce.status)}
+                        </span>
+                        <button class="favorite-btn ${favorites.includes(commerce.id) ? 'active' : ''}" 
+                                onclick="toggleFavorite(${commerce.id})">
+                            ${favorites.includes(commerce.id) ? '❤️' : '🤍'}
+                        </button>
+                    </div>
+                    
+                    <div class="commerce-info">
+                        <div class="commerce-header">
+                            <h3>${commerce.name}</h3>
+                            <div class="rating">
+                                <span class="stars">${getStarRating(commerce.rating)}</span>
+                                <span class="rating-count">${commerce.rating}</span>
+                            </div>
+                        </div>
+                        
+                        <span class="category">${getCategoryName(commerce.category)}</span>
+                        
+                        <p class="address">📍 ${commerce.address}</p>
+                        
+                        <p class="description">${commerce.description}</p>
+                        
+                        <div class="features">
+                            ${commerce.features.map(feature => `
+                                <span class="feature">${getFeatureIcon(feature)} ${getFeatureName(feature)}</span>
+                            `).join('')}
+                            ${commerce.deliveryTime ? `
+                                <span class="feature">🚚 ${commerce.deliveryTime}</span>
+                            ` : ''}
+                        </div>
+                        
+                        <div class="commerce-actions">
+                            <a href="commerce-profile.html?id=${commerce.id}" class="btn-primary">Visitar Comercio</a>
+                            <button class="btn-icon" onclick="shareCommerce(${commerce.id})" title="Compartir">
+                                📤
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getStatusText(status) {
+            const statusMap = {
+                'open': 'Abierto',
+                'closed': 'Cerrado',
+                'closing': 'Cerrando pronto'
+            };
+            return statusMap[status] || 'Abierto';
+        }
+
+        function getStarRating(rating) {
+            const fullStars = Math.floor(rating);
+            const halfStar = rating % 1 >= 0.5;
+            const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+            
+            return '★'.repeat(fullStars) + (halfStar ? '½' : '') + '☆'.repeat(emptyStars);
+        }
+
+        function getCategoryName(category) {
+            const categoryMap = {
+                'colmado': 'Colmado',
+                'panaderia': 'Panadería',
+                'farmacia': 'Farmacia',
+                'restaurante': 'Restaurante',
+                'peluqueria': 'Peluquería',
+                'otros': 'Otros Servicios'
+            };
+            return categoryMap[category] || category;
+        }
+
+        function getFeatureIcon(feature) {
+            const iconMap = {
+                'delivery': '🚚',
+                'pickup': '🏪',
+                '24h': '🕒',
+                'fresh': '🍞',
+                'prescriptions': '💊',
+                'reservations': '📅',
+                'family': '👨‍👩‍👧‍👦',
+                'appointments': '✂️',
+                'styling': '💇',
+                'beauty': '💄',
+                'groceries': '🛒',
+                'wifi': '📶',
+                'takeout': '🥡',
+                'coffee': '☕',
+                'express': '⚡',
+                'cash': '💵',
+                'card': '💳'
+            };
+            return iconMap[feature] || '✓';
+        }
+
+        function getFeatureName(feature) {
+            const nameMap = {
+                'delivery': 'Delivery',
+                'pickup': 'Recoge',
+                '24h': '24 Horas',
+                'fresh': 'Fresco',
+                'prescriptions': 'Recetas',
+                'reservations': 'Reservas',
+                'family': 'Familiar',
+                'appointments': 'Citas',
+                'styling': 'Estilismo',
+                'beauty': 'Belleza',
+                'groceries': 'Abarrotes',
+                'wifi': 'WiFi',
+                'takeout': 'Para llevar',
+                'coffee': 'Café',
+                'express': 'Express',
+                'cash': 'Efectivo',
+                'card': 'Tarjeta'
+            };
+            return nameMap[feature] || feature;
+        }
+
+        function toggleFavorite(commerceId) {
+            const index = favorites.indexOf(commerceId);
+            
+            if (index > -1) {
+                favorites.splice(index, 1);
+                showNotification('Removido de favoritos', 'info');
+            } else {
+                favorites.push(commerceId);
+                showNotification('Agregado a favoritos', 'success');
+            }
+            
+            // Guardar en localStorage
+            localStorage.setItem('commerceFavorites', JSON.stringify(favorites));
+            
+            // Actualizar la vista
+            renderCommerceGrid();
+        }
+
+        function shareCommerce(commerceId) {
+            const commerce = commerceData.find(c => c.id === commerceId);
+            if (navigator.share) {
+                navigator.share({
+                    title: commerce.name,
+                    text: commerce.description,
+                    url: `${window.location.origin}/commerce/commerce-profile.html?id=${commerceId}`
+                });
+            } else {
+                // Fallback para navegadores que no soportan Web Share API
+                const url = `${window.location.origin}/commerce/commerce-profile.html?id=${commerceId}`;
+                navigator.clipboard.writeText(url).then(() => {
+                    showNotification('Enlace copiado al portapapeles', 'success');
+                });
+            }
+        }
+
+        function updateResultsCount() {
+            const countElement = document.getElementById('count');
+            const totalElement = document.getElementById('total');
+            
+            if (countElement && totalElement) {
+                const startIndex = (currentPage - 1) * itemsPerPage + 1;
+                const endIndex = Math.min(startIndex + itemsPerPage - 1, filteredCommerce.length);
+                
+                countElement.textContent = `${startIndex}-${endIndex}`;
+                totalElement.textContent = filteredCommerce.length;
+            }
+        }
+
+        function updatePagination() {
+            const pagination = document.getElementById('pagination');
+            const totalPages = Math.ceil(filteredCommerce.length / itemsPerPage);
+            
+            if (totalPages <= 1) {
+                pagination.style.display = 'none';
+                return;
+            }
+            
+            pagination.style.display = 'flex';
+            
+            let paginationHTML = `
+                <button class="pagination-btn ${currentPage === 1 ? 'disabled' : ''}" 
+                        onclick="goToPrevPage()" ${currentPage === 1 ? 'disabled' : ''}>
+                    ‹ Anterior
+                </button>
+            `;
+            
+            // Mostrar máximo 5 páginas
+            const startPage = Math.max(1, currentPage - 2);
+            const endPage = Math.min(totalPages, startPage + 4);
+            
+            for (let i = startPage; i <= endPage; i++) {
+                paginationHTML += `
+                    <button class="pagination-btn ${i === currentPage ? 'active' : ''}" 
+                            onclick="goToPage(${i})">
+                        ${i}
+                    </button>
+                `;
+            }
+            
+            paginationHTML += `
+                <button class="pagination-btn ${currentPage === totalPages ? 'disabled' : ''}" 
+                        onclick="goToNextPage()" ${currentPage === totalPages ? 'disabled' : ''}>
+                    Siguiente ›
+                </button>
+            `;
+            
+            pagination.innerHTML = paginationHTML;
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            renderCommerceGrid();
+            updateResultsCount();
+            updatePagination();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function goToPrevPage() {
+            if (currentPage > 1) {
+                goToPage(currentPage - 1);
+            }
+        }
+
+        function goToNextPage() {
+            const totalPages = Math.ceil(filteredCommerce.length / itemsPerPage);
+            if (currentPage < totalPages) {
+                goToPage(currentPage + 1);
+            }
+        }
+
+        function toggleMap() {
+            const miniMap = document.getElementById('miniMap');
+            const mapToggle = document.getElementById('mapToggle');
+            
+            miniMap.classList.toggle('show');
+            mapToggle.style.display = miniMap.classList.contains('show') ? 'none' : 'block';
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()">×</button>
+            `;
+
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: ${getNotificationColor(type)};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                animation: slideInRight 0.3s ease;
+                max-width: 400px;
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 3000);
+        }
+
+        function getNotificationColor(type) {
+            const colors = {
+                success: '#28a745',
+                error: '#dc3545',
+                warning: '#ffc107',
+                info: '#17a2b8'
+            };
+            return colors[type] || colors.info;
+        }
+
+        // Agregar estilos para notificaciones
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+
+            .notification button {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.2rem;
+                cursor: pointer;
+                padding: 0;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0.8;
+            }
+
+            .notification button:hover {
+                opacity: 1;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

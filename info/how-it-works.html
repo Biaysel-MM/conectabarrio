@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cómo Funciona - ConectaBarrio</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* ESTILOS ESPECÍFICOS PARA HOW-IT-WORKS */
+        :root {
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #fff;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), #1a6a8f);
+            color: white;
+            padding: 4rem 5%;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* MAIN CONTENT */
+        .how-it-works-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+        }
+
+        /* TABS */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .tab.active {
+            color: var(--primary);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        /* CONTENT SECTIONS */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--dark);
+            font-size: 2rem;
+        }
+
+        /* STEPS */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .step {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .step:hover {
+            transform: translateY(-5px);
+        }
+
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--accent);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .step h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+            font-size: 1.3rem;
+        }
+
+        .step p {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* FEATURES */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .feature h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .feature p {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* COMPARISON */
+        .comparison {
+            background: var(--light);
+            padding: 3rem;
+            border-radius: 12px;
+            margin-bottom: 4rem;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .comparison-item {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .comparison-item h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .comparison-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* CTA SECTION */
+        .cta-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--secondary), #8a2f5f);
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+        }
+
+        .cta-section h2 {
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .cta-section p {
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: #d97d01;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--secondary);
+        }
+
+        /* FAQ PREVIEW */
+        .faq-preview {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .faq-preview h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--dark);
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 1rem;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            color: var(--gray);
+            line-height: 1.6;
+            display: none;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        .view-all-faq {
+            text-align: center;
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                padding: 0.75rem 1rem;
+                text-align: center;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .how-it-works-page {
+                padding: 2rem 1rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .step {
+                padding: 1.5rem;
+            }
+
+            .comparison {
+                padding: 2rem 1rem;
+            }
+
+            .faq-preview {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+<!-- En el body de cada página -->
+<div id="dynamic-navbar"></div>
+<!-- El resto del contenido de tu página -->
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <h1>¿Cómo funciona ConectaBarrio?</h1>
+        <p>Descubre cómo nuestra plataforma conecta tu comunidad con el comercio local de manera simple y eficiente</p>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="how-it-works-page">
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab active" data-tab="clients">Para Clientes</button>
+            <button class="tab" data-tab="business">Para Comercios</button>
+            <button class="tab" data-tab="benefits">Beneficios</button>
+        </div>
+
+        <!-- PARA CLIENTES -->
+        <div class="tab-content active" id="clients-content">
+            <h2 class="section-title">Cómo comprar en tu barrio</h2>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-icon" style="position: relative;">
+                        🔍
+                        <div class="step-number">1</div>
+                    </div>
+                    <h3>Explora Comercios</h3>
+                    <p>Descubre los negocios locales en tu área. Filtra por categoría, calificación o distancia para encontrar exactamente lo que necesitas.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-icon" style="position: relative;">
+                        🛒
+                        <div class="step-number">2</div>
+                    </div>
+                    <h3>Realiza tu Pedido</h3>
+                    <p>Agrega productos a tu carrito, personaliza tu pedido y completa tu compra de forma segura en pocos minutos.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-icon" style="position: relative;">
+                        🚚
+                        <div class="step-number">3</div>
+                    </div>
+                    <h3>Recibe en tu Casa</h3>
+                    <p>Tu pedido será preparado y entregado directamente desde el comercio a tu domicilio en el tiempo estimado.</p>
+                </div>
+            </div>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">📍</div>
+                    <h3>Geolocalización</h3>
+                    <p>Encuentra comercios cerca de tu ubicación actual con nuestra tecnología de geolocalización.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">⭐</div>
+                    <h3>Reseñas Verificadas</h3>
+                    <p>Lee opiniones reales de otros clientes antes de realizar tu compra.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">💳</div>
+                    <h3>Pagos Seguros</h3>
+                    <p>Múltiples métodos de pago con la máxima seguridad para tus transacciones.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">📱</div>
+                    <h3>Seguimiento en Tiempo Real</h3>
+                    <p>Monitorea el estado de tu pedido desde la confirmación hasta la entrega.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PARA COMERCIOS -->
+        <div class="tab-content" id="business-content">
+            <h2 class="section-title">Cómo vender en ConectaBarrio</h2>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-icon" style="position: relative;">
+                        📝
+                        <div class="step-number">1</div>
+                    </div>
+                    <h3>Registra tu Comercio</h3>
+                    <p>Crea tu perfil en minutos. Agrega información, fotos y horarios de tu negocio.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-icon" style="position: relative;">
+                        📦
+                        <div class="step-number">2</div>
+                    </div>
+                    <h3>Gestiona Productos</h3>
+                    <p>Sube tu catálogo de productos, establece precios y controla tu inventario.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-icon" style="position: relative;">
+                        📊
+                        <div class="step-number">3</div>
+                    </div>
+                    <h3>Recibe Pedidos</h3>
+                    <p>Gestiona órdenes, confirma disponibilidad y organiza entregas desde tu panel.</p>
+                </div>
+            </div>
+
+            <div class="comparison">
+                <h3 style="text-align: center; margin-bottom: 2rem;">¿Por qué unirse a ConectaBarrio?</h3>
+                <div class="comparison-grid">
+                    <div class="comparison-item">
+                        <h3>Antes</h3>
+                        <ul style="text-align: left; color: var(--gray); line-height: 1.8;">
+                            <li>Clientes limitados al área cercana</li>
+                            <li>Altos costos de marketing</li>
+                            <li>Sin presencia digital</li>
+                            <li>Procesos manuales</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <h3>Después</h3>
+                        <ul style="text-align: left; color: var(--success); line-height: 1.8;">
+                            <li>Alcance a toda la comunidad</li>
+                            <li>Marketing digital incluido</li>
+                            <li>Presencia online profesional</li>
+                            <li>Automatización de procesos</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="comparison-stats">
+                    <div class="stat">
+                        <span class="stat-value">+40%</span>
+                        <span class="stat-label">Aumento en ventas</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">+65%</span>
+                        <span class="stat-label">Nuevos clientes</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">-30%</span>
+                        <span class="stat-label">Costos operativos</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BENEFICIOS -->
+        <div class="tab-content" id="benefits-content">
+            <h2 class="section-title">Beneficios para Todos</h2>
+            
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">🏘️</div>
+                    <h3>Comunidad Fortalecida</h3>
+                    <p>Fomentamos el comercio local y creamos lazos más fuertes entre vecinos y negocios.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">💼</div>
+                    <h3>Economía Local</h3>
+                    <p>El dinero se queda en la comunidad, generando empleo y desarrollo sostenible.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">🌱</div>
+                    <h3>Sostenibilidad</h3>
+                    <p>Reducimos la huella de carbono con entregas locales optimizadas.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">🤝</div>
+                    <h3>Confianza</h3>
+                    <p>Relaciones directas entre compradores y vendedores de confianza.</p>
+                </div>
+            </div>
+
+            <div class="cta-section">
+                <h2>Únete a la Revolución Local</h2>
+                <p>Más de 500 comercios y 10,000 clientes ya están disfrutando de los beneficios de ConectaBarrio</p>
+                <div class="cta-buttons">
+                    <a href="../auth/register.html" class="btn-primary">Registrarme como Cliente</a>
+                    <a href="../auth/register.html?type=commerce" class="btn-secondary">Registrar Mi Negocio</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ PREVIEW -->
+        <div class="faq-preview">
+            <h2>Preguntas Frecuentes</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        ¿Cómo me registro en ConectaBarrio?
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        El registro es simple y gratuito. Solo necesitas tu email, crear una contraseña y completar algunos datos básicos. Puedes registrarte como cliente o como comercio.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        ¿Qué métodos de pago aceptan?
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Aceptamos efectivo, tarjetas de crédito/débito, transferencias bancarias y pagos móviles. Cada comercio puede especificar qué métodos acepta.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        ¿Cuánto cuesta usar ConectaBarrio?
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Para clientes es completamente gratuito. Los comercios pagan una pequeña comisión por cada venta exitosa, sin costos mensuales fijos.
+                    </div>
+                </div>
+            </div>
+            <div class="view-all-faq">
+                <a href="faq.html" class="btn-primary">Ver Todas las Preguntas</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navegación móvil
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+
+            // Tabs functionality
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Remove active class from all tabs and contents
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active class to current tab and content
+                    this.classList.add('active');
+                    document.getElementById(`${tabId}-content`).classList.add('active');
+                });
+            });
+
+            // FAQ functionality
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                
+                question.addEventListener('click', function() {
+                    const isActive = item.classList.contains('active');
+                    
+                    // Close all FAQ items
+                    faqItems.forEach(faq => {
+                        faq.classList.remove('active');
+                        faq.querySelector('.faq-question span').textContent = '+';
+                    });
+                    
+                    // Open current if it was closed
+                    if (!isActive) {
+                        item.classList.add('active');
+                        this.querySelector('span').textContent = '−';
+                    }
+                });
+            });
+
+            // Animation on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeIn 0.6s ease forwards';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe elements for animation
+            const elementsToAnimate = document.querySelectorAll('.step, .feature, .comparison-item');
+            elementsToAnimate.forEach(el => {
+                el.style.opacity = '0';
+                observer.observe(el);
+            });
+        });
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

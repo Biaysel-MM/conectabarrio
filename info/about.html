@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre Nosotros - ConectaBarrio</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* ESTILOS ESPECÍFICOS PARA ABOUT */
+        :root {
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #fff;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), #1a6a8f);
+            color: white;
+            padding: 4rem 5%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('../assets/images/about-pattern.svg') no-repeat center center;
+            opacity: 0.1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        /* MAIN CONTENT */
+        .about-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+        }
+
+        /* MISSION SECTION */
+        .mission-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 6rem;
+        }
+
+        .mission-content h2 {
+            color: var(--dark);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .mission-content p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .mission-image {
+            position: relative;
+        }
+
+        .mission-image img {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .image-badge {
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            background: var(--accent);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(241, 143, 1, 0.3);
+        }
+
+        .badge-value {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .badge-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* VALUES SECTION */
+        .values-section {
+            background: var(--light);
+            padding: 4rem;
+            border-radius: 12px;
+            margin-bottom: 6rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--dark);
+            font-size: 2.5rem;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .value-card {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .value-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .value-card h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .value-card p {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* TEAM SECTION */
+        .team-section {
+            margin-bottom: 6rem;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .team-member {
+            text-align: center;
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .member-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1.5rem;
+            border: 4px solid var(--primary);
+        }
+
+        .member-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .member-role {
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .member-bio {
+            color: var(--gray);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* STORY SECTION */
+        .story-section {
+            background: linear-gradient(135deg, var(--secondary), #8a2f5f);
+            color: white;
+            padding: 4rem;
+            border-radius: 12px;
+            margin-bottom: 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('../assets/images/story-pattern.svg') no-repeat center center;
+            opacity: 0.1;
+        }
+
+        .story-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .story-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .story-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .story-timeline {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            position: relative;
+        }
+
+        .story-timeline::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .timeline-item {
+            text-align: center;
+            position: relative;
+            flex: 1;
+        }
+
+        .timeline-year {
+            background: var(--accent);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 auto 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-text {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* IMPACT SECTION */
+        .impact-section {
+            margin-bottom: 6rem;
+        }
+
+        .impact-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        .impact-testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            color: var(--gray);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .testimonial-text::before {
+            content: '"';
+            font-size: 3rem;
+            color: var(--light);
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            line-height: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info h4 {
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .author-role {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* CTA SECTION */
+        .cta-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--primary), #1a6a8f);
+            color: white;
+            border-radius: 12px;
+        }
+
+        .cta-section h2 {
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+
+        .cta-section p {
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 1.1rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: #d97d01;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .mission-section {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .mission-image {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .about-page {
+                padding: 2rem 1rem;
+            }
+
+            .mission-content h2,
+            .section-title,
+            .story-content h2,
+            .cta-section h2 {
+                font-size: 2rem;
+            }
+
+            .values-section,
+            .story-section {
+                padding: 3rem 1.5rem;
+            }
+
+            .story-timeline {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .story-timeline::before {
+                display: none;
+            }
+
+            .impact-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 3rem 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .values-grid,
+            .team-grid,
+            .impact-stats,
+            .impact-testimonials {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-value {
+                font-size: 2.5rem;
+            }
+
+            .image-badge {
+                position: static;
+                margin-top: 1rem;
+            }
+
+            .cta-section {
+                padding: 3rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+<!-- En el body de cada página -->
+<div id="dynamic-navbar"></div>
+<!-- El resto del contenido de tu página -->
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Conectando Comunidades, Fortaleciendo Economías</h1>
+            <p>En ConectaBarrio creemos en el poder de lo local. Unimos vecinos y comercios para construir comunidades más fuertes y sostenibles.</p>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="about-page">
+        <!-- MISSION SECTION -->
+        <section class="mission-section">
+            <div class="mission-content">
+                <h2>Nuestra Misión</h2>
+                <p>
+                    En un mundo cada vez más digital, los comercios locales enfrentan desafíos sin precedentes. 
+                    ConectaBarrio nació para cerrar esta brecha, creando un puente tecnológico que fortalece 
+                    la economía local mientras preserva la esencia comunitaria que hace únicos a nuestros barrios.
+                </p>
+                <p>
+                    No somos solo una plataforma de comercio electrónico; somos un movimiento que empodera 
+                    a pequeños empresarios, conecta vecinos y revitaliza la economía de proximidad. Cada 
+                    compra en ConectaBarrio es un voto por el comercio local y un paso hacia comunidades 
+                    más resilientes y conectadas.
+                </p>
+            </div>
+            <div class="mission-image">
+                <img src="../assets/equipo.jpg" alt="Equipo ConectaBarrio" onerror="this.src='../assets/images/default-team.jpg'">
+                <div class="image-badge">
+                    <span class="badge-value">+500</span>
+                    <span class="badge-label">Comercios Locales</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- VALUES SECTION -->
+        <section class="values-section">
+            <h2 class="section-title">Nuestros Valores</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon">🤝</div>
+                    <h3>Comunidad</h3>
+                    <p>Creemos en el poder de las relaciones locales y en construir puentes entre vecinos y comercios.</p>
+                </div>
+                
+                <div class="value-card">
+                    <div class="value-icon">💡</div>
+                    <h3>Innovación</h3>
+                    <p>Utilizamos tecnología avanzada para resolver problemas reales de las comunidades locales.</p>
+                </div>
+                
+                <div class="value-card">
+                    <div class="value-icon">🌱</div>
+                    <h3>Sostenibilidad</h3>
+                    <p>Promovemos el consumo responsable y el desarrollo económico sostenible en los barrios.</p>
+                </div>
+                
+                <div class="value-card">
+                    <div class="value-icon">🔓</div>
+                    <h3>Transparencia</h3>
+                    <p>Operamos con honestidad y claridad en todas nuestras relaciones y transacciones.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TEAM SECTION -->
+        <section class="team-section">
+            <h2 class="section-title">Nuestro Equipo</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="../assets/user.png" alt="María Rodríguez" class="member-avatar" onerror="this.src='../assets/team/default-avatar.jpg'">
+                    <div class="member-name">María Rodríguez</div>
+                    <div class="member-role">CEO & Fundadora</div>
+                    <p class="member-bio">Emprendedora social con más de 10 años de experiencia en desarrollo comunitario y tecnología.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">📘</a>
+                        <a href="#" class="social-link">📷</a>
+                        <a href="#" class="social-link">🐦</a>
+                    </div>
+                </div>
+                
+                <div class="team-member">
+                    <img src="../assets/user.png" alt="Carlos Méndez" class="member-avatar" onerror="this.src='../assets/team/default-avatar.jpg'">
+                    <div class="member-name">Carlos Méndez</div>
+                    <div class="member-role">CTO</div>
+                    <p class="member-bio">Ingeniero de software especializado en plataformas escalables y experiencias de usuario.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">📘</a>
+                        <a href="#" class="social-link">💼</a>
+                        <a href="#" class="social-link">🐱</a>
+                    </div>
+                </div>
+                
+                <div class="team-member">
+                    <img src="../assets/user.png" alt="Ana García" class="member-avatar" onerror="this.src='../assets/team/default-avatar.jpg'">
+                    <div class="member-name">Ana García</div>
+                    <div class="member-role">Directora de Comunidad</div>
+                    <p class="member-bio">Especialista en engagement comunitario y relaciones con comercios locales.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">📘</a>
+                        <a href="#" class="social-link">📷</a>
+                        <a href="#" class="social-link">💼</a>
+                    </div>
+                </div>
+                
+                <div class="team-member">
+                    <img src="../assets/user.png" alt="Javier López" class="member-avatar" onerror="this.src='../assets/team/default-avatar.jpg'">
+                    <div class="member-name">Javier López</div>
+                    <div class="member-role">Director de Operaciones</div>
+                    <p class="member-bio">Experto en logística y optimización de procesos para delivery local.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">📘</a>
+                        <a href="#" class="social-link">💼</a>
+                        <a href="#" class="social-link">🐦</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- STORY SECTION -->
+        <section class="story-section">
+            <div class="story-content">
+                <h2>Nuestra Historia</h2>
+                <p>
+                    Todo comenzó en 2020, cuando María Rodríguez, nuestra fundadora, notó cómo los pequeños 
+                    comercios de su barrio luchaban por adaptarse a la nueva realidad digital mientras los 
+                    vecinos buscaban formas seguras de acceder a productos locales.
+                </p>
+                <p>
+                    Lo que empezó como un grupo de WhatsApp para coordinar pedidos entre vecinos se transformó 
+                    en una plataforma que hoy conecta cientos de comercios con miles de clientes, manteniendo 
+                    viva la esencia del comercio de barrio mientras abrazamos la innovación tecnológica.
+                </p>
+                
+                <div class="story-timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-year">2020</div>
+                        <div class="timeline-text">Nace la idea</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year">2021</div>
+                        <div class="timeline-text">Primer prototipo</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year">2022</div>
+                        <div class="timeline-text">Lanzamiento oficial</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year">2023</div>
+                        <div class="timeline-text">Expansión nacional</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year">2024</div>
+                        <div class="timeline-text">+500 comercios</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- IMPACT SECTION -->
+        <section class="impact-section">
+            <h2 class="section-title">Nuestro Impacto</h2>
+            
+            <div class="impact-stats">
+                <div class="stat-card">
+                    <span class="stat-value">547</span>
+                    <span class="stat-label">Comercios Locales</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">12,458</span>
+                    <span class="stat-label">Clientes Activos</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">45,892</span>
+                    <span class="stat-label">Pedidos Realizados</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">RD$ 8.2M</span>
+                    <span class="stat-label">En Ventas Locales</span>
+                </div>
+            </div>
+
+            <div class="impact-testimonials">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">
+                        Gracias a ConectaBarrio, mi colmado aumentó sus ventas en un 60% y pude contratar 
+                        a dos personas más de la comunidad. Es increíble ver cómo la tecnología puede 
+                        fortalecer los negocios tradicionales.
+                    </p>
+                    <div class="testimonial-author">
+                        <img src="../assets/user.png" alt="Raúl Martínez" class="author-avatar" onerror="this.src='../assets/testimonials/default-avatar.jpg'">
+                        <div class="author-info">
+                            <h4>Raúl Martínez</h4>
+                            <div class="author-role">Dueño de Colmado San Miguel</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">
+                        Como madre trabajadora, ConectaBarrio me ha cambiado la vida. Puedo apoyar a los 
+                        comercios de mi barrio sin sacrificar tiempo de calidad con mi familia. La comunidad 
+                        se ha vuelto más unida gracias a esta plataforma.
+                    </p>
+                    <div class="testimonial-author">
+                        <img src="../assets/user.png" alt="Elena Sánchez" class="author-avatar" onerror="this.src='../assets/testimonials/default-avatar.jpg'">
+                        <div class="author-info">
+                            <h4>Elena Sánchez</h4>
+                            <div class="author-role">Cliente desde 2022</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA SECTION -->
+        <section class="cta-section">
+            <h2>Únete a Nuestra Comunidad</h2>
+            <p>
+                Ya seas un cliente que quiere apoyar el comercio local o un comercio que busca crecer, 
+                hay un lugar para ti en ConectaBarrio. Juntos podemos construir comunidades más fuertes.
+            </p>
+            <div class="cta-buttons">
+                <a href="../auth/register.html" class="btn-primary">Registrarme como Cliente</a>
+                <a href="../auth/register.html?type=commerce" class="btn-secondary">Registrar Mi Negocio</a>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navegación móvil
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+
+            // Animation on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeInUp 0.6s ease forwards';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe elements for animation
+            const elementsToAnimate = document.querySelectorAll('.value-card, .team-member, .stat-card, .testimonial-card');
+            elementsToAnimate.forEach(el => {
+                el.style.opacity = '0';
+                observer.observe(el);
+            });
+
+            // Counter animation for stats
+            const statValues = document.querySelectorAll('.stat-value');
+            const animatedStats = new Set();
+            
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !animatedStats.has(entry.target)) {
+                        animateCounter(entry.target);
+                        animatedStats.add(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            statValues.forEach(stat => statsObserver.observe(stat));
+            
+            function animateCounter(element) {
+                const target = parseInt(element.textContent.replace(/[^\d]/g, ''));
+                const duration = 2000;
+                const steps = 60;
+                const step = target / steps;
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += step;
+                    if (current >= target) {
+                        element.textContent = formatNumber(target);
+                        clearInterval(timer);
+                    } else {
+                        element.textContent = formatNumber(Math.floor(current));
+                    }
+                }, duration / steps);
+            }
+            
+            function formatNumber(num) {
+                if (num >= 1000000) {
+                    return 'RD$ ' + (num / 1000000).toFixed(1) + 'M';
+                }
+                if (num >= 1000) {
+                    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+                return num.toString();
+            }
+        });
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

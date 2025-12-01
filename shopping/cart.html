@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras - ConectaBarrio</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* ESTILOS ESPECÍFICOS PARA CART */
+        :root {
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #fff;
+        }
+
+
+        /* BREADCRUMB */
+        .breadcrumb {
+            padding: 1rem 5%;
+            background: var(--light);
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .breadcrumb-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* MAIN CONTENT */
+        .cart-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 5%;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            color: var(--dark);
+            font-size: 2.2rem;
+        }
+
+        .continue-shopping {
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .continue-shopping:hover {
+            text-decoration: underline;
+        }
+
+        /* CART LAYOUT */
+        .cart-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+        }
+
+        /* CART ITEMS */
+        .cart-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .cart-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .section-header h3 {
+            color: var(--dark);
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .clear-cart {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .clear-cart:hover {
+            text-decoration: underline;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 100px 1fr auto;
+            gap: 1rem;
+            padding: 1.5rem;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .cart-item:hover {
+            border-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(46, 134, 171, 0.1);
+        }
+
+        .item-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .item-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .item-info h4 {
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .item-merchant {
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .item-description {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-price {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .item-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--light);
+            border-radius: 8px;
+            padding: 0.25rem;
+        }
+
+        .btn-quantity {
+            background: white;
+            border: 2px solid #e9ecef;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-quantity:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-quantity:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .quantity {
+            min-width: 40px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .item-total {
+            font-weight: bold;
+            color: var(--dark);
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-remove {
+            background: var(--light);
+            border: none;
+            border-radius: 6px;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--danger);
+            transition: all 0.3s;
+        }
+
+        .btn-remove:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-save {
+            background: var(--light);
+            border: none;
+            border-radius: 6px;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--primary);
+            transition: all 0.3s;
+        }
+
+        .btn-save:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* EMPTY CART */
+        .empty-cart {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray);
+        }
+
+        .empty-cart img {
+            width: 200px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-cart h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .empty-cart p {
+            margin-bottom: 2rem;
+        }
+
+        /* CART SUMMARY */
+        .cart-summary {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .summary-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-card h3 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .summary-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .summary-line:last-child {
+            border-bottom: none;
+        }
+
+        .summary-line.total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--dark);
+            border-top: 2px solid var(--primary);
+            margin-top: 0.5rem;
+            padding-top: 1rem;
+        }
+
+        .summary-line.discount {
+            color: var(--success);
+        }
+
+        .promo-code {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .promo-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .promo-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn-apply {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .btn-apply:hover {
+            background: #1a6a8f;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+
+        .btn-primary:hover {
+            background: #1a6a8f;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(46, 134, 171, 0.3);
+        }
+
+        .btn-primary:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* SECURITY BADGES */
+        .security-badges {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            opacity: 0.7;
+        }
+
+        .badge {
+            background: var(--light);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* SUGGESTED ITEMS */
+        .suggested-items {
+            margin-top: 3rem;
+        }
+
+        .suggested-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .suggested-card {
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .suggested-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .suggested-image {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 0.5rem;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .suggested-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .suggested-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .suggested-price {
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-add {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+
+        .btn-add:hover {
+            background: #1a6a8f;
+        }
+
+        /* ANIMATIONS */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+        }
+
+        .item-removing {
+            animation: fadeOut 0.3s ease forwards;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .cart-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-summary {
+                position: static;
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .cart-item {
+                grid-template-columns: 80px 1fr;
+                gap: 1rem;
+            }
+
+            .item-controls {
+                grid-column: 1 / -1;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 1rem;
+                padding-top: 1rem;
+                border-top: 1px solid #e9ecef;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .suggested-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cart-page {
+                padding: 1rem;
+            }
+
+            .cart-item {
+                padding: 1rem;
+            }
+
+            .promo-code {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+<!-- En el body de cada página -->
+<div id="dynamic-navbar"></div>
+<!-- El resto del contenido de tu página -->
+
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb">
+        <div class="breadcrumb-content">
+            <a href="../index.html">Inicio</a>
+            <span>›</span>
+            <a href="../commerce/commerce-list.html">Comercios</a>
+            <span>›</span>
+            <span>Carrito de Compras</span>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="cart-page">
+        <div class="page-header">
+            <h1>🛒 Tu Carrito de Compras</h1>
+            <a href="../commerce/commerce-list.html" class="continue-shopping">
+                ← Seguir comprando
+            </a>
+        </div>
+
+        <div class="cart-layout">
+            <!-- CART ITEMS -->
+            <div class="cart-items">
+                <div class="cart-section">
+                    <div class="section-header">
+                        <h3>📦 Productos en tu carrito</h3>
+                        <button class="clear-cart" id="clearCart">
+                            🗑️ Vaciar carrito
+                        </button>
+                    </div>
+
+                    <div id="cartItemsContainer">
+                        <!-- Los items del carrito se cargan dinámicamente aquí -->
+                    </div>
+                </div>
+
+                <!-- SUGGESTED ITEMS -->
+                <div class="suggested-items">
+                    <div class="section-header">
+                        <h3>🔥 Productos que te pueden gustar</h3>
+                    </div>
+                    <div class="suggested-grid" id="suggestedItems">
+                        <!-- Los productos sugeridos se cargan dinámicamente aquí -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- CART SUMMARY -->
+            <aside class="cart-summary">
+                <div class="summary-card">
+                    <h3>💵 Resumen del Pedido</h3>
+                    
+                    <div class="summary-line">
+                        <span>Subtotal (3 productos):</span>
+                        <span id="subtotal">$0.00</span>
+                    </div>
+                    
+                    <div class="summary-line">
+                        <span>Costo de delivery:</span>
+                        <span id="deliveryCost">$0.00</span>
+                    </div>
+                    
+                    <div class="summary-line">
+                        <span>Impuestos:</span>
+                        <span id="taxes">$0.00</span>
+                    </div>
+                    
+                    <div class="summary-line discount" id="discountLine" style="display: none;">
+                        <span>Descuento:</span>
+                        <span id="discount">-$0.00</span>
+                    </div>
+                    
+                    <div class="summary-line total">
+                        <span>Total:</span>
+                        <span id="total">$0.00</span>
+                    </div>
+
+                    <!-- PROMO CODE -->
+                    <div class="promo-code">
+                        <input type="text" class="promo-input" id="promoCode" placeholder="Código promocional">
+                        <button class="btn-apply" id="applyPromo">Aplicar</button>
+                    </div>
+
+                    <button class="btn-primary" id="checkoutBtn" disabled>
+                        🛒 Proceder al Pago
+                    </button>
+                    
+                    <a href="../commerce/commerce-list.html" class="btn-secondary">
+                        ← Seguir Comprando
+                    </a>
+
+                    <div class="security-badges">
+                        <div class="badge">🔒 Seguro</div>
+                        <div class="badge">💳 100% Protegido</div>
+                    </div>
+                </div>
+
+                <!-- DELIVERY INFO -->
+                <div class="summary-card">
+                    <h3>🚚 Información de Entrega</h3>
+                    <div class="delivery-info">
+                        <p><strong>📍 Dirección:</strong> <span id="deliveryAddress">Cargando...</span></p>
+                        <p><strong>⏰ Tiempo estimado:</strong> <span id="deliveryTime">30-45 min</span></p>
+                        <p><strong>💰 Delivery gratis:</strong> En pedidos mayores a $500 RD</p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <script>
+        // DATOS DEL CARRITO
+        let cartItems = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+        let appliedPromo = null;
+
+        // PROMO CODES
+        const promoCodes = {
+            'BIENVENIDO10': { discount: 0.1, type: 'percentage', minAmount: 100 },
+            'DESCUENTO15': { discount: 0.15, type: 'percentage', minAmount: 200 },
+            'ENVIOGRATIS': { discount: 0, type: 'free_shipping', minAmount: 500 },
+            'FIXED50': { discount: 50, type: 'fixed', minAmount: 300 }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initCart();
+            setupEventListeners();
+            renderCartItems();
+            updateCartSummary();
+            loadSuggestedItems();
+            loadDeliveryInfo();
+        });
+
+        function initCart() {
+            // Verificar si hay items en el carrito
+            if (cartItems.length === 0) {
+                showEmptyCart();
+            }
+        }
+
+        function setupEventListeners() {
+            // Navegación móvil
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+
+            // Botones del carrito
+            document.getElementById('clearCart').addEventListener('click', clearCart);
+            document.getElementById('applyPromo').addEventListener('click', applyPromoCode);
+            document.getElementById('checkoutBtn').addEventListener('click', proceedToCheckout);
+
+            // Enter en promo code
+            document.getElementById('promoCode').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    applyPromoCode();
+                }
+            });
+        }
+
+        function renderCartItems() {
+            const container = document.getElementById('cartItemsContainer');
+            
+            if (cartItems.length === 0) {
+                showEmptyCart();
+                return;
+            }
+
+            container.innerHTML = cartItems.map(item => `
+                <div class="cart-item" data-item-id="${item.id}">
+                    <div class="item-image">
+                        <img src="${item.image}" alt="${item.name}" onerror="this.src='../assets/colmado-miguel.jpg'">
+                    </div>
+                    
+                    <div class="item-details">
+                        <div class="item-info">
+                            <h4>${item.name}</h4>
+                            <div class="item-merchant">
+                                🏪 ${item.commerceName}
+                            </div>
+                            <div class="item-description">
+                                ${item.description || 'Producto de calidad'}
+                            </div>
+                            <div class="item-price">
+                                ${formatCurrency(item.price)}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="item-controls">
+                        <div class="quantity-controls">
+                            <button class="btn-quantity" onclick="updateQuantity(${item.id}, -1)" ${item.quantity <= 1 ? 'disabled' : ''}>
+                                -
+                            </button>
+                            <span class="quantity">${item.quantity}</span>
+                            <button class="btn-quantity" onclick="updateQuantity(${item.id}, 1)">
+                                +
+                            </button>
+                        </div>
+                        
+                        <div class="item-total">
+                            ${formatCurrency(calculateItemTotal(item))}
+                        </div>
+                        
+                        <div class="item-actions">
+                            <button class="btn-save" onclick="saveForLater(${item.id})" title="Guardar para después">
+                                💾
+                            </button>
+                            <button class="btn-remove" onclick="removeItem(${item.id})" title="Eliminar">
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showEmptyCart() {
+            const container = document.getElementById('cartItemsContainer');
+            container.innerHTML = `
+                <div class="empty-cart">
+                    <img src="../assets/icons/empty-cart.svg" alt="Carrito vacío">
+                    <h3>Tu carrito está vacío</h3>
+                    <p>Agrega algunos productos increíbles de tu barrio</p>
+                    <a href="../commerce/commerce-list.html" class="btn-primary">
+                        🏪 Explorar Comercios
+                    </a>
+                </div>
+            `;
+            
+            document.getElementById('checkoutBtn').disabled = true;
+        }
+
+        function updateQuantity(itemId, change) {
+            const item = cartItems.find(item => item.id === itemId);
+            if (item) {
+                item.quantity += change;
+                
+                if (item.quantity <= 0) {
+                    removeItem(itemId);
+                } else {
+                    saveCart();
+                    renderCartItems();
+                    updateCartSummary();
+                    showNotification(`Cantidad actualizada: ${item.quantity}`, 'success');
+                }
+            }
+        }
+
+        function removeItem(itemId) {
+            const itemElement = document.querySelector(`[data-item-id="${itemId}"]`);
+            if (itemElement) {
+                itemElement.classList.add('item-removing');
+                setTimeout(() => {
+                    cartItems = cartItems.filter(item => item.id !== itemId);
+                    saveCart();
+                    renderCartItems();
+                    updateCartSummary();
+                    showNotification('Producto removido del carrito', 'info');
+                }, 300);
+            }
+        }
+
+        function saveForLater(itemId) {
+            const savedItems = JSON.parse(localStorage.getItem('savedItems')) || [];
+            const item = cartItems.find(item => item.id === itemId);
+            
+            if (item) {
+                savedItems.push(item);
+                localStorage.setItem('savedItems', JSON.stringify(savedItems));
+                removeItem(itemId);
+                showNotification('Producto guardado para después', 'success');
+            }
+        }
+
+        function clearCart() {
+            if (cartItems.length === 0) return;
+            
+            if (confirm('¿Estás seguro de que quieres vaciar tu carrito?')) {
+                cartItems = [];
+                saveCart();
+                renderCartItems();
+                updateCartSummary();
+                showNotification('Carrito vaciado', 'info');
+            }
+        }
+
+        function calculateItemTotal(item) {
+            const price = parseFloat(item.price.replace(/[^0-9.-]+/g, ""));
+            return price * item.quantity;
+        }
+
+        function calculateCartTotals() {
+            const subtotal = cartItems.reduce((total, item) => total + calculateItemTotal(item), 0);
+            const deliveryCost = subtotal >= 500 ? 0 : 100; // Delivery gratis sobre $500
+            const taxes = subtotal * 0.18; // 18% ITBIS
+            let discount = 0;
+
+            // Aplicar descuento si hay promo code
+            if (appliedPromo && subtotal >= appliedPromo.minAmount) {
+                if (appliedPromo.type === 'percentage') {
+                    discount = subtotal * appliedPromo.discount;
+                } else if (appliedPromo.type === 'fixed') {
+                    discount = appliedPromo.discount;
+                } else if (appliedPromo.type === 'free_shipping') {
+                    discount = deliveryCost;
+                }
+            }
+
+            const total = subtotal + deliveryCost + taxes - discount;
+
+            return {
+                subtotal,
+                deliveryCost,
+                taxes,
+                discount,
+                total
+            };
+        }
+
+        function updateCartSummary() {
+            const totals = calculateCartTotals();
+            
+            document.getElementById('subtotal').textContent = formatCurrency(totals.subtotal);
+            document.getElementById('deliveryCost').textContent = formatCurrency(totals.deliveryCost);
+            document.getElementById('taxes').textContent = formatCurrency(totals.taxes);
+            document.getElementById('total').textContent = formatCurrency(totals.total);
+
+            // Mostrar/ocultar línea de descuento
+            const discountLine = document.getElementById('discountLine');
+            const discountElement = document.getElementById('discount');
+            
+            if (totals.discount > 0) {
+                discountLine.style.display = 'flex';
+                discountElement.textContent = `-${formatCurrency(totals.discount)}`;
+            } else {
+                discountLine.style.display = 'none';
+            }
+
+            // Habilitar/deshabilitar botón de checkout
+            document.getElementById('checkoutBtn').disabled = cartItems.length === 0;
+        }
+
+        function applyPromoCode() {
+            const promoInput = document.getElementById('promoCode');
+            const code = promoInput.value.trim().toUpperCase();
+            
+            if (!code) {
+                showNotification('Por favor ingresa un código promocional', 'error');
+                return;
+            }
+
+            const promo = promoCodes[code];
+            
+            if (!promo) {
+                showNotification('Código promocional inválido', 'error');
+                return;
+            }
+
+            const totals = calculateCartTotals();
+            if (totals.subtotal < promo.minAmount) {
+                showNotification(`Mínimo de compra: ${formatCurrency(promo.minAmount)}`, 'error');
+                return;
+            }
+
+            appliedPromo = { ...promo, code };
+            updateCartSummary();
+            showNotification(`¡Código aplicado! Descuento: ${getDiscountText(promo)}`, 'success');
+            promoInput.value = '';
+        }
+
+        function getDiscountText(promo) {
+            if (promo.type === 'percentage') {
+                return `${promo.discount * 100}%`;
+            } else if (promo.type === 'fixed') {
+                return formatCurrency(promo.discount);
+            } else if (promo.type === 'free_shipping') {
+                return 'Envío gratis';
+            }
+            return '';
+        }
+
+        function proceedToCheckout() {
+            if (cartItems.length === 0) {
+                showNotification('Tu carrito está vacío', 'error');
+                return;
+            }
+
+            // Guardar información del carrito para el checkout
+            const checkoutData = {
+                items: cartItems,
+                totals: calculateCartTotals(),
+                promo: appliedPromo
+            };
+            
+            localStorage.setItem('checkoutData', JSON.stringify(checkoutData));
+            
+            // Redirigir al checkout
+            window.location.href = 'checkout.html';
+        }
+
+        function loadSuggestedItems() {
+            const suggestedItems = [
+                {
+                    id: 101,
+                    name: "Café Santo Domingo",
+                    price: "$180 RD",
+                    image: "../assets/cafe.jpg",
+                    commerce: "Colmado San Miguel"
+                },
+                {
+                    id: 102,
+                    name: "Galletas María",
+                    price: "$45 RD",
+                    image: "../assets/galletas.jpg",
+                    commerce: "Colmado San Miguel"
+                },
+                {
+                    id: 103,
+                    name: "Jugo de Naranja",
+                    price: "$75 RD",
+                    image: "../assets/jugo.png",
+                    commerce: "Colmado San Miguel"
+                },
+                {
+                    id: 104,
+                    name: "Pan Integral",
+                    price: "$35 RD",
+                    image: "../assets/pan-de-agua.jpg",
+                    commerce: "Panadería Doña Rosa"
+                }
+            ];
+
+            const container = document.getElementById('suggestedItems');
+            container.innerHTML = suggestedItems.map(item => `
+                <div class="suggested-card" onclick="addSuggestedItem(${item.id})">
+                    <div class="suggested-image">
+                        <img src="${item.image}" alt="${item.name}" onerror="this.src='../assets/producto.png'">
+                    </div>
+                    <div class="suggested-name">${item.name}</div>
+                    <div class="suggested-price">${item.price}</div>
+                    <div class="suggested-merchant" style="font-size: 0.8rem; color: var(--gray); margin-bottom: 0.5rem;">${item.commerce}</div>
+                    <button class="btn-add" onclick="event.stopPropagation(); addSuggestedItem(${item.id})">
+                        🛒 Agregar
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function addSuggestedItem(itemId) {
+            const suggestedItems = [
+                {
+                    id: 101,
+                    name: "Café Santo Domingo",
+                    price: "$180 RD",
+                    image: "../assets/cafe.jpg",
+                    commerceName: "Colmado San Miguel",
+                    description: "Café premium 500g"
+                },
+                {
+                    id: 102,
+                    name: "Galletas María",
+                    price: "$45 RD",
+                    image: "../assets/galletas.jpg",
+                    commerceName: "Colmado San Miguel",
+                    description: "Galletas clásicas"
+                },
+                {
+                    id: 103,
+                    name: "Jugo de Naranja",
+                    price: "$75 RD",
+                    image: "../assets/jugo.png",
+                    commerceName: "Colmado San Miguel",
+                    description: "Jugo natural 1L"
+                },
+                {
+                    id: 104,
+                    name: "Pan Integral",
+                    price: "$35 RD",
+                    image: "../assets/pan-de-agua.jpg",
+                    commerceName: "Panadería Doña Rosa",
+                    description: "Pan integral fresco"
+                }
+            ];
+
+            const item = suggestedItems.find(i => i.id === itemId);
+            if (item) {
+                const existingItem = cartItems.find(cartItem => cartItem.id === itemId);
+                
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cartItems.push({
+                        ...item,
+                        quantity: 1
+                    });
+                }
+                
+                saveCart();
+                renderCartItems();
+                updateCartSummary();
+                showNotification(`${item.name} agregado al carrito`, 'success');
+            }
+        }
+
+        function loadDeliveryInfo() {
+            // En una app real, esto vendría del perfil del usuario
+            const userAddress = "Calle Ejemplo #123, Santo Domingo";
+            document.getElementById('deliveryAddress').textContent = userAddress;
+        }
+
+        function saveCart() {
+            localStorage.setItem('shoppingCart', JSON.stringify(cartItems));
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('es-DO', {
+                style: 'currency',
+                currency: 'DOP'
+            }).format(amount);
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()">×</button>
+            `;
+
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: ${getNotificationColor(type)};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                animation: slideInRight 0.3s ease;
+                max-width: 400px;
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 3000);
+        }
+
+        function getNotificationColor(type) {
+            const colors = {
+                success: '#28a745',
+                error: '#dc3545',
+                warning: '#ffc107',
+                info: '#17a2b8'
+            };
+            return colors[type] || colors.info;
+        }
+
+        // Agregar estilos para notificaciones
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+
+            .notification button {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.2rem;
+                cursor: pointer;
+                padding: 0;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0.8;
+            }
+
+            .notification button:hover {
+                opacity: 1;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

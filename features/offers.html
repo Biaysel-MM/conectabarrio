@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ofertas Especiales - ConectaBarrio</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        :root {
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #fff;
+        }
+
+
+        /* HERO SECTION */
+        .offers-hero {
+            background: linear-gradient(135deg, var(--accent), #d97d01);
+            color: white;
+            padding: 3rem 5%;
+            text-align: center;
+        }
+
+        .offers-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .offers-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        /* MAIN CONTENT */
+        .offers-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 5%;
+        }
+
+        /* FILTERS SECTION */
+        .filters-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .filters-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-select {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            min-width: 150px;
+        }
+
+        .filter-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tag {
+            background: var(--light);
+            border: 1px solid #e9ecef;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-tag:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .filter-tag.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* OFFERS GRID */
+        .offers-container {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            color: var(--dark);
+            font-size: 1.5rem;
+        }
+
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .view-all:hover {
+            text-decoration: underline;
+        }
+
+        .offers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .offer-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .offer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .offer-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--danger);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        .offer-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .offer-content {
+            padding: 1.5rem;
+        }
+
+        .offer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .offer-title {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .offer-merchant {
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .offer-rating {
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        .offer-description {
+            color: var(--gray);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .offer-price {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .current-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        .discount {
+            background: var(--success);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .offer-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .offer-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1a6a8f;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* COUNTDOWN TIMER */
+        .countdown {
+            background: rgba(220, 53, 69, 0.1);
+            padding: 0.5rem;
+            border-radius: 6px;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .countdown-text {
+            font-size: 0.8rem;
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        .countdown-timer {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        /* FEATURED OFFER */
+        .featured-offer {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        .featured-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .featured-info {
+            padding: 2rem;
+        }
+
+        .featured-badge {
+            background: var(--accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .featured-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .featured-description {
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .featured-price {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .featured-current {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .featured-original {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        .featured-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--gray);
+        }
+
+        .empty-state img {
+            width: 200px;
+            margin-bottom: 2rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        /* LOADING */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            color: var(--gray);
+        }
+
+        .loading-spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #e9ecef;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .featured-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .featured-image {
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .offers-hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-stats {
+                gap: 2rem;
+            }
+
+            .filters-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .offers-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .offer-actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .offers-page {
+                padding: 1rem;
+            }
+
+            .featured-info {
+                padding: 1rem;
+            }
+
+            .featured-title {
+                font-size: 1.5rem;
+            }
+
+            .stat-number {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+<!-- En el body de cada página -->
+<div id="dynamic-navbar"></div>
+<!-- El resto del contenido de tu página -->
+    <!-- HERO SECTION -->
+    <section class="offers-hero">
+        <h1>🔥 Ofertas Especiales</h1>
+        <p>Descubre las mejores promociones de los comercios de tu barrio</p>
+        
+        <div class="hero-stats">
+            <div class="stat-item">
+                <div class="stat-number" id="activeOffers">47</div>
+                <div class="stat-label">Ofertas Activas</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="commerceCount">23</div>
+                <div class="stat-label">Comercios Participando</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="savingsTotal">$12,450</div>
+                <div class="stat-label">Total Ahorrado</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="offers-page">
+        <!-- FILTROS -->
+        <section class="filters-section">
+            <div class="filters-row">
+                <div class="filter-group">
+                    <label>Ordenar por:</label>
+                    <select class="filter-select" id="sortFilter">
+                        <option value="popular">Más populares</option>
+                        <option value="newest">Más recientes</option>
+                        <option value="ending">Por terminar</option>
+                        <option value="discount">Mayor descuento</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Categoría:</label>
+                    <select class="filter-select" id="categoryFilter">
+                        <option value="all">Todas las categorías</option>
+                        <option value="food">Alimentos</option>
+                        <option value="drinks">Bebidas</option>
+                        <option value="home">Hogar</option>
+                        <option value="beauty">Belleza</option>
+                        <option value="services">Servicios</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Comercio:</label>
+                    <select class="filter-select" id="commerceFilter">
+                        <option value="all">Todos los comercios</option>
+                        <option value="colmado-san-miguel">Colmado San Miguel</option>
+                        <option value="panaderia-rosa">Panadería Doña Rosa</option>
+                        <option value="farmacia-esperanza">Farmacia La Esperanza</option>
+                    </select>
+                </div>
+
+                <div class="filter-tags">
+                    <div class="filter-tag active" data-filter="all">Todas</div>
+                    <div class="filter-tag" data-filter="featured">Destacadas</div>
+                    <div class="filter-tag" data-filter="ending">Por terminar</div>
+                    <div class="filter-tag" data-filter="discount">50%+ descuento</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- OFERTA DESTACADA -->
+        <section class="featured-offer">
+            <div class="featured-content">
+                <div class="featured-info">
+                    <div class="featured-badge">OFERTA DESTACADA</div>
+                    <h2 class="featured-title">2x1 en Todos los Panes</h2>
+                    <p class="featured-description">Disfruta del pan más fresco del barrio con esta increíble promoción 2x1. Perfecto para desayunos familiares.</p>
+                    
+                    <div class="featured-price">
+                        <span class="featured-current">$50 RD</span>
+                        <span class="featured-original">$100 RD</span>
+                    </div>
+
+                    <div class="countdown">
+                        <div class="countdown-text">Termina en:</div>
+                        <div class="countdown-timer" id="featuredCountdown">23:59:59</div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn btn-primary" onclick="viewOffer(1)">
+                            🛒 Comprar Ahora
+                        </button>
+                        <button class="btn btn-outline" style="background: rgba(255,255,255,0.2); color: white; border-color: white;" onclick="shareOffer(1)">
+                            📤 Compartir
+                        </button>
+                    </div>
+                </div>
+                <img src="../assets/pan-de-agua.jpg" alt="Oferta destacada" class="featured-image">
+            </div>
+        </section>
+
+        <!-- OFERTAS POPULARES -->
+        <section class="offers-container">
+            <div class="section-header">
+                <h2>🎯 Ofertas Populares</h2>
+                <a href="#" class="view-all">Ver todas</a>
+            </div>
+
+            <div class="offers-grid" id="popularOffers">
+                <!-- Las ofertas populares se cargan aquí -->
+            </div>
+        </section>
+
+        <!-- OFERTAS POR TERMINAR -->
+        <section class="offers-container">
+            <div class="section-header">
+                <h2>⏰ Ofertas por Terminar</h2>
+                <a href="#" class="view-all">Ver todas</a>
+            </div>
+
+            <div class="offers-grid" id="endingOffers">
+                <!-- Las ofertas por terminar se cargan aquí -->
+            </div>
+        </section>
+
+        <!-- OFERTAS DE COMERCIOS CERCANOS -->
+        <section class="offers-container">
+            <div class="section-header">
+                <h2>📍 Ofertas Cercanas</h2>
+                <a href="#" class="view-all">Ver todas</a>
+            </div>
+
+            <div class="offers-grid" id="nearbyOffers">
+                <!-- Las ofertas cercanas se cargan aquí -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // DATOS DE OFERTAS (simulados)
+        const offers = [
+            {
+                id: 1,
+                title: "2x1 en Todos los Panes",
+                description: "Promoción especial 2x1 en toda nuestra variedad de panes recién horneados.",
+                merchant: "Panadería Doña Rosa",
+                merchantId: "panaderia-rosa",
+                category: "food",
+                currentPrice: "$50 RD",
+                originalPrice: "$100 RD",
+                discount: "50%",
+                discountValue: 50,
+                image: "../assets/pan-de-agua.jpg",
+                rating: 4.8,
+                reviewCount: 89,
+                expiration: "2024-01-20T23:59:59",
+                featured: true,
+                popular: true,
+                nearby: true,
+                unitsLeft: 15
+            },
+            {
+                id: 2,
+                title: "Aceite de Soja 1L -30%",
+                description: "Aceite vegetal 100% puro con un increíble descuento del 30%.",
+                merchant: "Colmado San Miguel",
+                merchantId: "colmado-san-miguel",
+                category: "food",
+                currentPrice: "$126 RD",
+                originalPrice: "$180 RD",
+                discount: "30%",
+                discountValue: 30,
+                image: "../assets/aceite-de-soja.jpg",
+                rating: 4.2,
+                reviewCount: 128,
+                expiration: "2024-01-25T23:59:59",
+                featured: false,
+                popular: true,
+                nearby: true,
+                unitsLeft: 45
+            },
+            {
+                id: 3,
+                title: "Coca-Cola 2L -15%",
+                description: "Refresco familiar con descuento especial por tiempo limitado.",
+                merchant: "Colmado San Miguel",
+                merchantId: "colmado-san-miguel",
+                category: "drinks",
+                currentPrice: "$102 RD",
+                originalPrice: "$120 RD",
+                discount: "15%",
+                discountValue: 15,
+                image: "../assets/cocacola.jpg",
+                rating: 4.2,
+                reviewCount: 128,
+                expiration: "2024-01-18T23:59:59",
+                featured: false,
+                popular: false,
+                nearby: true,
+                unitsLeft: 8
+            },
+            {
+                id: 4,
+                title: "Corte de Cabello + Lavado",
+                description: "Servicio completo de peluquería con lavado incluido.",
+                merchant: "Peluquería Estilo",
+                merchantId: "peluqueria-estilo",
+                category: "services",
+                currentPrice: "$300 RD",
+                originalPrice: "$400 RD",
+                discount: "25%",
+                discountValue: 25,
+                image: "../assets/peluqueria-estilo.jpg",
+                rating: 4.5,
+                reviewCount: 67,
+                expiration: "2024-01-30T23:59:59",
+                featured: false,
+                popular: true,
+                nearby: false,
+                unitsLeft: 25
+            },
+            {
+                id: 5,
+                title: "Arroz Blanco 5kg -20%",
+                description: "Arroz de grano largo calidad premium con descuento especial.",
+                merchant: "Colmado San Miguel",
+                merchantId: "colmado-san-miguel",
+                category: "food",
+                currentPrice: "$200 RD",
+                originalPrice: "$250 RD",
+                discount: "20%",
+                discountValue: 20,
+                image: "../assets/arroz-blanco.jpg",
+                rating: 4.2,
+                reviewCount: 128,
+                expiration: "2024-01-22T23:59:59",
+                featured: false,
+                popular: false,
+                nearby: true,
+                unitsLeft: 32
+            },
+            {
+                id: 6,
+                title: "Shampoo Profesional -15%",
+                description: "Shampoo profesional para todo tipo de cabello.",
+                merchant: "Peluquería Estilo",
+                merchantId: "peluqueria-estilo",
+                category: "beauty",
+                currentPrice: "$340 RD",
+                originalPrice: "$400 RD",
+                discount: "15%",
+                discountValue: 15,
+                image: "../assets/shampoo.jpg",
+                rating: 4.5,
+                reviewCount: 67,
+                expiration: "2024-01-28T23:59:59",
+                featured: false,
+                popular: true,
+                nearby: false,
+                unitsLeft: 12
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initOffersPage();
+            setupEventListeners();
+            renderOffers();
+            startCountdowns();
+        });
+
+        function initOffersPage() {
+            // Actualizar estadísticas
+            updateStats();
+            
+            // Configurar countdown de oferta destacada
+            updateFeaturedCountdown();
+        }
+
+        function setupEventListeners() {
+            // Navegación móvil
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+
+            // Filtros
+            document.getElementById('sortFilter').addEventListener('change', filterOffers);
+            document.getElementById('categoryFilter').addEventListener('change', filterOffers);
+            document.getElementById('commerceFilter').addEventListener('change', filterOffers);
+
+            // Filtros rápidos
+            const filterTags = document.querySelectorAll('.filter-tag');
+            filterTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    filterTags.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    filterOffers();
+                });
+            });
+        }
+
+        function renderOffers() {
+            renderPopularOffers();
+            renderEndingOffers();
+            renderNearbyOffers();
+        }
+
+        function renderPopularOffers() {
+            const container = document.getElementById('popularOffers');
+            const popularOffers = offers.filter(offer => offer.popular).slice(0, 3);
+            
+            container.innerHTML = popularOffers.map(offer => createOfferCard(offer)).join('');
+        }
+
+        function renderEndingOffers() {
+            const container = document.getElementById('endingOffers');
+            // Ordenar por fecha de expiración (más cercanas primero)
+            const endingOffers = [...offers]
+                .filter(offer => !offer.featured)
+                .sort((a, b) => new Date(a.expiration) - new Date(b.expiration))
+                .slice(0, 3);
+            
+            container.innerHTML = endingOffers.map(offer => createOfferCard(offer)).join('');
+        }
+
+        function renderNearbyOffers() {
+            const container = document.getElementById('nearbyOffers');
+            const nearbyOffers = offers.filter(offer => offer.nearby).slice(0, 3);
+            
+            container.innerHTML = nearbyOffers.map(offer => createOfferCard(offer)).join('');
+        }
+
+        function createOfferCard(offer) {
+            const timeLeft = getTimeLeft(offer.expiration);
+            const isEndingSoon = timeLeft.hours < 24;
+            
+            return `
+                <div class="offer-card" data-offer-id="${offer.id}">
+                    ${isEndingSoon ? `<div class="offer-badge">⏰ Termina pronto</div>` : ''}
+                    <img src="${offer.image}" alt="${offer.title}" class="offer-image" onerror="this.src='../assets/products/default.jpg'">
+                    
+                    <div class="offer-content">
+                        <div class="offer-header">
+                            <div>
+                                <div class="offer-title">${offer.title}</div>
+                                <div class="offer-merchant">${offer.merchant}</div>
+                            </div>
+                            <div class="offer-rating">⭐ ${offer.rating}</div>
+                        </div>
+
+                        <p class="offer-description">${offer.description}</p>
+
+                        <div class="offer-price">
+                            <span class="current-price">${offer.currentPrice}</span>
+                            <span class="original-price">${offer.originalPrice}</span>
+                            <span class="discount">-${offer.discount}</span>
+                        </div>
+
+                        ${isEndingSoon ? `
+                            <div class="countdown">
+                                <div class="countdown-text">Termina en:</div>
+                                <div class="countdown-timer" data-expiration="${offer.expiration}">${formatTimeLeft(timeLeft)}</div>
+                            </div>
+                        ` : ''}
+
+                        <div class="offer-meta">
+                            <span>📦 ${offer.unitsLeft} unidades</span>
+                            <span>👥 ${offer.reviewCount} reseñas</span>
+                        </div>
+
+                        <div class="offer-actions">
+                            <button class="btn btn-primary" onclick="addToCart(${offer.id})">
+                                🛒 Agregar
+                            </button>
+                            <button class="btn btn-outline" onclick="viewOffer(${offer.id})">
+                                👀 Ver
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function filterOffers() {
+            const sortBy = document.getElementById('sortFilter').value;
+            const category = document.getElementById('categoryFilter').value;
+            const commerce = document.getElementById('commerceFilter').value;
+            const activeFilter = document.querySelector('.filter-tag.active').dataset.filter;
+
+            let filteredOffers = [...offers];
+
+            // Filtro por categoría
+            if (category !== 'all') {
+                filteredOffers = filteredOffers.filter(offer => offer.category === category);
+            }
+
+            // Filtro por comercio
+            if (commerce !== 'all') {
+                filteredOffers = filteredOffers.filter(offer => offer.merchantId === commerce);
+            }
+
+            // Filtros rápidos
+            switch (activeFilter) {
+                case 'featured':
+                    filteredOffers = filteredOffers.filter(offer => offer.featured);
+                    break;
+                case 'ending':
+                    filteredOffers = filteredOffers.filter(offer => getTimeLeft(offer.expiration).hours < 24);
+                    break;
+                case 'discount':
+                    filteredOffers = filteredOffers.filter(offer => offer.discountValue >= 50);
+                    break;
+            }
+
+            // Ordenar
+            switch (sortBy) {
+                case 'popular':
+                    filteredOffers.sort((a, b) => b.reviewCount - a.reviewCount);
+                    break;
+                case 'newest':
+                    filteredOffers.sort((a, b) => new Date(b.expiration) - new Date(a.expiration));
+                    break;
+                case 'ending':
+                    filteredOffers.sort((a, b) => new Date(a.expiration) - new Date(b.expiration));
+                    break;
+                case 'discount':
+                    filteredOffers.sort((a, b) => b.discountValue - a.discountValue);
+                    break;
+            }
+
+            // Aquí podrías re-renderizar todas las ofertas filtradas en una sola sección
+            console.log('Ofertas filtradas:', filteredOffers);
+        }
+
+        function updateStats() {
+            const activeOffers = offers.length;
+            const uniqueCommerce = [...new Set(offers.map(offer => offer.merchantId))].length;
+            const totalSavings = offers.reduce((sum, offer) => {
+                const saving = parseInt(offer.currentPrice.replace(/\D/g, '')) - parseInt(offer.originalPrice.replace(/\D/g, ''));
+                return sum + Math.abs(saving);
+            }, 0);
+
+            document.getElementById('activeOffers').textContent = activeOffers;
+            document.getElementById('commerceCount').textContent = uniqueCommerce;
+            document.getElementById('savingsTotal').textContent = `$${totalSavings.toLocaleString()} RD`;
+        }
+
+        function startCountdowns() {
+            // Actualizar todos los countdowns cada segundo
+            setInterval(() => {
+                updateFeaturedCountdown();
+                updateOfferCountdowns();
+            }, 1000);
+        }
+
+        function updateFeaturedCountdown() {
+            const featuredOffer = offers.find(offer => offer.featured);
+            if (featuredOffer) {
+                const timeLeft = getTimeLeft(featuredOffer.expiration);
+                document.getElementById('featuredCountdown').textContent = formatTimeLeft(timeLeft);
+            }
+        }
+
+        function updateOfferCountdowns() {
+            const countdownElements = document.querySelectorAll('.countdown-timer[data-expiration]');
+            countdownElements.forEach(element => {
+                const expiration = element.getAttribute('data-expiration');
+                const timeLeft = getTimeLeft(expiration);
+                element.textContent = formatTimeLeft(timeLeft);
+            });
+        }
+
+        function getTimeLeft(expirationDate) {
+            const now = new Date();
+            const expiration = new Date(expirationDate);
+            const difference = expiration - now;
+
+            if (difference <= 0) {
+                return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+            }
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            return { days, hours, minutes, seconds };
+        }
+
+        function formatTimeLeft(timeLeft) {
+            if (timeLeft.days > 0) {
+                return `${timeLeft.days}d ${timeLeft.hours}h`;
+            } else if (timeLeft.hours > 0) {
+                return `${timeLeft.hours}h ${timeLeft.minutes}m`;
+            } else {
+                return `${timeLeft.minutes}m ${timeLeft.seconds}s`;
+            }
+        }
+
+        // FUNCIONES DE INTERACCIÓN
+        function viewOffer(offerId) {
+            const offer = offers.find(o => o.id === offerId);
+            if (offer) {
+                // Redirigir a la página del comercio o mostrar modal
+                window.location.href = `../commerce/commerce-profile.html?id=${offer.merchantId}&offer=${offerId}`;
+            }
+        }
+
+        function addToCart(offerId) {
+            const offer = offers.find(o => o.id === offerId);
+            if (offer) {
+                // Agregar al carrito
+                const cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+                cart.push({
+                    id: offer.id,
+                    name: offer.title,
+                    price: offer.currentPrice,
+                    image: offer.image,
+                    merchant: offer.merchant,
+                    merchantId: offer.merchantId,
+                    quantity: 1,
+                    isOffer: true
+                });
+                localStorage.setItem('shoppingCart', JSON.stringify(cart));
+                
+                showNotification(`${offer.title} agregado al carrito`, 'success');
+            }
+        }
+
+        function shareOffer(offerId) {
+            const offer = offers.find(o => o.id === offerId);
+            if (offer && navigator.share) {
+                navigator.share({
+                    title: offer.title,
+                    text: `Mira esta increíble oferta en ConectaBarrio: ${offer.title} - ${offer.currentPrice} (${offer.discount} descuento)`,
+                    url: window.location.href + `?offer=${offerId}`
+                });
+            } else {
+                // Fallback para navegadores que no soportan Web Share API
+                navigator.clipboard.writeText(`${offer.title} - ${offer.currentPrice} (${offer.discount} descuento) en ${offer.merchant}`).then(() => {
+                    showNotification('Oferta copiada al portapapeles', 'info');
+                });
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()">×</button>
+            `;
+
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: ${getNotificationColor(type)};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                animation: slideInRight 0.3s ease;
+                max-width: 400px;
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 4000);
+        }
+
+        function getNotificationColor(type) {
+            const colors = {
+                success: '#28a745',
+                error: '#dc3545',
+                warning: '#ffc107',
+                info: '#17a2b8'
+            };
+            return colors[type] || colors.info;
+        }
+
+        // Agregar estilos para notificaciones
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+
+            .notification button {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.2rem;
+                cursor: pointer;
+                padding: 0;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0.8;
+            }
+
+            .notification button:hover {
+                opacity: 1;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

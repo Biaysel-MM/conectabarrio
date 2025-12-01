@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soporte y Ayuda - ConectaBarrio</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* ESTILOS ESPECÍFICOS PARA SUPPORT */
+        :root {
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #fff;
+        }
+
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), #1a6a8f);
+            color: white;
+            padding: 3rem 5%;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* MAIN CONTENT */
+        .support-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+        }
+
+        /* SUPPORT OPTIONS */
+        .support-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .support-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .support-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .support-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .support-card h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .support-card p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: #1a6a8f;
+            transform: translateY(-2px);
+        }
+
+        /* KNOWLEDGE BASE */
+        .knowledge-base {
+            background: var(--light);
+            padding: 3rem;
+            border-radius: 12px;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--dark);
+            font-size: 2rem;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .category {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .category h3 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .articles {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .article-link {
+            color: var(--gray);
+            text-decoration: none;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e9ecef;
+            transition: color 0.3s;
+        }
+
+        .article-link:hover {
+            color: var(--primary);
+        }
+
+        .article-link:last-child {
+            border-bottom: none;
+        }
+
+        /* TROUBLESHOOTING */
+        .troubleshooting {
+            margin-bottom: 4rem;
+        }
+
+        .troubleshooting-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .issue-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .issue-card h3 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .solution-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content p {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* CONTACT CTA */
+        .contact-cta {
+            background: linear-gradient(135deg, var(--secondary), #8a2f5f);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .contact-cta h2 {
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .contact-cta p {
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--secondary);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .support-page {
+                padding: 2rem 1rem;
+            }
+
+            .knowledge-base {
+                padding: 2rem 1rem;
+            }
+
+            .categories {
+                grid-template-columns: 1fr;
+            }
+
+            .troubleshooting-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-cta {
+                padding: 3rem 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 2rem 1rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .support-card {
+                padding: 1.5rem;
+            }
+
+            .issue-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+<!-- En el body de cada página -->
+<div id="dynamic-navbar"></div>
+<!-- El resto del contenido de tu página -->
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <h1>Centro de Soporte</h1>
+        <p>Estamos aquí para ayudarte. Encuentra respuestas rápidas o contacta con nuestro equipo</p>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="support-page">
+        <!-- SUPPORT OPTIONS -->
+        <div class="support-options">
+            <div class="support-card">
+                <div class="support-icon">📞</div>
+                <h3>Soporte Telefónico</h3>
+                <p>Habla directamente con nuestro equipo de soporte para resolver problemas urgentes</p>
+                <a href="tel:+18001234567" class="btn-primary">Llamar Ahora</a>
+            </div>
+
+            <div class="support-card">
+                <div class="support-icon">💬</div>
+                <h3>Chat en Vivo</h3>
+                <p>Conversación instantánea con nuestros agentes especializados</p>
+                <button class="btn-primary" onclick="openChat()">Iniciar Chat</button>
+            </div>
+
+            <div class="support-card">
+                <div class="support-icon">📧</div>
+                <h3>Email de Soporte</h3>
+                <p>Envía tu consulta y recibe respuesta en menos de 24 horas</p>
+                <a href="mailto:soporte@conectabarrio.com" class="btn-primary">Enviar Email</a>
+            </div>
+        </div>
+
+        <!-- KNOWLEDGE BASE -->
+        <section class="knowledge-base">
+            <h2 class="section-title">Base de Conocimiento</h2>
+            <div class="categories">
+                <div class="category">
+                    <h3>📝 Registro y Cuenta</h3>
+                    <div class="articles">
+                        <a href="faq.html#registration" class="article-link">Cómo crear una cuenta</a>
+                        <a href="faq.html#registration" class="article-link">Recuperar contraseña</a>
+                        <a href="faq.html#registration" class="article-link">Verificar mi cuenta</a>
+                        <a href="faq.html#registration" class="article-link">Actualizar información personal</a>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <h3>🛒 Pedidos y Compras</h3>
+                    <div class="articles">
+                        <a href="faq.html#orders" class="article-link">Realizar un pedido</a>
+                        <a href="faq.html#orders" class="article-link">Seguimiento de pedidos</a>
+                        <a href="faq.html#orders" class="article-link">Modificar o cancelar pedido</a>
+                        <a href="faq.html#orders" class="article-link">Problemas con la entrega</a>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <h3>💳 Pagos y Facturación</h3>
+                    <div class="articles">
+                        <a href="faq.html#payments" class="article-link">Métodos de pago aceptados</a>
+                        <a href="faq.html#payments" class="article-link">Problemas con el pago</a>
+                        <a href="faq.html#payments" class="article-link">Solicitar factura</a>
+                        <a href="faq.html#payments" class="article-link">Reembolsos y devoluciones</a>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <h3>🏪 Para Comercios</h3>
+                    <div class="articles">
+                        <a href="faq.html#commerce" class="article-link">Registrar mi comercio</a>
+                        <a href="faq.html#commerce" class="article-link">Gestionar productos</a>
+                        <a href="faq.html#commerce" class="article-link">Configurar entregas</a>
+                        <a href="faq.html#commerce" class="article-link">Reportes y estadísticas</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TROUBLESHOOTING -->
+        <section class="troubleshooting">
+            <h2 class="section-title">Solución de Problemas Comunes</h2>
+            <div class="troubleshooting-grid">
+                <div class="issue-card">
+                    <h3>🔐 Problemas de Acceso</h3>
+                    <div class="solution-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <p><strong>Verifica tu conexión a internet</strong> - Asegúrate de tener una conexión estable</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <p><strong>Limpia la caché del navegador</strong> - Ve a configuración y borra datos de navegación</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <p><strong>Usa "Olvidé mi contraseña"</strong> - Si no recuerdas tus credenciales</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="issue-card">
+                    <h3>📱 App No Funciona</h3>
+                    <div class="solution-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <p><strong>Actualiza la aplicación</strong> - Ve a tu tienda de apps y busca actualizaciones</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <p><strong>Reinicia la aplicación</strong> - Ciérrala completamente y vuelve a abrirla</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <p><strong>Reinstala la app</strong> - Desinstala y descarga nuevamente desde la tienda oficial</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="issue-card">
+                    <h3>💳 Pago Rechazado</h3>
+                    <div class="solution-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <p><strong>Verifica los datos de tu tarjeta</strong> - Número, fecha de vencimiento y CVV</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <p><strong>Contacta a tu banco</strong> - Algunas transacciones requieren autorización</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <p><strong>Prueba otro método de pago</strong> - Efectivo, transferencia o otra tarjeta</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="issue-card">
+                    <h3>🚚 Problemas de Entrega</h3>
+                    <div class="solution-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <p><strong>Verifica la dirección</strong> - Confirma que la dirección de entrega es correcta</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <p><strong>Contacta al comercio</strong> - Ellos pueden darte información actualizada</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <p><strong>Revisa el seguimiento</strong> - Usa el número de pedido para ver el estado</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT CTA -->
+        <div class="contact-cta">
+            <h2>¿Necesitas ayuda personalizada?</h2>
+            <p>Nuestro equipo de soporte está disponible para asistirte con cualquier problema o consulta que tengas.</p>
+            <a href="contact.html" class="btn-secondary">Contactar Soporte</a>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navegación móvil
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+
+            // Animation on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeIn 0.6s ease forwards';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe elements for animation
+            const elementsToAnimate = document.querySelectorAll('.support-card, .category, .issue-card');
+            elementsToAnimate.forEach(el => {
+                el.style.opacity = '0';
+                observer.observe(el);
+            });
+        });
+
+        function openChat() {
+            // Simular apertura de chat
+            alert('Iniciando chat en vivo... En un momento serás conectado con uno de nuestros agentes.');
+            
+            // En una implementación real, aquí se integraría con un servicio de chat como Intercom, Zendesk, etc.
+            const chatWindow = document.createElement('div');
+            chatWindow.innerHTML = `
+                <div style="position: fixed; bottom: 20px; right: 20px; width: 350px; height: 500px; background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 10000; display: flex; flex-direction: column;">
+                    <div style="background: var(--primary); color: white; padding: 1rem; border-radius: 12px 12px 0 0; display: flex; justify-content: space-between; align-items: center;">
+                        <strong>Soporte ConectaBarrio</strong>
+                        <button onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; color: white; cursor: pointer;">×</button>
+                    </div>
+                    <div style="flex: 1; padding: 1rem; overflow-y: auto;">
+                        <div style="background: var(--light); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                            <strong>Soporte:</strong> ¡Hola! ¿En qué puedo ayudarte hoy?
+                        </div>
+                    </div>
+                    <div style="padding: 1rem; border-top: 1px solid #e9ecef;">
+                        <input type="text" placeholder="Escribe tu mensaje..." style="width: 100%; padding: 0.75rem; border: 1px solid #e9ecef; border-radius: 8px; margin-bottom: 0.5rem;">
+                        <button style="background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; width: 100%;">Enviar</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(chatWindow);
+        }
+
+        // Agregar estilos para animaciones
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse - ConectaBarrio</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* ESTILOS ESPECÍFICOS PARA REGISTER */
+        :root {
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .auth-logo img {
+            height: 40px;
+        }
+
+        .auth-header h2 {
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .auth-header p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .user-type-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: var(--light);
+            padding: 0.5rem;
+            border-radius: 12px;
+        }
+
+        .user-type-btn {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 2px solid transparent;
+            background: transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .user-type-btn.active {
+            background: white;
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 2px 8px rgba(46, 134, 171, 0.2);
+        }
+
+        .auth-form {
+            margin-bottom: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: var(--light);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(46, 134, 171, 0.1);
+        }
+
+        .form-input.error {
+            border-color: var(--danger);
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 2.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--gray);
+            font-size: 1.2rem;
+        }
+
+        .password-strength {
+            margin-top: 0.5rem;
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+
+        .password-strength.weak .password-strength-bar {
+            background: var(--danger);
+            width: 33%;
+        }
+
+        .password-strength.medium .password-strength-bar {
+            background: var(--warning);
+            width: 66%;
+        }
+
+        .password-strength.strong .password-strength-bar {
+            background: var(--success);
+            width: 100%;
+        }
+
+        .password-hints {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 0.25rem;
+        }
+
+        .form-options {
+            margin-bottom: 1.5rem;
+        }
+
+        .checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .checkbox input {
+            margin-top: 0.25rem;
+            flex-shrink: 0;
+        }
+
+        .checkbox a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .checkbox a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        .btn-primary:hover {
+            background: #1a6a8f;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(46, 134, 171, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-google {
+            background: white;
+            color: var(--dark);
+            border: 2px solid #e9ecef;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .btn-google:hover {
+            border-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn-google img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .auth-divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            position: relative;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .auth-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e9ecef;
+        }
+
+        .auth-divider span {
+            background: white;
+            padding: 0 1rem;
+            position: relative;
+        }
+
+        .auth-footer {
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .auth-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .commerce-fields {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .commerce-fields.show {
+            display: block;
+        }
+
+        /* ANIMACIONES */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .user-type-selector {
+                flex-direction: column;
+            }
+
+            .auth-header h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <img src="../assets/logo.png" alt="ConectaBarrio">
+                    <span>ConectaBarrio</span>
+                </div>
+                <h2>Crear Cuenta</h2>
+                <p>Únete a tu comunidad local</p>
+            </div>
+
+            <!-- Selector de tipo de usuario -->
+            <div class="user-type-selector">
+                <button type="button" class="user-type-btn active" data-type="user">
+                    👤 Usuario
+                </button>
+                <button type="button" class="user-type-btn" data-type="commerce">
+                    🏪 Comercio
+                </button>
+            </div>
+            
+            <form id="registerForm" class="auth-form">
+                <!-- Campos comunes -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">Nombre</label>
+                        <input type="text" id="firstName" class="form-input" placeholder="Tu nombre" required>
+                        <div class="error-message" id="firstNameError">El nombre es requerido</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Apellido</label>
+                        <input type="text" id="lastName" class="form-input" placeholder="Tu apellido" required>
+                        <div class="error-message" id="lastNameError">El apellido es requerido</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Correo Electrónico</label>
+                    <input type="email" id="email" class="form-input" placeholder="tu@email.com" required>
+                    <div class="error-message" id="emailError">Por favor ingresa un correo válido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Teléfono</label>
+                    <input type="tel" id="phone" class="form-input" placeholder="(809) 123-4567" required>
+                    <div class="error-message" id="phoneError">Por favor ingresa un teléfono válido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Dirección</label>
+                    <input type="text" id="address" class="form-input" placeholder="Tu dirección completa" required>
+                    <div class="error-message" id="addressError">La dirección es requerida</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+                    <button type="button" class="password-toggle" id="passwordToggle">👁️</button>
+                    <div class="password-strength" id="passwordStrength">
+                        <div class="password-strength-bar"></div>
+                    </div>
+                    <div class="password-hints">
+                        La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas y números.
+                    </div>
+                    <div class="error-message" id="passwordError">La contraseña no cumple con los requisitos</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmar Contraseña</label>
+                    <input type="password" id="confirmPassword" class="form-input" placeholder="••••••••" required>
+                    <button type="button" class="password-toggle" id="confirmPasswordToggle">👁️</button>
+                    <div class="error-message" id="confirmPasswordError">Las contraseñas no coinciden</div>
+                </div>
+
+                <!-- Campos específicos para comercios -->
+                <div class="commerce-fields" id="commerceFields">
+                    <div class="form-group">
+                        <label for="businessName">Nombre del Comercio</label>
+                        <input type="text" id="businessName" class="form-input" placeholder="Nombre de tu negocio">
+                        <div class="error-message" id="businessNameError">El nombre del comercio es requerido</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="businessType">Tipo de Comercio</label>
+                        <select id="businessType" class="form-input">
+                            <option value="">Selecciona un tipo</option>
+                            <option value="colmado">Colmado</option>
+                            <option value="panaderia">Panadería</option>
+                            <option value="farmacia">Farmacia</option>
+                            <option value="restaurante">Restaurante</option>
+                            <option value="peluqueria">Peluquería</option>
+                            <option value="otros">Otros</option>
+                        </select>
+                        <div class="error-message" id="businessTypeError">Por favor selecciona un tipo de comercio</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="businessAddress">Dirección del Comercio</label>
+                        <input type="text" id="businessAddress" class="form-input" placeholder="Dirección del negocio">
+                        <div class="error-message" id="businessAddressError">La dirección del comercio es requerida</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="businessPhone">Teléfono del Comercio</label>
+                        <input type="tel" id="businessPhone" class="form-input" placeholder="(809) 987-6543">
+                        <div class="error-message" id="businessPhoneError">El teléfono del comercio es requerido</div>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <label class="checkbox">
+                        <input type="checkbox" id="terms" required>
+                        <span>Acepto los <a href="#" target="_blank">Términos y Condiciones</a> y la <a href="#" target="_blank">Política de Privacidad</a></span>
+                    </label>
+                    <div class="error-message" id="termsError">Debes aceptar los términos y condiciones</div>
+                </div>
+
+                <div class="form-options">
+                    <label class="checkbox">
+                        <input type="checkbox" id="newsletter">
+                        <span>Deseo recibir ofertas y novedades por correo electrónico</span>
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn-primary" id="registerBtn">
+                    <span>Crear Cuenta</span>
+                </button>
+            </form>
+
+            <div class="auth-divider">
+                <span>o registrarse con</span>
+            </div>
+
+            <button class="btn-google" id="googleRegister">
+                <img src="../assets/google.png" alt="Google">
+                <span>Google</span>
+            </button>
+            
+            <div class="auth-footer">
+                <p>¿Ya tienes cuenta? <a href="login.html">Inicia sesión aquí</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos del DOM
+            const registerForm = document.getElementById('registerForm');
+            const userTypeBtns = document.querySelectorAll('.user-type-btn');
+            const commerceFields = document.getElementById('commerceFields');
+            const registerBtn = document.getElementById('registerBtn');
+            const googleRegister = document.getElementById('googleRegister');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const passwordToggle = document.getElementById('passwordToggle');
+            const confirmPasswordToggle = document.getElementById('confirmPasswordToggle');
+            const passwordStrength = document.getElementById('passwordStrength');
+
+            // Tipo de usuario (por defecto o desde URL)
+            let userType = 'user';
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('type') === 'commerce') {
+                userType = 'commerce';
+                setUserType('commerce');
+            }
+
+            // Selector de tipo de usuario
+            userTypeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const type = this.getAttribute('data-type');
+                    setUserType(type);
+                });
+            });
+
+            function setUserType(type) {
+                userType = type;
+                
+                // Actualizar botones
+                userTypeBtns.forEach(btn => {
+                    btn.classList.toggle('active', btn.getAttribute('data-type') === type);
+                });
+
+                // Mostrar/ocultar campos de comercio
+                if (type === 'commerce') {
+                    commerceFields.classList.add('show');
+                    // Hacer requeridos los campos de comercio
+                    document.getElementById('businessName').required = true;
+                    document.getElementById('businessType').required = true;
+                    document.getElementById('businessAddress').required = true;
+                    document.getElementById('businessPhone').required = true;
+                } else {
+                    commerceFields.classList.remove('show');
+                    // Quitar requerido de campos de comercio
+                    document.getElementById('businessName').required = false;
+                    document.getElementById('businessType').required = false;
+                    document.getElementById('businessAddress').required = false;
+                    document.getElementById('businessPhone').required = false;
+                }
+            }
+
+            // Toggle de visibilidad de contraseñas
+            passwordToggle.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.textContent = type === 'password' ? '👁️' : '👁️‍🗨️';
+            });
+
+            confirmPasswordToggle.addEventListener('click', function() {
+                const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                confirmPasswordInput.setAttribute('type', type);
+                this.textContent = type === 'password' ? '👁️' : '👁️‍🗨️';
+            });
+
+            // Validación de fortaleza de contraseña
+            passwordInput.addEventListener('input', function() {
+                validatePasswordStrength(this.value);
+                validatePassword(this);
+            });
+
+            confirmPasswordInput.addEventListener('input', function() {
+                validateConfirmPassword(this);
+            });
+
+            // Validación en tiempo real para otros campos
+            const inputs = registerForm.querySelectorAll('input[required], select[required]');
+            inputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    validateField(this);
+                });
+            });
+
+            // Envío del formulario
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (validateForm()) {
+                    registerUser();
+                }
+            });
+
+            // Registro con Google
+            googleRegister.addEventListener('click', function() {
+                registerWithGoogle();
+            });
+
+            // Funciones de validación
+            function validateField(input) {
+                const fieldName = input.id;
+                
+                switch (fieldName) {
+                    case 'firstName':
+                    case 'lastName':
+                    case 'businessName':
+                        return validateRequired(input, 'Este campo es requerido');
+                    case 'email':
+                        return validateEmail(input);
+                    case 'phone':
+                    case 'businessPhone':
+                        return validatePhone(input);
+                    case 'address':
+                    case 'businessAddress':
+                        return validateRequired(input, 'La dirección es requerida');
+                    case 'password':
+                        return validatePassword(input);
+                    case 'confirmPassword':
+                        return validateConfirmPassword(input);
+                    case 'businessType':
+                        return validateRequired(input, 'Por favor selecciona un tipo de comercio');
+                    default:
+                        return true;
+                }
+            }
+
+            function validateRequired(input, message) {
+                const errorElement = document.getElementById(input.id + 'Error');
+                
+                if (!input.value.trim()) {
+                    showError(input, errorElement, message);
+                    return false;
+                }
+
+                hideError(input, errorElement);
+                return true;
+            }
+
+            function validateEmail(input) {
+                const errorElement = document.getElementById('emailError');
+                const email = input.value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (!email) {
+                    showError(input, errorElement, 'El correo electrónico es requerido');
+                    return false;
+                }
+
+                if (!emailRegex.test(email)) {
+                    showError(input, errorElement, 'Por favor ingresa un correo válido');
+                    return false;
+                }
+
+                hideError(input, errorElement);
+                return true;
+            }
+
+            function validatePhone(input) {
+                const errorElement = document.getElementById(input.id + 'Error');
+                const phone = input.value.trim();
+                const phoneRegex = /^[0-9+\-() ]{10,}$/;
+
+                if (!phone) {
+                    showError(input, errorElement, 'El teléfono es requerido');
+                    return false;
+                }
+
+                if (!phoneRegex.test(phone)) {
+                    showError(input, errorElement, 'Por favor ingresa un teléfono válido');
+                    return false;
+                }
+
+                hideError(input, errorElement);
+                return true;
+            }
+
+            function validatePassword(input) {
+                const errorElement = document.getElementById('passwordError');
+                const password = input.value;
+
+                if (!password) {
+                    showError(input, errorElement, 'La contraseña es requerida');
+                    return false;
+                }
+
+                if (password.length < 8) {
+                    showError(input, errorElement, 'La contraseña debe tener al menos 8 caracteres');
+                    return false;
+                }
+
+                const hasUpperCase = /[A-Z]/.test(password);
+                const hasLowerCase = /[a-z]/.test(password);
+                const hasNumbers = /\d/.test(password);
+
+                if (!hasUpperCase || !hasLowerCase || !hasNumbers) {
+                    showError(input, errorElement, 'La contraseña debe incluir mayúsculas, minúsculas y números');
+                    return false;
+                }
+
+                hideError(input, errorElement);
+                return true;
+            }
+
+            function validateConfirmPassword(input) {
+                const errorElement = document.getElementById('confirmPasswordError');
+                const confirmPassword = input.value;
+                const password = passwordInput.value;
+
+                if (!confirmPassword) {
+                    showError(input, errorElement, 'Por favor confirma tu contraseña');
+                    return false;
+                }
+
+                if (confirmPassword !== password) {
+                    showError(input, errorElement, 'Las contraseñas no coinciden');
+                    return false;
+                }
+
+                hideError(input, errorElement);
+                return true;
+            }
+
+            function validatePasswordStrength(password) {
+                let strength = 0;
+                
+                if (password.length >= 8) strength++;
+                if (/[A-Z]/.test(password)) strength++;
+                if (/[a-z]/.test(password)) strength++;
+                if (/\d/.test(password)) strength++;
+                if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+                passwordStrength.className = 'password-strength';
+                
+                if (strength <= 2) {
+                    passwordStrength.classList.add('weak');
+                } else if (strength <= 4) {
+                    passwordStrength.classList.add('medium');
+                } else {
+                    passwordStrength.classList.add('strong');
+                }
+            }
+
+            function validateForm() {
+                let isValid = true;
+                
+                // Validar campos comunes
+                const commonFields = ['firstName', 'lastName', 'email', 'phone', 'address', 'password', 'confirmPassword'];
+                commonFields.forEach(field => {
+                    const input = document.getElementById(field);
+                    if (!validateField(input)) {
+                        isValid = false;
+                    }
+                });
+
+                // Validar términos
+                const termsCheckbox = document.getElementById('terms');
+                const termsError = document.getElementById('termsError');
+                if (!termsCheckbox.checked) {
+                    termsError.classList.add('show');
+                    isValid = false;
+                } else {
+                    termsError.classList.remove('show');
+                }
+
+                // Validar campos de comercio si es necesario
+                if (userType === 'commerce') {
+                    const commerceFields = ['businessName', 'businessType', 'businessAddress', 'businessPhone'];
+                    commerceFields.forEach(field => {
+                        const input = document.getElementById(field);
+                        if (!validateField(input)) {
+                            isValid = false;
+                        }
+                    });
+                }
+
+                return isValid;
+            }
+
+            function showError(input, errorElement, message) {
+                input.classList.add('error');
+                input.classList.add('shake');
+                errorElement.textContent = message;
+                errorElement.classList.add('show');
+                
+                setTimeout(() => {
+                    input.classList.remove('shake');
+                }, 500);
+            }
+
+            function hideError(input, errorElement) {
+                input.classList.remove('error');
+                errorElement.classList.remove('show');
+            }
+
+            // Simulación de registro
+            function registerUser() {
+                const registerBtnText = registerBtn.querySelector('span');
+                const originalText = registerBtnText.textContent;
+                
+                // Mostrar loading
+                registerBtn.disabled = true;
+                registerBtnText.textContent = 'Creando cuenta...';
+                registerBtn.style.opacity = '0.7';
+
+                // Recopilar datos del formulario
+                const formData = {
+                    userType: userType,
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    address: document.getElementById('address').value,
+                    password: document.getElementById('password').value,
+                    terms: document.getElementById('terms').checked,
+                    newsletter: document.getElementById('newsletter').checked
+                };
+
+                // Agregar datos de comercio si aplica
+                if (userType === 'commerce') {
+                    formData.business = {
+                        name: document.getElementById('businessName').value,
+                        type: document.getElementById('businessType').value,
+                        address: document.getElementById('businessAddress').value,
+                        phone: document.getElementById('businessPhone').value
+                    };
+                }
+
+                // Simular llamada a API
+                setTimeout(() => {
+                    // Aquí iría la llamada real al backend
+                    console.log('Registration attempt:', formData);
+
+                    // Simular respuesta exitosa
+                    const success = Math.random() > 0.1; // 90% de éxito para demo
+
+                    if (success) {
+                        showNotification('¡Cuenta creada exitosamente! Redirigiendo...', 'success');
+                        
+                        // Redirigir al login después de registro exitoso
+                        setTimeout(() => {
+                            window.location.href = `login.html?registered=true&type=${userType}`;
+                        }, 2000);
+                    } else {
+                        showNotification('Error al crear la cuenta. Por favor intenta nuevamente.', 'error');
+                        registerBtn.disabled = false;
+                        registerBtnText.textContent = originalText;
+                        registerBtn.style.opacity = '1';
+                    }
+                }, 3000);
+            }
+
+            // Registro con Google (simulación)
+            function registerWithGoogle() {
+                googleRegister.disabled = true;
+                googleRegister.style.opacity = '0.7';
+                
+                showNotification('Redirigiendo a Google...', 'info');
+                
+                // Simular autenticación con Google
+                setTimeout(() => {
+                    showNotification('¡Registro exitoso con Google!', 'success');
+                    
+                    setTimeout(() => {
+                        window.location.href = '../user/user-dashboard.html';
+                    }, 1000);
+                }, 1500);
+            }
+
+            // Sistema de notificaciones
+            function showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.innerHTML = `
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.remove()">×</button>
+                `;
+
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: ${getNotificationColor(type)};
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    z-index: 10000;
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    animation: slideInRight 0.3s ease;
+                    max-width: 400px;
+                `;
+
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 4000);
+            }
+
+            function getNotificationColor(type) {
+                const colors = {
+                    success: '#28a745',
+                    error: '#dc3545',
+                    warning: '#ffc107',
+                    info: '#17a2b8'
+                };
+                return colors[type] || colors.info;
+            }
+
+            // Agregar estilos para notificaciones
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideInRight {
+                    from {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+
+                .notification button {
+                    background: none;
+                    border: none;
+                    color: white;
+                    font-size: 1.2rem;
+                    cursor: pointer;
+                    padding: 0;
+                    width: 24px;
+                    height: 24px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    opacity: 0.8;
+                }
+
+                .notification button:hover {
+                    opacity: 1;
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - ConectaBarrio</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* ESTILOS ESPECÍFICOS PARA CONTACT */
+        :root {
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #fff;
+        }
+
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), #1a6a8f);
+            color: white;
+            padding: 3rem 5%;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* MAIN CONTENT */
+        .contact-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+        }
+
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        /* CONTACT INFO */
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .info-card h2 {
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .contact-content h3 {
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-content p {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        .contact-content a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .contact-content a:hover {
+            text-decoration: underline;
+        }
+
+        /* BUSINESS HOURS */
+        .hours-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .hour-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .hour-item:last-child {
+            border-bottom: none;
+        }
+
+        .hour-day {
+            font-weight: 500;
+        }
+
+        .hour-time {
+            color: var(--gray);
+        }
+
+        /* CONTACT FORM */
+        .contact-form {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .form-title {
+            color: var(--dark);
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: #1a6a8f;
+            transform: translateY(-2px);
+        }
+
+        /* MAP SECTION */
+        .map-section {
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--dark);
+            font-size: 2rem;
+        }
+
+        .map-container {
+            height: 400px;
+            background: var(--light);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        /* FAQ CTA */
+        .faq-cta {
+            background: var(--light);
+            padding: 3rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .faq-cta h2 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .faq-cta p {
+            color: var(--gray);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .contact-layout {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .contact-page {
+                padding: 2rem 1rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .map-container {
+                height: 300px;
+            }
+
+            .faq-cta {
+                padding: 2rem 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 2rem 1rem;
+            }
+
+            .info-card,
+            .contact-form {
+                padding: 1.5rem;
+            }
+
+            .contact-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+<!-- En el body de cada página -->
+<div id="dynamic-navbar"></div>
+<!-- El resto del contenido de tu página -->
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <h1>Contáctanos</h1>
+        <p>Estamos aquí para escucharte. Ponte en contacto con nuestro equipo para cualquier consulta o sugerencia.</p>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="contact-page">
+        <div class="contact-layout">
+            <!-- CONTACT INFO -->
+            <div class="contact-info">
+                <div class="info-card">
+                    <h2>📞 Información de Contacto</h2>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <div class="contact-icon">📞</div>
+                            <div class="contact-content">
+                                <h3>Teléfono</h3>
+                                <p><a href="tel:+18001234567">+1 (800) 123-4567</a></p>
+                                <p style="font-size: 0.9rem; color: var(--gray);">Lunes a Viernes: 8:00 AM - 6:00 PM</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon">📧</div>
+                            <div class="contact-content">
+                                <h3>Email</h3>
+                                <p><a href="mailto:info@conectabarrio.com">info@conectabarrio.com</a></p>
+                                <p style="font-size: 0.9rem; color: var(--gray);">Respondemos en menos de 24 horas</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon">📍</div>
+                            <div class="contact-content">
+                                <h3>Oficina Principal</h3>
+                                <p>Av. George Washington #500<br>Distrito Nacional, Santo Domingo<br>República Dominicana</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon">🌐</div>
+                            <div class="contact-content">
+                                <h3>Soporte Técnico</h3>
+                                <p><a href="mailto:soporte@conectabarrio.com">soporte@conectabarrio.com</a></p>
+                                <p style="font-size: 0.9rem; color: var(--gray);">Atención 24/7 para problemas técnicos</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h2>🕒 Horario de Atención</h2>
+                    <div class="hours-list">
+                        <div class="hour-item">
+                            <span class="hour-day">Lunes - Viernes</span>
+                            <span class="hour-time">8:00 AM - 6:00 PM</span>
+                        </div>
+                        <div class="hour-item">
+                            <span class="hour-day">Sábados</span>
+                            <span class="hour-time">9:00 AM - 2:00 PM</span>
+                        </div>
+                        <div class="hour-item">
+                            <span class="hour-day">Domingos</span>
+                            <span class="hour-time">Cerrado</span>
+                        </div>
+                        <div class="hour-item">
+                            <span class="hour-day">Soporte Técnico</span>
+                            <span class="hour-time">24/7</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h2>🚀 Soporte Rápido</h2>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <div class="contact-icon">💬</div>
+                            <div class="contact-content">
+                                <h3>Chat en Vivo</h3>
+                                <p>Disponible en horario comercial</p>
+                                <button class="btn-secondary" onclick="openChat()" style="margin-top: 0.5rem;">Iniciar Chat</button>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon">📱</div>
+                            <div class="contact-content">
+                                <h3>App Móvil</h3>
+                                <p>Soporte integrado en la aplicación</p>
+                                <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                                    <a href="#" class="btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">App Store</a>
+                                    <a href="#" class="btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Google Play</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTACT FORM -->
+            <div class="contact-form">
+                <h2 class="form-title">Envíanos un Mensaje</h2>
+                <form id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="firstName">Nombre *</label>
+                            <input type="text" id="firstName" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="lastName">Apellido *</label>
+                            <input type="text" id="lastName" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email *</label>
+                        <input type="email" id="email" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="phone">Teléfono</label>
+                        <input type="tel" id="phone" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="subject">Asunto *</label>
+                        <select id="subject" class="form-select" required>
+                            <option value="">Selecciona un asunto</option>
+                            <option value="general">Consulta General</option>
+                            <option value="support">Soporte Técnico</option>
+                            <option value="billing">Facturación y Pagos</option>
+                            <option value="commerce">Registro de Comercio</option>
+                            <option value="partnership">Alianzas Comerciales</option>
+                            <option value="other">Otro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="message">Mensaje *</label>
+                        <textarea id="message" class="form-textarea" placeholder="Describe tu consulta o problema..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-weight: normal;">
+                            <input type="checkbox" required style="margin-top: 0.25rem;">
+                            <span>Acepto la <a href="#" style="color: var(--primary);">política de privacidad</a> y el tratamiento de mis datos *</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Enviar Mensaje</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- MAP SECTION -->
+        <section class="map-section">
+            <h2 class="section-title">📍 Nuestra Ubicación</h2>
+            <div class="map-container">
+                <!-- En una implementación real, aquí iría un mapa de Google Maps o similar -->
+                <div style="text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🗺️</div>
+                    <h3>Oficinas ConectaBarrio</h3>
+                    <p>Av. George Washington #500, Santo Domingo</p>
+                    <p style="margin-top: 1rem;">
+                        <a href="https://maps.google.com/?q=Av.+George+Washington+500+Santo+Domingo" 
+                           target="_blank" 
+                           class="btn-secondary" 
+                           style="display: inline-block; margin-top: 1rem;">
+                            Ver en Google Maps
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ CTA -->
+        <div class="faq-cta">
+            <h2>¿Tienes una pregunta común?</h2>
+            <p>Consulta nuestra sección de preguntas frecuentes donde encontrarás respuestas rápidas a las dudas más comunes de nuestros usuarios.</p>
+            <a href="faq.html" class="btn-secondary">Ver Preguntas Frecuentes</a>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navegación móvil
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+
+            // Form submission
+            const contactForm = document.getElementById('contactForm');
+            
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Simular envío del formulario
+                const formData = {
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    subject: document.getElementById('subject').value,
+                    message: document.getElementById('message').value
+                };
+                
+                // Mostrar mensaje de éxito
+                showNotification('¡Mensaje enviado con éxito! Te contactaremos pronto.', 'success');
+                
+                // Limpiar formulario
+                contactForm.reset();
+                
+                // En una implementación real, aquí se enviarían los datos al servidor
+                console.log('Formulario enviado:', formData);
+            });
+
+            // Animation on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeIn 0.6s ease forwards';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe elements for animation
+            const elementsToAnimate = document.querySelectorAll('.info-card, .contact-form, .map-container');
+            elementsToAnimate.forEach(el => {
+                el.style.opacity = '0';
+                observer.observe(el);
+            });
+        });
+
+        function openChat() {
+            // Simular apertura de chat
+            alert('Iniciando chat en vivo... En un momento serás conectado con uno de nuestros agentes.');
+            
+            // En una implementación real, aquí se integraría con un servicio de chat
+            const chatWindow = document.createElement('div');
+            chatWindow.innerHTML = `
+                <div style="position: fixed; bottom: 20px; right: 20px; width: 350px; height: 500px; background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 10000; display: flex; flex-direction: column;">
+                    <div style="background: var(--primary); color: white; padding: 1rem; border-radius: 12px 12px 0 0; display: flex; justify-content: space-between; align-items: center;">
+                        <strong>Soporte ConectaBarrio</strong>
+                        <button onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; color: white; cursor: pointer;">×</button>
+                    </div>
+                    <div style="flex: 1; padding: 1rem; overflow-y: auto;">
+                        <div style="background: var(--light); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                            <strong>Soporte:</strong> ¡Hola! ¿En qué puedo ayudarte hoy?
+                        </div>
+                    </div>
+                    <div style="padding: 1rem; border-top: 1px solid #e9ecef;">
+                        <input type="text" placeholder="Escribe tu mensaje..." style="width: 100%; padding: 0.75rem; border: 1px solid #e9ecef; border-radius: 8px; margin-bottom: 0.5rem;">
+                        <button style="background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; width: 100%;">Enviar</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(chatWindow);
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()">×</button>
+            `;
+
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: ${getNotificationColor(type)};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                animation: slideInRight 0.3s ease;
+                max-width: 400px;
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        function getNotificationColor(type) {
+            const colors = {
+                success: '#28a745',
+                error: '#dc3545',
+                warning: '#ffc107',
+                info: '#17a2b8'
+            };
+            return colors[type] || colors.info;
+        }
+
+        // Agregar estilos para animaciones y notificaciones
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+
+            .notification button {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.2rem;
+                cursor: pointer;
+                padding: 0;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0.8;
+            }
+
+            .notification button:hover {
+                opacity: 1;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

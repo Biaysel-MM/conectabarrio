@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Búsqueda Avanzada - ConectaBarrio</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        :root {
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f8f9fa;
+        }
+
+        /* MAIN CONTENT */
+        .search-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 5%;
+        }
+
+        /* HEADER */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            color: var(--dark);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* SEARCH CONTAINER */
+        .search-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 3rem;
+        }
+
+        /* QUICK SEARCH */
+        .quick-search {
+            padding: 2rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 2px solid #e9ecef;
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(46, 134, 171, 0.1);
+        }
+
+        .btn-search {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-search:hover {
+            background: #1a6a8f;
+            transform: translateY(-1px);
+        }
+
+        .search-suggestions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .suggestion-tag {
+            background: var(--light);
+            border: 1px solid #e9ecef;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .suggestion-tag:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* FILTERS SECTION */
+        .filters-section {
+            padding: 2rem;
+        }
+
+        .filters-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .filters-header h2 {
+            color: var(--dark);
+            font-size: 1.5rem;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group h3 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+
+        .filter-option input[type="checkbox"],
+        .filter-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        .filter-label {
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .filter-count {
+            color: var(--gray);
+            font-size: 0.8rem;
+            margin-left: auto;
+        }
+
+        /* RANGE SLIDERS */
+        .range-inputs {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .range-input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .range-separator {
+            color: var(--gray);
+        }
+
+        /* RATING FILTER */
+        .rating-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .rating-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .rating-stars {
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        /* SAVED SEARCHES */
+        .saved-searches {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .saved-searches h2 {
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .saved-searches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .saved-search-card {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .saved-search-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .saved-search-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .saved-search-name {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .saved-search-filters {
+            color: var(--gray);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .saved-search-actions {
+            display: flex;
+            gap: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .saved-search-card:hover .saved-search-actions {
+            opacity: 1;
+        }
+
+        /* RESULTS SECTION */
+        .results-section {
+            margin-top: 3rem;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .results-header h2 {
+            color: var(--dark);
+            font-size: 1.5rem;
+        }
+
+        .results-count {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .view-toggle {
+            display: flex;
+            background: white;
+            border-radius: 8px;
+            padding: 0.25rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .view-option {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .view-option.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .result-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .result-content {
+            padding: 1.5rem;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .result-name {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .result-category {
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .result-rating {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .result-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .result-features {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .feature-tag {
+            background: var(--light);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 1;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1a6a8f;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* RESULTS LIST VIEW */
+        .results-list {
+            display: none;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .result-list-item {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: grid;
+            grid-template-columns: 100px 1fr auto;
+            gap: 1.5rem;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .result-list-item:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .result-list-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .result-list-info {
+            flex: 1;
+        }
+
+        .result-list-name {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .result-list-description {
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .result-list-features {
+            display: flex;
+            gap: 1rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* PAGINATION */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .page-btn {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e9ecef;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .page-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .page-numbers {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .page-number {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .page-number.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .page-number:hover {
+            border-color: var(--primary);
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--gray);
+        }
+
+        .empty-state img {
+            width: 200px;
+            margin-bottom: 2rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .filters-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .saved-searches-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .search-page {
+                padding: 1rem;
+            }
+
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .btn-search {
+                border-radius: 8px;
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .result-list-item {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .result-list-image {
+                margin: 0 auto;
+            }
+
+            .result-list-features {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .range-inputs {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .result-actions {
+                flex-direction: column;
+            }
+
+            .pagination {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+<!-- En el body de cada página -->
+<div id="dynamic-navbar"></div>
+<!-- El resto del contenido de tu página -->
+
+    <!-- MAIN CONTENT -->
+    <main class="search-page">
+        <!-- HEADER -->
+        <div class="page-header">
+            <h1>🔍 Búsqueda Avanzada</h1>
+            <p>Encuentra exactamente lo que buscas con nuestros filtros avanzados y búsquedas guardadas</p>
+        </div>
+
+        <!-- SEARCH CONTAINER -->
+        <div class="search-container">
+            <!-- QUICK SEARCH -->
+            <section class="quick-search">
+                <div class="search-bar">
+                    <input type="text" class="search-input" id="searchInput" placeholder="¿Qué estás buscando? Ej: colmado, panadería, farmacia...">
+                    <button class="btn-search" onclick="performSearch()">
+                        🔍 Buscar
+                    </button>
+                </div>
+
+                <div class="search-suggestions">
+                    <div class="suggestion-tag" onclick="setSearchQuery('colmados cerca')">Colmados cerca</div>
+                    <div class="suggestion-tag" onclick="setSearchQuery('abierto ahora')">Abierto ahora</div>
+                    <div class="suggestion-tag" onclick="setSearchQuery('con delivery')">Con delivery</div>
+                    <div class="suggestion-tag" onclick="setSearchQuery('ofertas hoy')">Ofertas hoy</div>
+                    <div class="suggestion-tag" onclick="setSearchQuery('4 estrellas')">4+ estrellas</div>
+                </div>
+            </section>
+
+            <!-- FILTERS -->
+            <section class="filters-section">
+                <div class="filters-header">
+                    <h2>🎯 Filtros Avanzados</h2>
+                    <div class="filter-actions">
+                        <button class="btn btn-outline" onclick="resetFilters()">
+                            🔄 Limpiar Filtros
+                        </button>
+                        <button class="btn btn-primary" onclick="saveSearch()">
+                            💾 Guardar Búsqueda
+                        </button>
+                    </div>
+                </div>
+
+                <div class="filters-grid">
+                    <!-- CATEGORÍA -->
+                    <div class="filter-group">
+                        <h3>🏪 Categoría</h3>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="checkbox" name="category" value="colmado" checked>
+                                <span class="filter-label">Colmados</span>
+                                <span class="filter-count">(24)</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="category" value="panaderia">
+                                <span class="filter-label">Panaderías</span>
+                                <span class="filter-count">(12)</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="category" value="farmacia">
+                                <span class="filter-label">Farmacias</span>
+                                <span class="filter-count">(8)</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="category" value="restaurante">
+                                <span class="filter-label">Restaurantes</span>
+                                <span class="filter-count">(15)</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="category" value="peluqueria">
+                                <span class="filter-label">Peluquerías</span>
+                                <span class="filter-count">(9)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- UBICACIÓN -->
+                    <div class="filter-group">
+                        <h3>📍 Ubicación</h3>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="radio" name="location" value="current" checked>
+                                <span class="filter-label">Mi ubicación actual</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="radio" name="location" value="custom">
+                                <span class="filter-label">Otra ubicación</span>
+                            </label>
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <input type="text" class="search-input" placeholder="Ingresa una dirección" style="border-radius: 8px; padding: 0.75rem;">
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <label style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem; display: block;">Radio de búsqueda:</label>
+                            <select class="search-input" style="border-radius: 8px; padding: 0.75rem; width: 100%;">
+                                <option value="1">1 km</option>
+                                <option value="3" selected>3 km</option>
+                                <option value="5">5 km</option>
+                                <option value="10">10 km</option>
+                                <option value="20">20 km</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- PRECIO -->
+                    <div class="filter-group">
+                        <h3>💰 Rango de Precios</h3>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="radio" name="price" value="any" checked>
+                                <span class="filter-label">Cualquier precio</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="radio" name="price" value="budget">
+                                <span class="filter-label">Económico ($)</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="radio" name="price" value="medium">
+                                <span class="filter-label">Moderado ($$)</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="radio" name="price" value="premium">
+                                <span class="filter-label">Premium ($$$)</span>
+                            </label>
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <label style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem; display: block;">Rango personalizado:</label>
+                            <div class="range-inputs">
+                                <input type="number" class="range-input" placeholder="Mín" min="0">
+                                <span class="range-separator">-</span>
+                                <input type="number" class="range-input" placeholder="Máx" min="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CALIFICACIÓN -->
+                    <div class="filter-group">
+                        <h3>⭐ Calificación</h3>
+                        <div class="rating-options">
+                            <label class="rating-option">
+                                <input type="checkbox" name="rating" value="5">
+                                <span class="rating-stars">★★★★★</span>
+                                <span class="filter-label">5 estrellas</span>
+                                <span class="filter-count">(12)</span>
+                            </label>
+                            <label class="rating-option">
+                                <input type="checkbox" name="rating" value="4">
+                                <span class="rating-stars">★★★★☆</span>
+                                <span class="filter-label">4+ estrellas</span>
+                                <span class="filter-count">(28)</span>
+                            </label>
+                            <label class="rating-option">
+                                <input type="checkbox" name="rating" value="3">
+                                <span class="rating-stars">★★★☆☆</span>
+                                <span class="filter-label">3+ estrellas</span>
+                                <span class="filter-count">(35)</span>
+                            </label>
+                            <label class="rating-option">
+                                <input type="checkbox" name="rating" value="2">
+                                <span class="rating-stars">★★☆☆☆</span>
+                                <span class="filter-label">2+ estrellas</span>
+                                <span class="filter-count">(42)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- SERVICIOS -->
+                    <div class="filter-group">
+                        <h3>🚚 Servicios</h3>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="checkbox" name="service" value="delivery">
+                                <span class="filter-label">Delivery a domicilio</span>
+                                <span class="filter-count">(32)</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="service" value="pickup">
+                                <span class="filter-label">Recoge en tienda</span>
+                                <span class="filter-count">(45)</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="service" value="24hours">
+                                <span class="filter-label">Abierto 24 horas</span>
+                                <span class="filter-count">(8)</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="service" value="parking">
+                                <span class="filter-label">Estacionamiento</span>
+                                <span class="filter-count">(15)</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="service" value="wifi">
+                                <span class="filter-label">Wi-Fi gratis</span>
+                                <span class="filter-count">(12)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- HORARIO -->
+                    <div class="filter-group">
+                        <h3>🕒 Horario</h3>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="checkbox" name="hours" value="opennow">
+                                <span class="filter-label">Abierto ahora</span>
+                                <span class="filter-count">(18)</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="hours" value="weekend">
+                                <span class="filter-label">Abierto fines de semana</span>
+                                <span class="filter-count">(40)</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="hours" value="late">
+                                <span class="filter-label">Abierto hasta tarde</span>
+                                <span class="filter-count">(22)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- SAVED SEARCHES -->
+        <section class="saved-searches">
+            <h2>📚 Búsquedas Guardadas</h2>
+            <div class="saved-searches-grid" id="savedSearches">
+                <!-- Las búsquedas guardadas se cargan dinámicamente -->
+            </div>
+        </section>
+
+        <!-- RESULTS -->
+        <section class="results-section">
+            <div class="results-header">
+                <div>
+                    <h2>📋 Resultados de Búsqueda</h2>
+                    <div class="results-count" id="resultsCount">Mostrando 0 resultados</div>
+                </div>
+                <div class="view-toggle">
+                    <button class="view-option active" data-view="grid" onclick="switchView('grid')">
+                        🏠 Grid
+                    </button>
+                    <button class="view-option" data-view="list" onclick="switchView('list')">
+                        📋 Lista
+                    </button>
+                </div>
+            </div>
+
+            <!-- GRID VIEW -->
+            <div class="results-grid" id="resultsGrid">
+                <!-- Los resultados en grid se cargan aquí -->
+            </div>
+
+            <!-- LIST VIEW -->
+            <div class="results-list" id="resultsList">
+                <!-- Los resultados en lista se cargan aquí -->
+            </div>
+
+            <!-- PAGINATION -->
+            <div class="pagination">
+                <button class="page-btn">
+                    ← Anterior
+                </button>
+                <div class="page-numbers">
+                    <div class="page-number active">1</div>
+                    <div class="page-number">2</div>
+                    <div class="page-number">3</div>
+                </div>
+                <button class="page-btn">
+                    Siguiente →
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // DATOS DE BÚSQUEDA (simulados)
+        const searchResults = [
+            {
+                id: 1,
+                name: "Colmado San Miguel",
+                category: "colmado",
+                description: "Productos frescos y delivery rápido en toda la zona. Especialistas en abarrotes y víveres.",
+                image: "../assets/colmado-miguel.jpg",
+                rating: 4.2,
+                reviewCount: 128,
+                distance: 0.8,
+                delivery: true,
+                pickup: true,
+                openNow: true,
+                features: ["🚚 Delivery", "💵 Efectivo", "💳 Tarjetas", "🏠 Familiar"],
+                priceRange: "$"
+            },
+            {
+                id: 2,
+                name: "Panadería Doña Rosa",
+                category: "panaderia",
+                description: "Pan recién horneado todos los días. Especialistas en postres tradicionales y repostería fina.",
+                image: "../assets/panaderia-rosa.jpg",
+                rating: 4.8,
+                reviewCount: 95,
+                distance: 1.2,
+                delivery: true,
+                pickup: true,
+                openNow: true,
+                features: ["🍞 Fresco", "🚚 Delivery", "🏠 Familiar", "☕ Cafetería"],
+                priceRange: "$"
+            },
+            {
+                id: 3,
+                name: "Farmacia La Esperanza",
+                category: "farmacia",
+                description: "Farmacia comunitaria con medicamentos y productos de cuidado personal. Servicio profesional.",
+                image: "../assets/farmacia.jpg",
+                rating: 4.5,
+                reviewCount: 67,
+                distance: 0.5,
+                delivery: true,
+                pickup: true,
+                openNow: false,
+                features: ["💊 Medicamentos", "🚚 Delivery", "👨‍⚕️ Asesoría", "🏪 24/7"],
+                priceRange: "$$"
+            },
+            {
+                id: 4,
+                name: "Peluquería Estilo",
+                category: "peluqueria",
+                description: "Estilistas profesionales con los mejores cortes modernos y servicios de belleza integral.",
+                image: "../assets/peluqueria-estilo.jpg",
+                rating: 4.3,
+                reviewCount: 89,
+                distance: 0.9,
+                delivery: false,
+                pickup: false,
+                openNow: true,
+                features: ["💇 Profesional", "🎨 Coloración", "👶 Niños", "💆 Tratamientos"],
+                priceRange: "$$"
+            },
+            {
+                id: 5,
+                name: "Restaurante Sabores Criollos",
+                category: "restaurante",
+                description: "Auténtica comida dominicana en un ambiente familiar. Los mejores platos tradicionales.",
+                image: "../assets/supermercado.jpg",
+                rating: 4.6,
+                reviewCount: 203,
+                distance: 1.8,
+                delivery: true,
+                pickup: true,
+                openNow: true,
+                features: ["🍛 Criollo", "🚚 Delivery", "🏠 Familiar", "🎉 Eventos"],
+                priceRange: "$$"
+            },
+            {
+                id: 6,
+                name: "Supermercado El Ahorro",
+                category: "colmado",
+                description: "Supermercado con gran variedad de productos a precios competitivos. Todo en un solo lugar.",
+                image: "../assets/supermercado.jpg",
+                rating: 4.1,
+                reviewCount: 156,
+                distance: 2.3,
+                delivery: true,
+                pickup: true,
+                openNow: true,
+                features: ["🛒 Supermercado", "🚚 Delivery", "💳 Tarjetas", "🏪 Amplio"],
+                priceRange: "$$"
+            }
+        ];
+
+        // Búsquedas guardadas
+        const savedSearches = [
+            {
+                id: 1,
+                name: "Colmados con delivery",
+                filters: {
+                    category: ["colmado"],
+                    service: ["delivery"],
+                    rating: ["4", "5"]
+                },
+                resultCount: 12,
+                lastUsed: "2024-01-15"
+            },
+            {
+                id: 2,
+                name: "Abierto ahora cerca",
+                filters: {
+                    hours: ["opennow"],
+                    location: "current",
+                    radius: 3
+                },
+                resultCount: 8,
+                lastUsed: "2024-01-14"
+            },
+            {
+                id: 3,
+                name: "Restaurantes 4+ estrellas",
+                filters: {
+                    category: ["restaurante"],
+                    rating: ["4", "5"],
+                    price: ["medium", "premium"]
+                },
+                resultCount: 6,
+                lastUsed: "2024-01-12"
+            }
+        ];
+
+        // Variables globales
+        let currentView = 'grid';
+        let currentResults = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initSearchPage();
+            setupEventListeners();
+            renderSavedSearches();
+            performSearch(); // Búsqueda inicial
+        });
+
+        function initSearchPage() {
+            // Configuración inicial de la página
+            console.log('Página de búsqueda avanzada inicializada');
+        }
+
+        function setupEventListeners() {
+            // Navegación móvil
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+
+            // Búsqueda con Enter
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            // Filtros en tiempo real
+            const filterInputs = document.querySelectorAll('input[type="checkbox"], input[type="radio"]');
+            filterInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    // En una implementación real, aquí podrías hacer búsqueda en tiempo real
+                    // Por ahora solo mostramos un mensaje
+                    console.log('Filtro cambiado:', this.name, this.value, this.checked);
+                });
+            });
+        }
+
+        function setSearchQuery(query) {
+            document.getElementById('searchInput').value = query;
+            performSearch();
+        }
+
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            const filters = getCurrentFilters();
+            
+            // Simular búsqueda (en una app real, esto llamaría a una API)
+            currentResults = searchResults.filter(result => {
+                // Filtro por texto
+                const matchesQuery = !query || 
+                    result.name.toLowerCase().includes(query.toLowerCase()) ||
+                    result.description.toLowerCase().includes(query.toLowerCase()) ||
+                    result.category.toLowerCase().includes(query.toLowerCase());
+
+                // Filtro por categoría
+                const matchesCategory = filters.categories.length === 0 || 
+                    filters.categories.includes(result.category);
+
+                // Filtro por servicios
+                const matchesDelivery = !filters.delivery || result.delivery;
+                const matchesOpenNow = !filters.openNow || result.openNow;
+
+                return matchesQuery && matchesCategory && matchesDelivery && matchesOpenNow;
+            });
+
+            renderResults();
+            updateResultsCount();
+        }
+
+        function getCurrentFilters() {
+            const filters = {
+                categories: [],
+                delivery: false,
+                openNow: false,
+                minRating: 0
+            };
+
+            // Obtener categorías seleccionadas
+            const categoryCheckboxes = document.querySelectorAll('input[name="category"]:checked');
+            categoryCheckboxes.forEach(checkbox => {
+                filters.categories.push(checkbox.value);
+            });
+
+            // Obtener servicios seleccionados
+            const serviceCheckboxes = document.querySelectorAll('input[name="service"]:checked');
+            filters.delivery = Array.from(serviceCheckboxes).some(cb => cb.value === 'delivery');
+            filters.openNow = document.querySelector('input[name="hours"][value="opennow"]').checked;
+
+            return filters;
+        }
+
+        function renderResults() {
+            renderGridView();
+            renderListView();
+        }
+
+        function renderGridView() {
+            const container = document.getElementById('resultsGrid');
+            
+            if (currentResults.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <img src="../assets/no-hay-productos.png" alt="Sin resultados">
+                        <h3>No se encontraron resultados</h3>
+                        <p>Intenta ajustar los filtros de búsqueda</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = currentResults.map(result => `
+                <div class="result-card" data-result-id="${result.id}">
+                    <img src="${result.image}" alt="${result.name}" class="result-image" onerror="this.src='../assets/colmado-miguel.jpg'">
+                    
+                    <div class="result-content">
+                        <div class="result-header">
+                            <div>
+                                <div class="result-name">${result.name}</div>
+                                <div class="result-category">${getCategoryName(result.category)}</div>
+                            </div>
+                            <div class="result-rating">⭐ ${result.rating}</div>
+                        </div>
+
+                        <div class="result-meta">
+                            <span>📍 ${result.distance} km</span>
+                            <span>👥 ${result.reviewCount} reseñas</span>
+                        </div>
+
+                        <div class="result-features">
+                            ${result.features.map(feature => `
+                                <span class="feature-tag">${feature}</span>
+                            `).join('')}
+                        </div>
+
+                        <div class="result-actions">
+                            <button class="btn btn-primary" onclick="viewCommerce(${result.id})">
+                                👀 Ver
+                            </button>
+                            <button class="btn btn-outline" onclick="saveToFavorites(${result.id})">
+                                🤍 Guardar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderListView() {
+            const container = document.getElementById('resultsList');
+            
+            if (currentResults.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <img src="../assets/no-hay-productos.png" alt="Sin resultados">
+                        <h3>No se encontraron resultados</h3>
+                        <p>Intenta ajustar los filtros de búsqueda</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = currentResults.map(result => `
+                <div class="result-list-item" data-result-id="${result.id}">
+                    <img src="${result.image}" alt="${result.name}" class="result-list-image" onerror="this.src='../assets/producto.png'">
+                    
+                    <div class="result-list-info">
+                        <div class="result-list-name">${result.name}</div>
+                        <div class="result-list-description">${result.description}</div>
+                        
+                        <div class="result-list-features">
+                            <span>⭐ ${result.rating} (${result.reviewCount})</span>
+                            <span>📍 ${result.distance} km</span>
+                            <span>${result.openNow ? '🟢 Abierto' : '🔴 Cerrado'}</span>
+                            ${result.delivery ? '<span>🚚 Delivery</span>' : ''}
+                        </div>
+                    </div>
+
+                    <div class="result-actions">
+                        <button class="btn btn-primary" onclick="viewCommerce(${result.id})">
+                            👀 Ver
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderSavedSearches() {
+            const container = document.getElementById('savedSearches');
+            
+            if (savedSearches.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="padding: 2rem;">
+                        <img src="../assets/no-hay-productos.png" alt="Sin búsquedas guardadas">
+                        <h3>No tienes búsquedas guardadas</h3>
+                        <p>Guarda tus búsquedas favoritas para acceder rápidamente</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = savedSearches.map(search => `
+                <div class="saved-search-card" onclick="loadSavedSearch(${search.id})">
+                    <div class="saved-search-header">
+                        <div>
+                            <div class="saved-search-name">${search.name}</div>
+                            <div class="saved-search-filters">
+                                ${Object.keys(search.filters).map(key => 
+                                    `${key}: ${Array.isArray(search.filters[key]) ? search.filters[key].join(', ') : search.filters[key]}`
+                                ).join(' • ')}
+                            </div>
+                        </div>
+                        <div class="saved-search-actions">
+                            <button class="btn-icon" onclick="event.stopPropagation(); deleteSavedSearch(${search.id})" title="Eliminar">
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                    <div style="color: var(--gray); font-size: 0.9rem;">
+                        ${search.resultCount} resultados • Usado ${formatDate(search.lastUsed)}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function switchView(view) {
+            currentView = view;
+            
+            // Ocultar todas las vistas
+            document.getElementById('resultsGrid').style.display = 'none';
+            document.getElementById('resultsList').style.display = 'none';
+            
+            // Mostrar vista seleccionada
+            document.getElementById(`results${view.charAt(0).toUpperCase() + view.slice(1)}`).style.display = 
+                view === 'grid' ? 'grid' : 'flex';
+            
+            // Actualizar botones activos
+            document.querySelectorAll('.view-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            document.querySelector(`[data-view="${view}"]`).classList.add('active');
+        }
+
+        function updateResultsCount() {
+            const countElement = document.getElementById('resultsCount');
+            countElement.textContent = `Mostrando ${currentResults.length} resultado${currentResults.length !== 1 ? 's' : ''}`;
+        }
+
+        function resetFilters() {
+            // Limpiar todos los checkboxes y radios
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = radio.value === 'any' || radio.value === 'current';
+            });
+
+            // Restablecer checkboxes por defecto
+            document.querySelector('input[name="category"][value="colmado"]').checked = true;
+            
+            showNotification('Filtros restablecidos', 'info');
+            performSearch();
+        }
+
+        function saveSearch() {
+            const searchName = prompt('Nombre para esta búsqueda:');
+            if (searchName) {
+                const filters = getCurrentFilters();
+                const newSearch = {
+                    id: Date.now(),
+                    name: searchName,
+                    filters: filters,
+                    resultCount: currentResults.length,
+                    lastUsed: new Date().toISOString().split('T')[0]
+                };
+                
+                savedSearches.unshift(newSearch);
+                renderSavedSearches();
+                showNotification('Búsqueda guardada exitosamente', 'success');
+            }
+        }
+
+        function loadSavedSearch(searchId) {
+            const search = savedSearches.find(s => s.id === searchId);
+            if (search) {
+                // Aplicar filtros guardados (simulado)
+                showNotification(`Cargando búsqueda: ${search.name}`, 'info');
+                // En una implementación real, aquí aplicarías los filtros guardados
+                
+                // Actualizar última fecha de uso
+                search.lastUsed = new Date().toISOString().split('T')[0];
+                renderSavedSearches();
+            }
+        }
+
+        function deleteSavedSearch(searchId) {
+            if (confirm('¿Estás seguro de que quieres eliminar esta búsqueda guardada?')) {
+                const index = savedSearches.findIndex(s => s.id === searchId);
+                if (index !== -1) {
+                    savedSearches.splice(index, 1);
+                    renderSavedSearches();
+                    showNotification('Búsqueda eliminada', 'success');
+                }
+            }
+        }
+
+        // FUNCIONES DE INTERACCIÓN
+        function viewCommerce(commerceId) {
+            window.location.href = `../commerce/commerce-profile.html?id=${commerceId}`;
+        }
+
+        function saveToFavorites(commerceId) {
+            const commerce = searchResults.find(c => c.id === commerceId);
+            if (commerce) {
+                // Guardar en favoritos
+                const favorites = JSON.parse(localStorage.getItem('commerceFavorites')) || [];
+                if (!favorites.includes(commerceId)) {
+                    favorites.push(commerceId);
+                    localStorage.setItem('commerceFavorites', JSON.stringify(favorites));
+                    showNotification(`${commerce.name} agregado a favoritos`, 'success');
+                } else {
+                    showNotification(`${commerce.name} ya está en favoritos`, 'info');
+                }
+            }
+        }
+
+        // FUNCIONES AUXILIARES
+        function getCategoryName(category) {
+            const categories = {
+                'colmado': '🏪 Colmado',
+                'panaderia': '🍞 Panadería',
+                'farmacia': '💊 Farmacia',
+                'restaurante': '🍽️ Restaurante',
+                'peluqueria': '💈 Peluquería'
+            };
+            return categories[category] || category;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const today = new Date();
+            const diffTime = today - date;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays === 0) return 'hoy';
+            if (diffDays === 1) return 'ayer';
+            if (diffDays < 7) return `hace ${diffDays} días`;
+            if (diffDays < 30) return `hace ${Math.floor(diffDays / 7)} semana${Math.floor(diffDays / 7) !== 1 ? 's' : ''}`;
+            
+            return date.toLocaleDateString('es-ES');
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()">×</button>
+            `;
+
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: ${getNotificationColor(type)};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                animation: slideInRight 0.3s ease;
+                max-width: 400px;
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 4000);
+        }
+
+        function getNotificationColor(type) {
+            const colors = {
+                success: '#28a745',
+                error: '#dc3545',
+                warning: '#ffc107',
+                info: '#17a2b8'
+            };
+            return colors[type] || colors.info;
+        }
+
+        // Agregar estilos para notificaciones
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+
+            .notification button {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.2rem;
+                cursor: pointer;
+                padding: 0;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0.8;
+            }
+
+            .notification button:hover {
+                opacity: 1;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

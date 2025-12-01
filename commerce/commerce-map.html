@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Comercios - ConectaBarrio</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* ESTILOS ESPECÍFICOS PARA COMMERCE MAP */
+        :root {
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #fff;
+        }
+        /* MAP LAYOUT */
+        .map-page {
+            display: flex;
+            height: calc(100vh - 80px);
+        }
+
+        /* SIDEBAR */
+        .map-sidebar {
+            width: 400px;
+            background: white;
+            border-right: 1px solid #e9ecef;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+            background: var(--light);
+        }
+
+        .sidebar-header h1 {
+            color: var(--dark);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-subtitle {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* SEARCH AND FILTERS */
+        .search-section {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .search-bar {
+            display: flex;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-bar input {
+            flex: 1;
+            border: none;
+            padding: 0.5rem;
+            font-size: 1rem;
+            outline: none;
+            background: transparent;
+        }
+
+        .btn-search {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .filter-select {
+            padding: 0.5rem;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* QUICK FILTERS */
+        .quick-filters {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .filter-tag {
+            background: var(--light);
+            border: 1px solid #e9ecef;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-tag:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .filter-tag.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* COMMERCE LIST */
+        .commerce-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0;
+        }
+
+        .commerce-item {
+            display: flex;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+            cursor: pointer;
+            transition: all 0.3s;
+            gap: 1rem;
+        }
+
+        .commerce-item:hover {
+            background: rgba(46, 134, 171, 0.05);
+        }
+
+        .commerce-item.active {
+            background: rgba(46, 134, 171, 0.1);
+            border-left: 4px solid var(--primary);
+        }
+
+        .commerce-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .commerce-info {
+            flex: 1;
+        }
+
+        .commerce-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .commerce-name {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .commerce-category {
+            color: var(--primary);
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .commerce-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .status-open {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+
+        .status-closed {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+
+        .commerce-rating {
+            color: var(--accent);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .commerce-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .commerce-distance {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .commerce-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.25rem 0.75rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1a6a8f;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* MAP CONTAINER */
+        .map-container {
+            flex: 1;
+            position: relative;
+            background: #e9ecef;
+        }
+
+        #commerceMap {
+            width: 100%;
+            height: 100%;
+        }
+
+        .map-controls {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 1000;
+        }
+
+        .map-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .map-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* MAP INFO WINDOW */
+        .map-info-window {
+            max-width: 300px;
+            padding: 1rem;
+        }
+
+        .info-window-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-window-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .info-window-title {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .info-window-category {
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .info-window-rating {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-window-meta {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .info-window-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* VIEW TOGGLE */
+        .view-toggle {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border-radius: 25px;
+            padding: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            display: flex;
+            gap: 0.25rem;
+            z-index: 1000;
+        }
+
+        .view-option {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 20px;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .view-option.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--gray);
+        }
+
+        .empty-state img {
+            width: 150px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        /* LOADING */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: var(--gray);
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e9ecef;
+            border-top: 2px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .map-sidebar {
+                width: 350px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .map-page {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .map-sidebar {
+                width: 100%;
+                height: 50vh;
+            }
+
+            .map-container {
+                height: 50vh;
+            }
+
+            .view-toggle {
+                bottom: 0.5rem;
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .commerce-item {
+                padding: 1rem;
+            }
+
+            .commerce-image {
+                width: 60px;
+                height: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar-header {
+                padding: 1rem;
+            }
+
+            .search-section {
+                padding: 1rem;
+            }
+
+            .quick-filters {
+                padding: 0.75rem 1rem;
+            }
+
+            .filter-tags {
+                justify-content: center;
+            }
+
+            .commerce-header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .commerce-actions {
+                flex-direction: column;
+            }
+
+            .map-controls {
+                top: 0.5rem;
+                right: 0.5rem;
+            }
+
+            .map-btn {
+                width: 35px;
+                height: 35px;
+            }
+        }
+    </style>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <!-- NAVBAR -->
+<!-- En el body de cada página -->
+<div id="dynamic-navbar"></div>
+<!-- El resto del contenido de tu página -->
+
+    <!-- MAP LAYOUT -->
+    <div class="map-page">
+        <!-- SIDEBAR -->
+        <aside class="map-sidebar">
+            <!-- HEADER -->
+            <div class="sidebar-header">
+                <h1>🗺️ Mapa de Comercios</h1>
+                <p class="sidebar-subtitle">Encuentra negocios locales cerca de ti</p>
+            </div>
+
+            <!-- SEARCH AND FILTERS -->
+            <div class="search-section">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Buscar comercios...">
+                    <button class="btn-search">🔍</button>
+                </div>
+                
+                <div class="filters-grid">
+                    <select class="filter-select" id="categoryFilter">
+                        <option value="">Todas las categorías</option>
+                        <option value="colmado">Colmados</option>
+                        <option value="panaderia">Panaderías</option>
+                        <option value="farmacia">Farmacias</option>
+                        <option value="restaurante">Restaurantes</option>
+                        <option value="peluqueria">Peluquerías</option>
+                        <option value="otros">Otros</option>
+                    </select>
+                    
+                    <select class="filter-select" id="distanceFilter">
+                        <option value="">Cualquier distancia</option>
+                        <option value="1">Menos de 1 km</option>
+                        <option value="3">Menos de 3 km</option>
+                        <option value="5">Menos de 5 km</option>
+                        <option value="10">Menos de 10 km</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- QUICK FILTERS -->
+            <div class="quick-filters">
+                <div class="filter-tags">
+                    <div class="filter-tag active" data-filter="all">Todos</div>
+                    <div class="filter-tag" data-filter="open">Abierto ahora</div>
+                    <div class="filter-tag" data-filter="delivery">Con delivery</div>
+                    <div class="filter-tag" data-filter="offers">Con ofertas</div>
+                    <div class="filter-tag" data-filter="rating">⭐ 4.0+</div>
+                </div>
+            </div>
+
+            <!-- COMMERCE LIST -->
+            <div class="commerce-list" id="commerceList">
+                <!-- Los comercios se cargan dinámicamente aquí -->
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    Cargando comercios...
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAP CONTAINER -->
+        <div class="map-container">
+            <div id="commerceMap"></div>
+            
+            <!-- MAP CONTROLS -->
+            <div class="map-controls">
+                <button class="map-btn" onclick="locateUser()" title="Mi ubicación">📍</button>
+                <button class="map-btn" onclick="zoomIn()" title="Acercar">➕</button>
+                <button class="map-btn" onclick="zoomOut()" title="Alejar">➖</button>
+                <button class="map-btn" onclick="resetView()" title="Vista inicial">🏠</button>
+            </div>
+
+            <!-- VIEW TOGGLE -->
+            <div class="view-toggle">
+                <button class="view-option active" data-view="map">Mapa</button>
+                <button class="view-option" data-view="satellite">Satélite</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // DATOS DE COMERCIOS (simulados)
+        const commerces = [
+            {
+                id: 1,
+                name: "Colmado San Miguel",
+                category: "colmado",
+                address: "Calle Principal #123, Zona Colonial",
+                phone: "(809) 123-4567",
+                rating: 4.2,
+                reviews: 128,
+                image: "../assets/colmado-miguel.jpg",
+                lat: 18.4861,
+                lng: -69.9312,
+                open: true,
+                delivery: true,
+                offers: true,
+                distance: 0.8,
+                hours: "7:00 AM - 10:00 PM"
+            },
+            {
+                id: 2,
+                name: "Panadería Doña Rosa",
+                category: "panaderia",
+                address: "Av. Independencia #456",
+                phone: "(809) 234-5678",
+                rating: 4.8,
+                reviews: 95,
+                image: "../assets/panaderia-rosa.jpg",
+                lat: 18.4885,
+                lng: -69.9298,
+                open: true,
+                delivery: true,
+                offers: true,
+                distance: 1.2,
+                hours: "6:00 AM - 9:00 PM"
+            },
+            {
+                id: 3,
+                name: "Farmacia La Esperanza",
+                category: "farmacia",
+                address: "Calle El Conde #789",
+                phone: "(809) 345-6789",
+                rating: 4.5,
+                reviews: 67,
+                image: "../assets/farmacia.jpg",
+                lat: 18.4832,
+                lng: -69.9334,
+                open: false,
+                delivery: true,
+                offers: false,
+                distance: 0.5,
+                hours: "8:00 AM - 8:00 PM"
+            },
+            {
+                id: 4,
+                name: "Restaurante Sabores Criollos",
+                category: "restaurante",
+                address: "Av. Bolívar #321",
+                phone: "(809) 456-7890",
+                rating: 4.6,
+                reviews: 203,
+                image: "../assets/supermercado.jpg",
+                lat: 18.4901,
+                lng: -69.9276,
+                open: true,
+                delivery: true,
+                offers: true,
+                distance: 1.8,
+                hours: "11:00 AM - 11:00 PM"
+            },
+            {
+                id: 5,
+                name: "Peluquería Estilo",
+                category: "peluqueria",
+                address: "Calle Las Damas #654",
+                phone: "(809) 567-8901",
+                rating: 4.3,
+                reviews: 89,
+                image: "../assets/peluqueria-estilo.jpg",
+                lat: 18.4853,
+                lng: -69.9305,
+                open: true,
+                delivery: false,
+                offers: true,
+                distance: 0.9,
+                hours: "9:00 AM - 7:00 PM"
+            },
+            {
+                id: 6,
+                name: "Supermercado El Ahorro",
+                category: "colmado",
+                address: "Av. George Washington #987",
+                phone: "(809) 678-9012",
+                rating: 4.1,
+                reviews: 156,
+                image: "../assets/supermercado.jpg",
+                lat: 18.4928,
+                lng: -69.9259,
+                open: true,
+                delivery: true,
+                offers: false,
+                distance: 2.3,
+                hours: "7:00 AM - 10:00 PM"
+            }
+        ];
+
+        // VARIABLES GLOBALES
+        let map;
+        let userLocation = null;
+        let markers = [];
+        let currentMarkers = [];
+        let userMarker = null;
+        let selectedCommerce = null;
+
+        // ICONOS PERSONALIZADOS
+        const commerceIcons = {
+            colmado: L.divIcon({
+                html: '🏪',
+                className: 'commerce-marker colmado',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            }),
+            panaderia: L.divIcon({
+                html: '🍞',
+                className: 'commerce-marker panaderia',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            }),
+            farmacia: L.divIcon({
+                html: '💊',
+                className: 'commerce-marker farmacia',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            }),
+            restaurante: L.divIcon({
+                html: '🍽️',
+                className: 'commerce-marker restaurante',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            }),
+            peluqueria: L.divIcon({
+                html: '💈',
+                className: 'commerce-marker peluqueria',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            }),
+            otros: L.divIcon({
+                html: '🏬',
+                className: 'commerce-marker otros',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            })
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initMap();
+            setupEventListeners();
+            loadCommerces();
+            renderCommerceList(commerces);
+        });
+
+        function initMap() {
+            // Coordenadas iniciales (Santo Domingo)
+            const defaultCoords = [18.4861, -69.9312];
+            
+            // Inicializar mapa
+            map = L.map('commerceMap').setView(defaultCoords, 15);
+
+            // Capa base (OpenStreetMap)
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 18
+            }).addTo(map);
+
+            // Capa satélite (opcional)
+            const satelliteLayer = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+                maxZoom: 20,
+                subdomains: ['mt0','mt1','mt2','mt3']
+            });
+
+            // Estilos para marcadores
+            const style = document.createElement('style');
+            style.textContent = `
+                .commerce-marker {
+                    background: white;
+                    border: 3px solid var(--primary);
+                    border-radius: 50%;
+                    width: 30px;
+                    height: 30px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 14px;
+                    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+                    transition: all 0.3s;
+                }
+                
+                .commerce-marker:hover {
+                    transform: scale(1.2);
+                    z-index: 1000;
+                }
+                
+                .commerce-marker.colmado { border-color: #2E86AB; }
+                .commerce-marker.panaderia { border-color: #F18F01; }
+                .commerce-marker.farmacia { border-color: #28a745; }
+                .commerce-marker.restaurante { border-color: #A23B72; }
+                .commerce-marker.peluqueria { border-color: #6f42c1; }
+                .commerce-marker.otros { border-color: #6c757d; }
+                
+                .user-marker {
+                    background: var(--primary);
+                    border: 3px solid white;
+                    border-radius: 50%;
+                    width: 20px;
+                    height: 20px;
+                    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+                }
+                
+                .leaflet-popup-content {
+                    margin: 0;
+                    padding: 0;
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Intentar obtener ubicación del usuario
+            locateUser();
+        }
+
+        function setupEventListeners() {
+            // Navegación móvil
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+
+            // Búsqueda
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', function() {
+                filterCommerces();
+            });
+
+            // Filtros
+            document.getElementById('categoryFilter').addEventListener('change', filterCommerces);
+            document.getElementById('distanceFilter').addEventListener('change', filterCommerces);
+
+            // Filtros rápidos
+            const filterTags = document.querySelectorAll('.filter-tag');
+            filterTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    // Remover active de todos
+                    filterTags.forEach(t => t.classList.remove('active'));
+                    // Agregar active al clickeado
+                    this.classList.add('active');
+                    filterCommerces();
+                });
+            });
+
+            // Cambio de vista
+            const viewOptions = document.querySelectorAll('.view-option');
+            viewOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    viewOptions.forEach(o => o.classList.remove('active'));
+                    this.classList.add('active');
+                    // Aquí cambiaría la capa del mapa (simplificado)
+                });
+            });
+        }
+
+        function loadCommerces() {
+            // Agregar marcadores al mapa
+            commerces.forEach(commerce => {
+                addCommerceToMap(commerce);
+            });
+        }
+
+        function addCommerceToMap(commerce) {
+            const marker = L.marker([commerce.lat, commerce.lng], {
+                icon: commerceIcons[commerce.category] || commerceIcons.otros
+            }).addTo(map);
+
+            // Popup personalizado
+            const popupContent = `
+                <div class="map-info-window">
+                    <div class="info-window-header">
+                        <img src="${commerce.image}" alt="${commerce.name}" class="info-window-image" onerror="this.src='../assets/colmado-miguel.jpg'">
+                        <div>
+                            <div class="info-window-title">${commerce.name}</div>
+                            <div class="info-window-category">${getCategoryName(commerce.category)}</div>
+                            <div class="info-window-rating">${getStarRating(commerce.rating)} ${commerce.rating}</div>
+                        </div>
+                    </div>
+                    <div class="info-window-meta">
+                        <div>📍 ${commerce.distance} km</div>
+                        <div>${commerce.open ? '🟢 Abierto' : '🔴 Cerrado'}</div>
+                        <div>${commerce.delivery ? '🚚 Delivery disponible' : ''}</div>
+                    </div>
+                    <div class="info-window-actions">
+                        <button class="btn-small btn-primary" onclick="viewCommerce(${commerce.id})">Ver</button>
+                        <button class="btn-small btn-outline" onclick="getDirections(${commerce.id})">Cómo llegar</button>
+                    </div>
+                </div>
+            `;
+
+            marker.bindPopup(popupContent);
+            
+            marker.on('click', function() {
+                selectCommerce(commerce.id);
+            });
+
+            markers.push({
+                id: commerce.id,
+                marker: marker,
+                commerce: commerce
+            });
+        }
+
+        function renderCommerceList(commercesToShow) {
+            const container = document.getElementById('commerceList');
+            
+            if (commercesToShow.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <img src="../assets/no-hay-productos.png" alt="Sin resultados">
+                        <h3>No se encontraron comercios</h3>
+                        <p>Intenta ajustar los filtros de búsqueda</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = commercesToShow.map(commerce => `
+                <div class="commerce-item ${selectedCommerce === commerce.id ? 'active' : ''}" 
+                     onclick="selectCommerce(${commerce.id})" 
+                     data-commerce-id="${commerce.id}">
+                    <img src="${commerce.image}" alt="${commerce.name}" class="commerce-image" onerror="this.src='../assets/colmado-miguel.jpg'">
+                    <div class="commerce-info">
+                        <div class="commerce-header">
+                            <div>
+                                <div class="commerce-name">${commerce.name}</div>
+                                <div class="commerce-category">${getCategoryName(commerce.category)}</div>
+                            </div>
+                            <div class="commerce-status ${commerce.open ? 'status-open' : 'status-closed'}">
+                                ${commerce.open ? 'Abierto' : 'Cerrado'}
+                            </div>
+                        </div>
+                        <div class="commerce-rating">
+                            ${getStarRating(commerce.rating)} ${commerce.rating} (${commerce.reviews} reseñas)
+                        </div>
+                        <div class="commerce-meta">
+                            <div class="commerce-distance">
+                                📍 ${commerce.distance} km
+                                ${commerce.delivery ? '• 🚚 Delivery' : ''}
+                                ${commerce.offers ? '• 🔥 Ofertas' : ''}
+                            </div>
+                            <div>${commerce.hours}</div>
+                        </div>
+                        <div class="commerce-actions">
+                            <button class="btn-small btn-primary" onclick="event.stopPropagation(); viewCommerce(${commerce.id})">
+                                Ver Comercio
+                            </button>
+                            <button class="btn-small btn-outline" onclick="event.stopPropagation(); getDirections(${commerce.id})">
+                                Cómo llegar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterCommerces() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const distanceFilter = document.getElementById('distanceFilter').value;
+            const activeFilter = document.querySelector('.filter-tag.active').dataset.filter;
+
+            let filteredCommerces = commerces.filter(commerce => {
+                // Filtro de búsqueda
+                const matchesSearch = commerce.name.toLowerCase().includes(searchTerm) || 
+                                    commerce.address.toLowerCase().includes(searchTerm);
+                
+                // Filtro de categoría
+                const matchesCategory = !categoryFilter || commerce.category === categoryFilter;
+                
+                // Filtro de distancia
+                const matchesDistance = !distanceFilter || commerce.distance <= parseInt(distanceFilter);
+                
+                // Filtros rápidos
+                let matchesQuickFilter = true;
+                switch (activeFilter) {
+                    case 'open':
+                        matchesQuickFilter = commerce.open;
+                        break;
+                    case 'delivery':
+                        matchesQuickFilter = commerce.delivery;
+                        break;
+                    case 'offers':
+                        matchesQuickFilter = commerce.offers;
+                        break;
+                    case 'rating':
+                        matchesQuickFilter = commerce.rating >= 4.0;
+                        break;
+                }
+
+                return matchesSearch && matchesCategory && matchesDistance && matchesQuickFilter;
+            });
+
+            // Actualizar lista
+            renderCommerceList(filteredCommerces);
+            
+            // Actualizar marcadores en el mapa
+            updateMapMarkers(filteredCommerces);
+        }
+
+        function updateMapMarkers(filteredCommerces) {
+            // Ocultar todos los marcadores primero
+            markers.forEach(markerObj => {
+                map.removeLayer(markerObj.marker);
+            });
+
+            // Mostrar solo los marcadores filtrados
+            const filteredIds = filteredCommerces.map(c => c.id);
+            markers.forEach(markerObj => {
+                if (filteredIds.includes(markerObj.id)) {
+                    map.addLayer(markerObj.marker);
+                }
+            });
+        }
+
+        function selectCommerce(commerceId) {
+            selectedCommerce = commerceId;
+            
+            // Actualizar lista
+            document.querySelectorAll('.commerce-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-commerce-id="${commerceId}"]`).classList.add('active');
+            
+            // Encontrar el marcador y centrar el mapa
+            const markerObj = markers.find(m => m.id === commerceId);
+            if (markerObj) {
+                map.setView([markerObj.commerce.lat, markerObj.commerce.lng], 16);
+                markerObj.marker.openPopup();
+            }
+        }
+
+        function viewCommerce(commerceId) {
+            const commerce = commerces.find(c => c.id === commerceId);
+            if (commerce) {
+                window.location.href = `commerce-profile.html?id=${commerceId}`;
+            }
+        }
+
+        function getDirections(commerceId) {
+            const commerce = commerces.find(c => c.id === commerceId);
+            if (commerce && userLocation) {
+                // Abrir en Google Maps con direcciones
+                const url = `https://www.google.com/maps/dir/${userLocation.lat},${userLocation.lng}/${commerce.lat},${commerce.lng}`;
+                window.open(url, '_blank');
+            } else if (commerce) {
+                // Solo mostrar la ubicación del comercio
+                const url = `https://www.google.com/maps?q=${commerce.lat},${commerce.lng}`;
+                window.open(url, '_blank');
+            }
+        }
+
+        // FUNCIONES DEL MAPA
+        function locateUser() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        userLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        
+                        // Agregar marcador de usuario
+                        if (userMarker) {
+                            map.removeLayer(userMarker);
+                        }
+                        
+                        userMarker = L.marker([userLocation.lat, userLocation.lng], {
+                            icon: L.divIcon({
+                                className: 'user-marker',
+                                iconSize: [20, 20],
+                                iconAnchor: [10, 10]
+                            })
+                        }).addTo(map);
+                        
+                        userMarker.bindPopup('📍 Tu ubicación actual').openPopup();
+                        
+                        // Centrar mapa en la ubicación del usuario
+                        map.setView([userLocation.lat, userLocation.lng], 15);
+                        
+                        showNotification('Ubicación detectada correctamente', 'success');
+                    },
+                    function(error) {
+                        console.error('Error obteniendo ubicación:', error);
+                        showNotification('No se pudo obtener tu ubicación', 'error');
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 60000
+                    }
+                );
+            } else {
+                showNotification('La geolocalización no es soportada por tu navegador', 'error');
+            }
+        }
+
+        function zoomIn() {
+            map.zoomIn();
+        }
+
+        function zoomOut() {
+            map.zoomOut();
+        }
+
+        function resetView() {
+            if (userLocation) {
+                map.setView([userLocation.lat, userLocation.lng], 15);
+            } else {
+                map.setView([18.4861, -69.9312], 15);
+            }
+        }
+
+        // FUNCIONES AUXILIARES
+        function getCategoryName(category) {
+            const categories = {
+                'colmado': 'Colmado',
+                'panaderia': 'Panadería',
+                'farmacia': 'Farmacia',
+                'restaurante': 'Restaurante',
+                'peluqueria': 'Peluquería',
+                'otros': 'Otros'
+            };
+            return categories[category] || category;
+        }
+
+        function getStarRating(rating) {
+            const fullStars = Math.floor(rating);
+            const halfStar = rating % 1 >= 0.5;
+            const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+            
+            return '★'.repeat(fullStars) + (halfStar ? '½' : '') + '☆'.repeat(emptyStars);
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()">×</button>
+            `;
+
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: ${getNotificationColor(type)};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                animation: slideInRight 0.3s ease;
+                max-width: 400px;
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 3000);
+        }
+
+        function getNotificationColor(type) {
+            const colors = {
+                success: '#28a745',
+                error: '#dc3545',
+                warning: '#ffc107',
+                info: '#17a2b8'
+            };
+            return colors[type] || colors.info;
+        }
+
+        // Agregar estilos para notificaciones
+        const notificationStyle = document.createElement('style');
+        notificationStyle.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+
+            .notification button {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.2rem;
+                cursor: pointer;
+                padding: 0;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0.8;
+            }
+
+            .notification button:hover {
+                opacity: 1;
+            }
+        `;
+        document.head.appendChild(notificationStyle);
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

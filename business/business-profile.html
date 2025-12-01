@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil Comercio - Panel Comercio - ConectaBarrio</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        :root {
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f8f9fa;
+        }
+
+        /* DASHBOARD LAYOUT */
+        .business-dashboard {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+
+
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-brand img {
+            height: 40px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .business-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .business-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* DASHBOARD LAYOUT */
+        .business-dashboard {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 300px;
+            background: white;
+            border-right: 1px solid #e9ecef;
+            padding: 2rem 0;
+            position: sticky;
+            top: 80px;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+
+        .business-profile {
+            padding: 0 2rem 2rem;
+            border-bottom: 1px solid #e9ecef;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .business-avatar-large {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            margin: 0 auto 1rem;
+        }
+
+        .business-info h4 {
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .business-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .business-status {
+            display: inline-block;
+            background: var(--success);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 0 1rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: var(--dark);
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-item.logout {
+            color: var(--danger);
+            margin-top: 1rem;
+            border-top: 1px solid #e9ecef;
+            padding-top: 1.5rem;
+        }
+
+        .nav-item.logout:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* CONTENIDO PRINCIPAL */
+        .business-content {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .content-header h1 {
+            color: var(--dark);
+            font-size: 1.8rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* FORMULARIO DE PERFIL */
+        .profile-form-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .form-tabs {
+            display: flex;
+            background: var(--light);
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .form-tab {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .form-tab.active {
+            background: white;
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 2rem;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* FORMULARIOS */
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section h3 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(46, 134, 171, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-hint {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 0.25rem;
+        }
+
+        .form-error {
+            color: var(--danger);
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        /* UPLOAD DE IMÁGENES */
+        .image-upload-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .upload-area {
+            border: 2px dashed #e9ecef;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(46, 134, 171, 0.02);
+        }
+
+        .upload-area.has-image {
+            border-style: solid;
+            border-color: var(--success);
+        }
+
+        .upload-preview {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .upload-placeholder {
+            color: var(--gray);
+        }
+
+        .upload-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .upload-actions {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        /* HORARIOS */
+        .hours-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .hour-row {
+            display: grid;
+            grid-template-columns: 100px 1fr 1fr auto;
+            gap: 1rem;
+            align-items: center;
+            padding: 1rem;
+            background: var(--light);
+            border-radius: 8px;
+        }
+
+        .hour-day {
+            font-weight: 600;
+        }
+
+        .closed-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--success);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        /* MÉTODOS DE PAGO */
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .payment-method:hover {
+            border-color: var(--primary);
+        }
+
+        .payment-method.selected {
+            border-color: var(--primary);
+            background: rgba(46, 134, 171, 0.05);
+        }
+
+        .payment-icon {
+            font-size: 2rem;
+        }
+
+        .payment-info h4 {
+            margin-bottom: 0.25rem;
+        }
+
+        .payment-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* CONFIGURACIÓN DELIVERY */
+        .delivery-settings {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .delivery-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+        }
+
+        .delivery-option.active {
+            border-color: var(--primary);
+            background: rgba(46, 134, 171, 0.05);
+        }
+
+        .delivery-details {
+            flex: 1;
+        }
+
+        .delivery-details h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .delivery-radius {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .radius-input {
+            width: 100px;
+            padding: 0.5rem;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+        }
+
+        /* BOTONES */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1a6a8f;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            padding-top: 2rem;
+            border-top: 1px solid #e9ecef;
+            margin-top: 2rem;
+        }
+
+        /* PREVIEW DEL COMERCIO */
+        .commerce-preview {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .preview-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 12px;
+            object-fit: cover;
+            margin: 0 auto 1rem;
+            border: 3px solid var(--light);
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .preview-card {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .preview-card h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .business-layout {
+                flex-direction: column;
+            }
+
+            .business-sidebar {
+                width: 100%;
+                order: 2;
+            }
+
+            .business-content {
+                order: 1;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .image-upload-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .business-content {
+                padding: 1rem;
+            }
+
+            .content-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .form-tabs {
+                flex-direction: column;
+            }
+
+            .form-tab {
+                text-align: left;
+            }
+
+            .hour-row {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand">
+            <img src="../assets/logo.png" alt="ConectaBarrio">
+        </a>
+        
+        <div class="nav-links" id="navLinks">
+            <a href="../index.html">Inicio</a>
+            <a href="../commerce/commerce-list.html">Comercios</a>
+            <a href="../features/events.html">Eventos</a>
+            <a href="../features/offers.html">Ofertas</a>
+            <a href="../info/about.html">Sobre Nosotros</a>
+            <div class="business-menu">
+                <img src="../assets/user.png" alt="Colmado San Miguel" class="business-avatar">
+                <span>Colmado S.M.</span>
+            </div>
+        </div>
+        
+        <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    </nav>
+
+    <!-- DASHBOARD LAYOUT -->
+    <main class="business-dashboard">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="business-profile">
+                <img src="../assets/user.png" alt="Colmado San Miguel" class="business-avatar-large">
+                <div class="business-info">
+                    <h4>Colmado San Miguel</h4>
+                    <p>Miguel Ángel - Propietario</p>
+                    <span class="business-status">🟢 Abierto</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="business-dashboard.html" class="nav-item">
+                    📊 Dashboard
+                </a>
+                <a href="business-orders.html" class="nav-item">
+                    📦 Pedidos
+                </a>
+                <a href="business-products.html" class="nav-item">
+                    🛍️ Productos
+                </a>
+                <a href="business-reviews.html" class="nav-item">
+                    ⭐ Reseñas
+                </a>
+                <a href="business-profile.html" class="nav-item  active">
+                    ⚙️ Configuración
+                </a>
+                <a href="../auth/login.html" class="nav-item logout">
+                    🚪 Cerrar Sesión
+                </a>
+            </nav>
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="business-content">
+            <!-- HEADER -->
+            <div class="content-header">
+                <h1>⚙️ Perfil del Comercio</h1>
+                <div class="header-actions">
+                    <button class="btn btn-outline" onclick="previewCommerce()">
+                        👁️ Vista Previa
+                    </button>
+                    <button class="btn btn-primary" onclick="saveChanges()">
+                        💾 Guardar Cambios
+                    </button>
+                </div>
+            </div>
+
+            <!-- FORMULARIO PRINCIPAL -->
+            <div class="profile-form-container">
+                <!-- PESTAÑAS -->
+                <div class="form-tabs">
+                    <button class="form-tab active" data-tab="basic">Información Básica</button>
+                    <button class="form-tab" data-tab="images">Imágenes</button>
+                    <button class="form-tab" data-tab="hours">Horarios</button>
+                    <button class="form-tab" data-tab="payment">Pagos & Delivery</button>
+                    <button class="form-tab" data-tab="settings">Configuración</button>
+                </div>
+
+                <!-- INFORMACIÓN BÁSICA -->
+                <div class="tab-content active" id="basic-tab">
+                    <div class="form-section">
+                        <h3>Información del Comercio</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label" for="businessName">Nombre del Comercio *</label>
+                                <input type="text" class="form-input" id="businessName" value="Colmado San Miguel" required>
+                                <div class="form-error" id="nameError"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="businessType">Tipo de Negocio *</label>
+                                <select class="form-select" id="businessType" required>
+                                    <option value="">Seleccionar tipo</option>
+                                    <option value="colmado" selected>Colmado</option>
+                                    <option value="panaderia">Panadería</option>
+                                    <option value="farmacia">Farmacia</option>
+                                    <option value="restaurante">Restaurante</option>
+                                    <option value="peluqueria">Peluquería</option>
+                                    <option value="otros">Otros</option>
+                                </select>
+                                <div class="form-error" id="typeError"></div>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label class="form-label" for="businessDescription">Descripción *</label>
+                                <textarea class="form-textarea" id="businessDescription" placeholder="Describe tu comercio..." required>Colmado San Miguel es un negocio familiar con más de 15 años de experiencia sirviendo a la comunidad de la Zona Colonial. Nos especializamos en productos frescos, abarrotes y víveres de la más alta calidad.</textarea>
+                                <div class="form-hint">Máximo 500 caracteres</div>
+                                <div class="form-error" id="descriptionError"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Información de Contacto</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label" for="businessPhone">Teléfono *</label>
+                                <input type="tel" class="form-input" id="businessPhone" value="(809) 123-4567" required>
+                                <div class="form-error" id="phoneError"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="businessEmail">Email *</label>
+                                <input type="email" class="form-input" id="businessEmail" value="info@colmadosanmiguel.com" required>
+                                <div class="form-error" id="emailError"></div>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label class="form-label" for="businessAddress">Dirección *</label>
+                                <input type="text" class="form-input" id="businessAddress" value="Calle Principal #123, Zona Colonial, Santo Domingo" required>
+                                <div class="form-error" id="addressError"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="businessWebsite">Sitio Web</label>
+                                <input type="url" class="form-input" id="businessWebsite" value="www.colmadosanmiguel.com">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="businessBarrio">Barrio *</label>
+                                <input type="text" class="form-input" id="businessBarrio" value="Zona Colonial" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IMÁGENES -->
+                <div class="tab-content" id="images-tab">
+                    <div class="form-section">
+                        <h3>Imágenes del Comercio</h3>
+                        <div class="image-upload-section">
+                            <div class="upload-area" id="logoUpload">
+                                <div class="upload-placeholder">
+                                    <i>🏪</i>
+                                    <div>Logo del Comercio</div>
+                                    <div class="form-hint">Recomendado: 400x400px PNG</div>
+                                </div>
+                                <img src="../assets/user.png" class="upload-preview" alt="Logo preview">
+                            </div>
+
+                            <div class="upload-area" id="coverUpload">
+                                <div class="upload-placeholder">
+                                    <i>🖼️</i>
+                                    <div>Imagen de Portada</div>
+                                    <div class="form-hint">Recomendado: 1200x400px JPG</div>
+                                </div>
+                                <img src="../assets/user.png" class="upload-preview" alt="Cover preview">
+                            </div>
+                        </div>
+
+                        <div class="upload-actions">
+                            <button class="btn btn-outline" onclick="document.getElementById('logoInput').click()">
+                                📁 Cambiar Logo
+                            </button>
+                            <button class="btn btn-outline" onclick="document.getElementById('coverInput').click()">
+                                📁 Cambiar Portada
+                            </button>
+                        </div>
+
+                        <input type="file" id="logoInput" accept="image/*" style="display: none;">
+                        <input type="file" id="coverInput" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+
+                <!-- HORARIOS -->
+                <div class="tab-content" id="hours-tab">
+                    <div class="form-section">
+                        <h3>Horario de Atención</h3>
+                        <div class="hours-grid" id="hoursGrid">
+                            <!-- Los horarios se generan dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAGOS & DELIVERY -->
+                <div class="tab-content" id="payment-tab">
+                    <div class="form-section">
+                        <h3>Métodos de Pago Aceptados</h3>
+                        <div class="payment-methods">
+                            <div class="payment-method" data-method="cash">
+                                <div class="payment-icon">💵</div>
+                                <div class="payment-info">
+                                    <h4>Efectivo</h4>
+                                    <p>Pago en efectivo al recibir</p>
+                                </div>
+                            </div>
+
+                            <div class="payment-method" data-method="card">
+                                <div class="payment-icon">💳</div>
+                                <div class="payment-info">
+                                    <h4>Tarjeta de Crédito/Débito</h4>
+                                    <p>Pago con tarjeta en línea</p>
+                                </div>
+                            </div>
+
+                            <div class="payment-method" data-method="transfer">
+                                <div class="payment-icon">🏦</div>
+                                <div class="payment-info">
+                                    <h4>Transferencia Bancaria</h4>
+                                    <p>Transferencia electrónica</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Configuración de Delivery</h3>
+                        <div class="delivery-settings">
+                            <div class="delivery-option active">
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="deliveryToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </div>
+                                <div class="delivery-details">
+                                    <h4>Servicio de Delivery</h4>
+                                    <p>Ofrecer delivery a domicilio</p>
+                                    
+                                    <div class="delivery-radius">
+                                        <label class="form-label">Radio de entrega (km):</label>
+                                        <input type="number" class="radius-input" id="deliveryRadius" value="5" min="1" max="20">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="delivery-option">
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="pickupToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </div>
+                                <div class="delivery-details">
+                                    <h4>Recoge en Tienda</h4>
+                                    <p>Los clientes pueden recoger en el local</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONFIGURACIÓN -->
+                <div class="tab-content" id="settings-tab">
+                    <div class="form-section">
+                        <h3>Configuración de Notificaciones</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Notificaciones de Pedidos</label>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="orderNotifications" checked>
+                                    <span class="toggle-slider"></span>
+                                </div>
+                                <div class="form-hint">Recibir notificaciones de nuevos pedidos</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Notificaciones de Reseñas</label>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="reviewNotifications" checked>
+                                    <span class="toggle-slider"></span>
+                                </div>
+                                <div class="form-hint">Recibir notificaciones de nuevas reseñas</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Zona Peligrosa</h3>
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <button class="btn btn-danger" onclick="confirmDelete()">
+                                    🗑️ Eliminar Comercio
+                                </button>
+                                <div class="form-hint">Esta acción no se puede deshacer. Se perderán todos los datos del comercio.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ACCIONES DEL FORMULARIO -->
+                <div class="form-actions">
+                    <button class="btn btn-outline" onclick="resetForm()">
+                        🔄 Restablecer
+                    </button>
+                    <button class="btn btn-primary" onclick="saveChanges()">
+                        💾 Guardar Cambios
+                    </button>
+                </div>
+            </div>
+
+            <!-- VISTA PREVIA -->
+            <div class="commerce-preview" id="commercePreview" style="display: none;">
+                <div class="preview-header">
+                    <img src="../assets/user.png" alt="Logo" class="preview-logo">
+                    <h2 id="previewName">Colmado San Miguel</h2>
+                    <p id="previewCategory">🏪 Colmado</p>
+                </div>
+
+                <div class="preview-grid">
+                    <div class="preview-card">
+                        <h4>📞 Contacto</h4>
+                        <p id="previewPhone">(809) 123-4567</p>
+                        <p id="previewEmail">info@colmadosanmiguel.com</p>
+                        <p id="previewAddress">Calle Principal #123, Zona Colonial</p>
+                    </div>
+
+                    <div class="preview-card">
+                        <h4>🕒 Horario</h4>
+                        <div id="previewHours"></div>
+                    </div>
+
+                    <div class="preview-card">
+                        <h4>🚚 Servicios</h4>
+                        <div id="previewServices"></div>
+                    </div>
+
+                    <div class="preview-card">
+                        <h4>💳 Pagos</h4>
+                        <div id="previewPayments"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // DATOS INICIALES DEL COMERCIO
+        const commerceData = {
+            name: "Colmado San Miguel",
+            type: "colmado",
+            description: "Colmado San Miguel es un negocio familiar con más de 15 años de experiencia sirviendo a la comunidad de la Zona Colonial. Nos especializamos en productos frescos, abarrotes y víveres de la más alta calidad.",
+            phone: "(809) 123-4567",
+            email: "info@colmadosanmiguel.com",
+            address: "Calle Principal #123, Zona Colonial, Santo Domingo",
+            website: "www.colmadosanmiguel.com",
+            barrio: "Zona Colonial",
+            hours: {
+                monday: { open: "07:00", close: "22:00", closed: false },
+                tuesday: { open: "07:00", close: "22:00", closed: false },
+                wednesday: { open: "07:00", close: "22:00", closed: false },
+                thursday: { open: "07:00", close: "22:00", closed: false },
+                friday: { open: "07:00", close: "22:00", closed: false },
+                saturday: { open: "07:00", close: "23:00", closed: false },
+                sunday: { open: "08:00", close: "21:00", closed: false }
+            },
+            paymentMethods: ["cash", "card"],
+            delivery: {
+                enabled: true,
+                radius: 5,
+                pickup: true
+            },
+            notifications: {
+                orders: true,
+                reviews: true
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initProfilePage();
+            setupEventListeners();
+            loadCommerceData();
+            renderHoursGrid();
+        });
+
+        function initProfilePage() {
+            // Configuración inicial de la página
+            console.log('Página de perfil del comercio inicializada');
+        }
+
+        function setupEventListeners() {
+            // Navegación entre pestañas
+            const tabs = document.querySelectorAll('.form-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    switchTab(tabId);
+                });
+            });
+
+            // Upload de imágenes
+            document.getElementById('logoInput').addEventListener('change', handleLogoUpload);
+            document.getElementById('coverInput').addEventListener('change', handleCoverUpload);
+
+            // Métodos de pago
+            const paymentMethods = document.querySelectorAll('.payment-method');
+            paymentMethods.forEach(method => {
+                method.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                });
+            });
+
+            // Toggles de delivery
+            document.getElementById('deliveryToggle').addEventListener('change', function() {
+                updateDeliverySettings();
+            });
+
+            document.getElementById('pickupToggle').addEventListener('change', function() {
+                updateDeliverySettings();
+            });
+        }
+
+        function loadCommerceData() {
+            // Cargar datos en el formulario
+            document.getElementById('businessName').value = commerceData.name;
+            document.getElementById('businessType').value = commerceData.type;
+            document.getElementById('businessDescription').value = commerceData.description;
+            document.getElementById('businessPhone').value = commerceData.phone;
+            document.getElementById('businessEmail').value = commerceData.email;
+            document.getElementById('businessAddress').value = commerceData.address;
+            document.getElementById('businessWebsite').value = commerceData.website;
+            document.getElementById('businessBarrio').value = commerceData.barrio;
+
+            // Configurar métodos de pago seleccionados
+            commerceData.paymentMethods.forEach(method => {
+                const element = document.querySelector(`[data-method="${method}"]`);
+                if (element) {
+                    element.classList.add('selected');
+                }
+            });
+
+            // Configurar delivery
+            document.getElementById('deliveryToggle').checked = commerceData.delivery.enabled;
+            document.getElementById('pickupToggle').checked = commerceData.delivery.pickup;
+            document.getElementById('deliveryRadius').value = commerceData.delivery.radius;
+
+            // Configurar notificaciones
+            document.getElementById('orderNotifications').checked = commerceData.notifications.orders;
+            document.getElementById('reviewNotifications').checked = commerceData.notifications.reviews;
+        }
+
+        function renderHoursGrid() {
+            const days = [
+                { key: 'monday', label: 'Lunes' },
+                { key: 'tuesday', label: 'Martes' },
+                { key: 'wednesday', label: 'Miércoles' },
+                { key: 'thursday', label: 'Jueves' },
+                { key: 'friday', label: 'Viernes' },
+                { key: 'saturday', label: 'Sábado' },
+                { key: 'sunday', label: 'Domingo' }
+            ];
+
+            const container = document.getElementById('hoursGrid');
+            container.innerHTML = days.map(day => {
+                const hours = commerceData.hours[day.key];
+                return `
+                    <div class="hour-row">
+                        <div class="hour-day">${day.label}</div>
+                        <div class="closed-toggle">
+                            <label class="toggle-switch">
+                                <input type="checkbox" data-day="${day.key}" ${!hours.closed ? 'checked' : ''}>
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span>${hours.closed ? 'Cerrado' : 'Abierto'}</span>
+                        </div>
+                        <div>
+                            <input type="time" data-day="${day.key}-open" value="${hours.open}" ${hours.closed ? 'disabled' : ''}>
+                            <span> a </span>
+                            <input type="time" data-day="${day.key}-close" value="${hours.close}" ${hours.closed ? 'disabled' : ''}>
+                        </div>
+                        <div>
+                            <button class="btn btn-outline" onclick="copyPreviousDay('${day.key}')" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">
+                                🔄 Copiar anterior
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Agregar event listeners a los toggles de horarios
+            const hourToggles = container.querySelectorAll('input[type="checkbox"]');
+            hourToggles.forEach(toggle => {
+                toggle.addEventListener('change', function() {
+                    const day = this.getAttribute('data-day');
+                    const openInput = document.querySelector(`[data-day="${day}-open"]`);
+                    const closeInput = document.querySelector(`[data-day="${day}-close"]`);
+                    
+                    openInput.disabled = !this.checked;
+                    closeInput.disabled = !this.checked;
+                });
+            });
+        }
+
+        function switchTab(tabId) {
+            // Ocultar todas las pestañas
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.form-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Mostrar pestaña seleccionada
+            document.getElementById(`${tabId}-tab`).classList.add('active');
+            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+        }
+
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const uploadArea = document.getElementById('logoUpload');
+                    const preview = uploadArea.querySelector('.upload-preview');
+                    const placeholder = uploadArea.querySelector('.upload-placeholder');
+                    
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    placeholder.style.display = 'none';
+                    uploadArea.classList.add('has-image');
+                    
+                    showNotification('Logo actualizado correctamente', 'success');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handleCoverUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const uploadArea = document.getElementById('coverUpload');
+                    const preview = uploadArea.querySelector('.upload-preview');
+                    const placeholder = uploadArea.querySelector('.upload-placeholder');
+                    
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    placeholder.style.display = 'none';
+                    uploadArea.classList.add('has-image');
+                    
+                    showNotification('Imagen de portada actualizada correctamente', 'success');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function copyPreviousDay(day) {
+            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            const currentIndex = days.indexOf(day);
+            if (currentIndex > 0) {
+                const previousDay = days[currentIndex - 1];
+                const previousOpen = document.querySelector(`[data-day="${previousDay}-open"]`).value;
+                const previousClose = document.querySelector(`[data-day="${previousDay}-close"]`).value;
+                const previousToggle = document.querySelector(`[data-day="${previousDay}"]`).checked;
+                
+                document.querySelector(`[data-day="${day}-open"]`).value = previousOpen;
+                document.querySelector(`[data-day="${day}-close"]`).value = previousClose;
+                document.querySelector(`[data-day="${day}"]`).checked = previousToggle;
+                
+                // Actualizar estado de los inputs
+                const openInput = document.querySelector(`[data-day="${day}-open"]`);
+                const closeInput = document.querySelector(`[data-day="${day}-close"]`);
+                openInput.disabled = !previousToggle;
+                closeInput.disabled = !previousToggle;
+                
+                showNotification(`Horario copiado del ${getDayName(previousDay)}`, 'info');
+            }
+        }
+
+        function getDayName(dayKey) {
+            const names = {
+                monday: 'lunes',
+                tuesday: 'martes',
+                wednesday: 'miércoles',
+                thursday: 'jueves',
+                friday: 'viernes',
+                saturday: 'sábado',
+                sunday: 'domingo'
+            };
+            return names[dayKey] || dayKey;
+        }
+
+        function updateDeliverySettings() {
+            const deliveryEnabled = document.getElementById('deliveryToggle').checked;
+            const pickupEnabled = document.getElementById('pickupToggle').checked;
+            
+            // Aquí podrías actualizar la UI basado en las configuraciones
+            console.log('Delivery settings updated:', {
+                delivery: deliveryEnabled,
+                pickup: pickupEnabled
+            });
+        }
+
+        function previewCommerce() {
+            const preview = document.getElementById('commercePreview');
+            preview.style.display = preview.style.display === 'none' ? 'block' : 'none';
+            
+            if (preview.style.display === 'block') {
+                updatePreview();
+            }
+        }
+
+        function updatePreview() {
+            // Actualizar vista previa con datos actuales
+            document.getElementById('previewName').textContent = document.getElementById('businessName').value;
+            document.getElementById('previewCategory').textContent = `🏪 ${document.getElementById('businessType').options[document.getElementById('businessType').selectedIndex].text}`;
+            document.getElementById('previewPhone').textContent = document.getElementById('businessPhone').value;
+            document.getElementById('previewEmail').textContent = document.getElementById('businessEmail').value;
+            document.getElementById('previewAddress').textContent = document.getElementById('businessAddress').value;
+            
+            // Actualizar horarios en vista previa
+            const hoursContainer = document.getElementById('previewHours');
+            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            hoursContainer.innerHTML = days.map(day => {
+                const toggle = document.querySelector(`[data-day="${day}"]`);
+                const open = document.querySelector(`[data-day="${day}-open"]`).value;
+                const close = document.querySelector(`[data-day="${day}-close"]`).value;
+                
+                if (toggle.checked) {
+                    return `<div>${getDayName(day)}: ${open} - ${close}</div>`;
+                } else {
+                    return `<div>${getDayName(day)}: <span style="color: var(--danger);">Cerrado</span></div>`;
+                }
+            }).join('');
+            
+            // Actualizar servicios
+            const servicesContainer = document.getElementById('previewServices');
+            const services = [];
+            if (document.getElementById('deliveryToggle').checked) {
+                services.push('🚚 Delivery');
+            }
+            if (document.getElementById('pickupToggle').checked) {
+                services.push('🏪 Recoge en tienda');
+            }
+            servicesContainer.innerHTML = services.map(service => `<div>${service}</div>`).join('');
+            
+            // Actualizar métodos de pago
+            const paymentsContainer = document.getElementById('previewPayments');
+            const selectedPayments = document.querySelectorAll('.payment-method.selected');
+            paymentsContainer.innerHTML = Array.from(selectedPayments).map(method => {
+                const methodName = method.querySelector('h4').textContent;
+                return `<div>${methodName}</div>`;
+            }).join('');
+        }
+
+        function saveChanges() {
+            // Validar formulario
+            if (!validateForm()) {
+                showNotification('Por favor completa todos los campos requeridos', 'error');
+                return;
+            }
+
+            // Recopilar datos del formulario
+            const formData = {
+                name: document.getElementById('businessName').value,
+                type: document.getElementById('businessType').value,
+                description: document.getElementById('businessDescription').value,
+                phone: document.getElementById('businessPhone').value,
+                email: document.getElementById('businessEmail').value,
+                address: document.getElementById('businessAddress').value,
+                website: document.getElementById('businessWebsite').value,
+                barrio: document.getElementById('businessBarrio').value,
+                hours: getHoursData(),
+                paymentMethods: getSelectedPaymentMethods(),
+                delivery: {
+                    enabled: document.getElementById('deliveryToggle').checked,
+                    radius: parseInt(document.getElementById('deliveryRadius').value),
+                    pickup: document.getElementById('pickupToggle').checked
+                },
+                notifications: {
+                    orders: document.getElementById('orderNotifications').checked,
+                    reviews: document.getElementById('reviewNotifications').checked
+                }
+            };
+
+            // Simular guardado (en una app real, esto enviaría los datos al backend)
+            console.log('Guardando datos:', formData);
+            
+            showNotification('Cambios guardados exitosamente', 'success');
+            
+            // Actualizar datos locales
+            Object.assign(commerceData, formData);
+        }
+
+        function validateForm() {
+            let isValid = true;
+            const requiredFields = [
+                'businessName', 'businessType', 'businessDescription', 
+                'businessPhone', 'businessEmail', 'businessAddress'
+            ];
+
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                const errorElement = document.getElementById(fieldId + 'Error');
+                
+                if (!field.value.trim()) {
+                    field.style.borderColor = 'var(--danger)';
+                    errorElement.textContent = 'Este campo es requerido';
+                    errorElement.style.display = 'block';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = '#e9ecef';
+                    errorElement.style.display = 'none';
+                }
+            });
+
+            return isValid;
+        }
+
+        function getHoursData() {
+            const hours = {};
+            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            
+            days.forEach(day => {
+                const toggle = document.querySelector(`[data-day="${day}"]`);
+                const open = document.querySelector(`[data-day="${day}-open"]`).value;
+                const close = document.querySelector(`[data-day="${day}-close"]`).value;
+                
+                hours[day] = {
+                    closed: !toggle.checked,
+                    open: open,
+                    close: close
+                };
+            });
+            
+            return hours;
+        }
+
+        function getSelectedPaymentMethods() {
+            const selected = document.querySelectorAll('.payment-method.selected');
+            return Array.from(selected).map(method => method.getAttribute('data-method'));
+        }
+
+        function resetForm() {
+            if (confirm('¿Estás seguro de que quieres restablecer todos los cambios?')) {
+                loadCommerceData();
+                renderHoursGrid();
+                showNotification('Formulario restablecido', 'info');
+            }
+        }
+
+        function confirmDelete() {
+            if (confirm('¿ESTÁS ABSOLUTAMENTE SEGURO? Esta acción eliminará permanentemente tu comercio y todos sus datos. Esta acción no se puede deshacer.')) {
+                if (confirm('ÚLTIMA OPORTUNIDAD: ¿Realmente quieres eliminar tu comercio?')) {
+                    showNotification('Comercio eliminado (simulación)', 'error');
+                    // En una app real, aquí se enviaría la solicitud de eliminación al backend
+                }
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()">×</button>
+            `;
+
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${getNotificationColor(type)};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                animation: slideInRight 0.3s ease;
+                max-width: 400px;
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 4000);
+        }
+
+        function getNotificationColor(type) {
+            const colors = {
+                success: '#28a745',
+                error: '#dc3545',
+                warning: '#ffc107',
+                info: '#17a2b8'
+            };
+            return colors[type] || colors.info;
+        }
+
+        // Agregar estilos para notificaciones
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+
+            .notification button {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.2rem;
+                cursor: pointer;
+                padding: 0;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0.8;
+            }
+
+            .notification button:hover {
+                opacity: 1;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

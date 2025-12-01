@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colmado San Miguel - ConectaBarrio</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* ESTILOS ESPECÍFICOS PARA COMMERCE-PROFILE */
+        :root {
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #fff;
+        }
+
+        /* HERO DEL COMERCIO */
+        .commerce-hero {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .commerce-hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(0,0,0,0.3));
+            display: flex;
+            align-items: flex-end;
+            padding: 2rem 5%;
+            color: white;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .commerce-badge {
+            background: var(--accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .commerce-title {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .commerce-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* MAIN CONTENT */
+        .commerce-profile-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 5%;
+        }
+
+        .commerce-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+        }
+
+        /* SIDEBAR */
+        .commerce-sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .info-card h3 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--gray);
+        }
+
+        .contact-item a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
+
+        .hours-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .hour-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .hour-item:last-child {
+            border-bottom: none;
+        }
+
+        .hour-day {
+            font-weight: 500;
+        }
+
+        .hour-time {
+            color: var(--gray);
+        }
+
+        .hour-time.closed {
+            color: var(--danger);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* MAIN CONTENT SECTIONS */
+        .commerce-main {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            color: var(--dark);
+            font-size: 1.5rem;
+        }
+
+        .section-more {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .section-more:hover {
+            text-decoration: underline;
+        }
+
+        /* PRODUCTOS */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .product-image {
+            height: 150px;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 1rem;
+        }
+
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .product-description {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1a6a8f;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* RESEÑAS */
+        .reviews-summary {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            align-items: center;
+        }
+
+        .rating-overview {
+            text-align: center;
+        }
+
+        .rating-score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--dark);
+            line-height: 1;
+        }
+
+        .rating-stars {
+            color: var(--accent);
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+
+        .rating-count {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .rating-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .rating-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .bar-label {
+            width: 60px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .bar-container {
+            flex: 1;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 4px;
+        }
+
+        .reviews-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .review-card {
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 1.5rem;
+        }
+
+        .review-card:last-child {
+            border-bottom: none;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .reviewer {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .reviewer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .reviewer-info h4 {
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .review-date {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .review-rating {
+            color: var(--accent);
+        }
+
+        .review-text {
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .review-images {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .review-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        /* MAPA */
+        .map-container {
+            height: 300px;
+            background: #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+        }
+
+        /* ACTION BUTTONS */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .commerce-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .commerce-sidebar {
+                position: static;
+                order: 2;
+            }
+
+            .commerce-main {
+                order: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .commerce-hero {
+                height: 300px;
+            }
+
+            .commerce-title {
+                font-size: 2rem;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .reviews-summary {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .commerce-profile-page {
+                padding: 1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+<!-- En el body de cada página -->
+<div id="dynamic-navbar"></div>
+<!-- El resto del contenido de tu página -->
+
+    <!-- HERO DEL COMERCIO -->
+    <section class="commerce-hero">
+        <img src="../assets/colmado-miguel.jpg" alt="Colmado San Miguel" class="commerce-hero-image">
+        <div class="hero-overlay">
+            <div class="hero-content">
+                <span class="commerce-badge">🏪 Colmado</span>
+                <h1 class="commerce-title">Colmado San Miguel</h1>
+                <p class="commerce-subtitle">Productos frescos y delivery rápido en toda la zona</p>
+                <div class="hero-actions">
+                    <button class="btn-primary" onclick="startShopping()">🛒 Comprar Ahora</button>
+                    <button class="btn-secondary" onclick="toggleFavorite()">
+                        <span id="favoriteIcon">🤍</span> Favorito
+                    </button>
+                    <button class="btn-secondary" onclick="shareCommerce()">📤 Compartir</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="commerce-profile-page">
+        <div class="commerce-layout">
+            <!-- CONTENIDO PRINCIPAL -->
+            <div class="commerce-main">
+                <!-- INFORMACIÓN DEL COMERCIO -->
+                <section class="section">
+                    <div class="section-header">
+                        <h2>📋 Sobre el Comercio</h2>
+                    </div>
+                    <p>Colmado San Miguel es un negocio familiar con más de 15 años de experiencia sirviendo a la comunidad de la Zona Colonial. Nos especializamos en productos frescos, abarrotes y víveres de la más alta calidad.</p>
+                    
+                    <div class="features-grid" style="margin-top: 1rem;">
+                        <div class="feature-item">🚚 Delivery en 30-45 min</div>
+                        <div class="feature-item">💵 Aceptamos efectivo y tarjetas</div>
+                        <div class="feature-item">🕒 Abierto hasta las 10:00 PM</div>
+                        <div class="feature-item">⭐ 4.2 de 128 reseñas</div>
+                    </div>
+                </section>
+
+                <!-- PRODUCTOS DESTACADOS -->
+                <section class="section">
+                    <div class="section-header">
+                        <h2>🛒 Productos Destacados</h2>
+                        <a href="#" class="section-more">Ver todos</a>
+                    </div>
+                    <div class="products-grid" id="featuredProducts">
+                        <!-- Los productos se cargan dinámicamente -->
+                    </div>
+                </section>
+
+                <!-- OFERTAS ESPECIALES -->
+                <section class="section">
+                    <div class="section-header">
+                        <h2>🔥 Ofertas Especiales</h2>
+                    </div>
+                    <div class="products-grid" id="specialOffers">
+                        <!-- Las ofertas se cargan dinámicamente -->
+                    </div>
+                </section>
+
+                <!-- RESEÑAS -->
+                <section class="section">
+                    <div class="section-header">
+                        <h2>⭐ Reseñas y Calificaciones</h2>
+                        <a href="#" class="section-more">Ver todas</a>
+                    </div>
+                    
+                    <div class="reviews-summary">
+                        <div class="rating-overview">
+                            <div class="rating-score">4.2</div>
+                            <div class="rating-stars">★★★★☆</div>
+                            <div class="rating-count">128 reseñas</div>
+                        </div>
+                        <div class="rating-bars">
+                            <div class="rating-bar">
+                                <span class="bar-label">5 estrellas</span>
+                                <div class="bar-container">
+                                    <div class="bar-fill" style="width: 60%;"></div>
+                                </div>
+                                <span>60%</span>
+                            </div>
+                            <div class="rating-bar">
+                                <span class="bar-label">4 estrellas</span>
+                                <div class="bar-container">
+                                    <div class="bar-fill" style="width: 25%;"></div>
+                                </div>
+                                <span>25%</span>
+                            </div>
+                            <div class="rating-bar">
+                                <span class="bar-label">3 estrellas</span>
+                                <div class="bar-container">
+                                    <div class="bar-fill" style="width: 10%;"></div>
+                                </div>
+                                <span>10%</span>
+                            </div>
+                            <div class="rating-bar">
+                                <span class="bar-label">2 estrellas</span>
+                                <div class="bar-container">
+                                    <div class="bar-fill" style="width: 3%;"></div>
+                                </div>
+                                <span>3%</span>
+                            </div>
+                            <div class="rating-bar">
+                                <span class="bar-label">1 estrella</span>
+                                <div class="bar-container">
+                                    <div class="bar-fill" style="width: 2%;"></div>
+                                </div>
+                                <span>2%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="reviews-list">
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="reviewer">
+                                    <img src="../assets/user.png" alt="María González" class="reviewer-avatar">
+                                    <div class="reviewer-info">
+                                        <h4>María González</h4>
+                                        <div class="review-date">Hace 2 días</div>
+                                    </div>
+                                </div>
+                                <div class="review-rating">★★★★★</div>
+                            </div>
+                            <p class="review-text">Excelente servicio y productos de calidad. El delivery siempre llega a tiempo y los precios son justos. Recomendado 100%.</p>
+                        </div>
+
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="reviewer">
+                                    <img src="../assets/user.png" alt="Carlos Rodríguez" class="reviewer-avatar">
+                                    <div class="reviewer-info">
+                                        <h4>Carlos Rodríguez</h4>
+                                        <div class="review-date">Hace 1 semana</div>
+                                    </div>
+                                </div>
+                                <div class="review-rating">★★★★☆</div>
+                            </div>
+                            <p class="review-text">Buen colmado con variedad de productos. El delivery es rápido y el personal muy amable. Sigan así!</p>
+                            <div class="review-images">
+                                <img src="../assets/arroz-blanco.jpg" alt="Producto" class="review-image">
+                                <img src="../assets/aceite-de-soja.jpg" alt="Producto" class="review-image">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- UBICACIÓN -->
+                <section class="section">
+                    <div class="section-header">
+                        <h2>📍 Ubicación</h2>
+                    </div>
+                    <p><strong>Dirección:</strong> Calle Principal #123, Zona Colonial, Santo Domingo</p>
+                    <div class="map-container">
+                        🗺️ Mapa interactivo - Colmado San Miguel
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-secondary" onclick="openDirections()">🚗 Cómo llegar</button>
+                        <button class="btn-secondary" onclick="callCommerce()">📞 Llamar al comercio</button>
+                    </div>
+                </section>
+            </div>
+
+            <!-- SIDEBAR -->
+            <aside class="commerce-sidebar">
+                <!-- INFORMACIÓN DE CONTACTO -->
+                <div class="info-card">
+                    <h3>📞 Contacto</h3>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <span>📞</span>
+                            <a href="tel:+18091234567">(809) 123-4567</a>
+                        </div>
+                        <div class="contact-item">
+                            <span>📧</span>
+                            <a href="mailto:info@colmadosanmiguel.com">info@colmadosanmiguel.com</a>
+                        </div>
+                        <div class="contact-item">
+                            <span>🌐</span>
+                            <a href="#" target="_blank">www.colmadosanmiguel.com</a>
+                        </div>
+                        <div class="contact-item">
+                            <span>📍</span>
+                            <span>Calle Principal #123, Zona Colonial</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HORARIO -->
+                <div class="info-card">
+                    <h3>🕒 Horario</h3>
+                    <div class="hours-list">
+                        <div class="hour-item">
+                            <span class="hour-day">Lunes - Viernes</span>
+                            <span class="hour-time">7:00 AM - 10:00 PM</span>
+                        </div>
+                        <div class="hour-item">
+                            <span class="hour-day">Sábados</span>
+                            <span class="hour-time">7:00 AM - 11:00 PM</span>
+                        </div>
+                        <div class="hour-item">
+                            <span class="hour-day">Domingos</span>
+                            <span class="hour-time">8:00 AM - 9:00 PM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SERVICIOS -->
+                <div class="info-card">
+                    <h3>⚡ Servicios</h3>
+                    <div class="features-grid">
+                        <div class="feature-item">🚚 Delivery</div>
+                        <div class="feature-item">🏪 Recoge en tienda</div>
+                        <div class="feature-item">💵 Efectivo</div>
+                        <div class="feature-item">💳 Tarjetas</div>
+                        <div class="feature-item">📦 Productos frescos</div>
+                        <div class="feature-item">🏠 Negocio familiar</div>
+                    </div>
+                </div>
+
+                <!-- ACCIONES RÁPIDAS -->
+                <div class="info-card">
+                    <h3>🚀 Acciones Rápidas</h3>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <button class="btn-primary" onclick="startShopping()">🛒 Comenzar a comprar</button>
+                        <button class="btn-outline" onclick="viewFullMenu()">📋 Ver menú completo</button>
+                        <button class="btn-outline" onclick="contactCommerce()">💬 Contactar</button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <script>
+        // DATOS DEL COMERCIO
+        const commerce = {
+            id: 1,
+            name: "Colmado San Miguel",
+            category: "colmado",
+            phone: "(809) 123-4567",
+            email: "info@colmadosanmiguel.com",
+            website: "www.colmadosanmiguel.com",
+            address: "Calle Principal #123, Zona Colonial, Santo Domingo",
+            rating: 4.2,
+            reviewCount: 128,
+            isFavorite: false
+        };
+
+        // DATOS DE PRODUCTOS
+        const products = [
+            {
+                id: 1,
+                name: "Arroz Blanco 5kg",
+                description: "Arroz de grano largo calidad premium",
+                price: "$250 RD",
+                image: "../assets/arroz-blanco.jpg",
+                category: "abarrotes",
+                isOffer: false
+            },
+            {
+                id: 2,
+                name: "Aceite de Soja 1L",
+                description: "Aceite vegetal 100% puro",
+                price: "$180 RD",
+                image: "../assets/aceite-de-soja.jpg",
+                category: "abarrotes",
+                isOffer: false
+            },
+            {
+                id: 3,
+                name: "Leche Entera 1L",
+                description: "Leche fresca pasteurizada",
+                price: "$85 RD",
+                image: "../assets/lehce.jpg",
+                category: "lacteos",
+                isOffer: false
+            },
+            {
+                id: 4,
+                name: "Pan de Agua",
+                description: "Pan fresco recién horneado",
+                price: "$25 RD",
+                image: "../assets/pan-de-agua.jpg",
+                category: "panaderia",
+                isOffer: false
+            },
+            {
+                id: 5,
+                name: "Coca-Cola 2L",
+                description: "Refresco familiar",
+                price: "$120 RD",
+                originalPrice: "$140 RD",
+                image: "../assets/cocacola.jpg",
+                category: "bebidas",
+                isOffer: true
+            },
+            {
+                id: 6,
+                name: "Jabón de Baño",
+                description: "Jabón antibacterial",
+                price: "$45 RD",
+                originalPrice: "$60 RD",
+                image: "../assets/jabon-de-cuaba.jpg",
+                category: "limpieza",
+                isOffer: true
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar la página
+            initCommerceProfile();
+            setupEventListeners();
+            renderProducts();
+            loadCommerceData();
+        });
+
+        function initCommerceProfile() {
+            // Cargar datos del comercio desde URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const commerceId = urlParams.get('id');
+            
+            if (commerceId) {
+                // En una app real, aquí se cargarían los datos del comercio desde una API
+                console.log('Cargando comercio ID:', commerceId);
+            }
+
+            // Cargar estado de favorito
+            const favorites = JSON.parse(localStorage.getItem('commerceFavorites')) || [];
+            commerce.isFavorite = favorites.includes(commerce.id);
+            updateFavoriteButton();
+        }
+
+        function setupEventListeners() {
+            // Navegación móvil
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+        }
+
+        function loadCommerceData() {
+            // Actualizar datos dinámicos en la página
+            document.title = `${commerce.name} - ConectaBarrio`;
+            
+            // Actualizar información de contacto
+            document.querySelector('a[href^="tel"]').href = `tel:${commerce.phone}`;
+            document.querySelector('a[href^="mailto"]').href = `mailto:${commerce.email}`;
+        }
+
+        function renderProducts() {
+            const featuredContainer = document.getElementById('featuredProducts');
+            const offersContainer = document.getElementById('specialOffers');
+
+            // Productos destacados (sin ofertas)
+            const featuredProducts = products.filter(p => !p.isOffer);
+            featuredContainer.innerHTML = featuredProducts.map(product => `
+                <div class="product-card" onclick="viewProduct(${product.id})">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}" onerror="this.src='../assets/products/default.jpg'">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-description">${product.description}</div>
+                        <div class="product-price">${product.price}</div>
+                        <div class="product-actions">
+                            <button class="btn-small btn-primary" onclick="event.stopPropagation(); addToCart(${product.id})">
+                                🛒 Agregar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Ofertas especiales
+            const specialOffers = products.filter(p => p.isOffer);
+            offersContainer.innerHTML = specialOffers.map(product => `
+                <div class="product-card" onclick="viewProduct(${product.id})">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}" onerror="this.src='../assets/products/default.jpg'">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-description">${product.description}</div>
+                        <div class="product-price">
+                            ${product.price}
+                            ${product.originalPrice ? `<span style="text-decoration: line-through; color: var(--gray); font-size: 0.9rem; margin-left: 0.5rem;">${product.originalPrice}</span>` : ''}
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn-small btn-primary" onclick="event.stopPropagation(); addToCart(${product.id})">
+                                🛒 Agregar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleFavorite() {
+            commerce.isFavorite = !commerce.isFavorite;
+            
+            // Actualizar localStorage
+            const favorites = JSON.parse(localStorage.getItem('commerceFavorites')) || [];
+            if (commerce.isFavorite) {
+                if (!favorites.includes(commerce.id)) {
+                    favorites.push(commerce.id);
+                }
+                showNotification('Agregado a favoritos', 'success');
+            } else {
+                const index = favorites.indexOf(commerce.id);
+                if (index > -1) {
+                    favorites.splice(index, 1);
+                }
+                showNotification('Removido de favoritos', 'info');
+            }
+            localStorage.setItem('commerceFavorites', JSON.stringify(favorites));
+            
+            updateFavoriteButton();
+        }
+
+        function updateFavoriteButton() {
+            const favoriteIcon = document.getElementById('favoriteIcon');
+            if (favoriteIcon) {
+                favoriteIcon.textContent = commerce.isFavorite ? '❤️' : '🤍';
+            }
+        }
+
+        function startShopping() {
+            showNotification('Redirigiendo a la tienda...', 'info');
+            // En una app real, esto redirigiría a la página de compras del comercio
+            setTimeout(() => {
+                // Simular redirección
+                console.log('Iniciando compra en:', commerce.name);
+            }, 1000);
+        }
+
+        function shareCommerce() {
+            if (navigator.share) {
+                navigator.share({
+                    title: commerce.name,
+                    text: 'Mira este comercio en ConectaBarrio',
+                    url: window.location.href
+                });
+            } else {
+                // Fallback
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    showNotification('Enlace copiado al portapapeles', 'success');
+                });
+            }
+        }
+
+        function viewProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                showNotification(`Viendo ${product.name}`, 'info');
+                // En una app real, esto abriría un modal o redirigiría a la página del producto
+            }
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                showNotification(`${product.name} agregado al carrito`, 'success');
+                
+                // Aquí iría la lógica para agregar al carrito
+                const cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+                const existingItem = cart.find(item => item.id === productId);
+                
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        id: productId,
+                        name: product.name,
+                        price: product.price,
+                        image: product.image,
+                        quantity: 1,
+                        commerceId: commerce.id,
+                        commerceName: commerce.name
+                    });
+                }
+                
+                localStorage.setItem('shoppingCart', JSON.stringify(cart));
+            }
+        }
+
+        function openDirections() {
+            // Abrir en Google Maps o app de mapas
+            const address = encodeURIComponent(commerce.address);
+            window.open(`https://www.google.com/maps/search/?api=1&query=${address}`, '_blank');
+        }
+
+        function callCommerce() {
+            window.location.href = `tel:${commerce.phone}`;
+        }
+
+        function viewFullMenu() {
+            showNotification('Cargando menú completo...', 'info');
+            // Redirigir a la página completa de productos
+        }
+
+        function contactCommerce() {
+            // Abrir modal de contacto o redirigir
+            window.location.href = `mailto:${commerce.email}?subject=Consulta - ${commerce.name}`;
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()">×</button>
+            `;
+
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: ${getNotificationColor(type)};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                animation: slideInRight 0.3s ease;
+                max-width: 400px;
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 3000);
+        }
+
+        function getNotificationColor(type) {
+            const colors = {
+                success: '#28a745',
+                error: '#dc3545',
+                warning: '#ffc107',
+                info: '#17a2b8'
+            };
+            return colors[type] || colors.info;
+        }
+
+        // Agregar estilos para notificaciones
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+
+            .notification button {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.2rem;
+                cursor: pointer;
+                padding: 0;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0.8;
+            }
+
+            .notification button:hover {
+                opacity: 1;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

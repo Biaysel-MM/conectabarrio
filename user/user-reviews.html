@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Reseñas - ConectaBarrio</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* ESTILOS ESPECÍFICOS PARA USER REVIEWS */
+        :root {
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f8f9fa;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-brand img {
+            height: 40px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* DASHBOARD LAYOUT */
+        .dashboard-page {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 300px;
+            background: white;
+            border-right: 1px solid #e9ecef;
+            padding: 2rem 0;
+            position: sticky;
+            top: 80px;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+
+        .user-profile {
+            padding: 0 2rem 2rem;
+            border-bottom: 1px solid #e9ecef;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .user-avatar-large {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            margin: 0 auto 1rem;
+        }
+
+        .user-info h4 {
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .user-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .user-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 0 1rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: var(--dark);
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-item.logout {
+            color: var(--danger);
+            margin-top: 1rem;
+            border-top: 1px solid #e9ecef;
+            padding-top: 1.5rem;
+        }
+
+        .nav-item.logout:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* MAIN CONTENT */
+        .dashboard-content {
+            flex: 1;
+            padding: 2rem;
+            background: #f8f9fa;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .content-header h1 {
+            color: var(--dark);
+            font-size: 2rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-bar {
+            display: flex;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 0.5rem;
+            min-width: 300px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            border: none;
+            padding: 0.5rem;
+            font-size: 1rem;
+            outline: none;
+            background: transparent;
+        }
+
+        .btn-search {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* REVIEWS STATS */
+        .reviews-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .rating-distribution {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .distribution-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .distribution-header h3 {
+            color: var(--dark);
+            font-size: 1.2rem;
+        }
+
+        .distribution-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .distribution-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .bar-label {
+            width: 80px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .bar-container {
+            flex: 1;
+            height: 8px;
+            background: var(--light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 4px;
+        }
+
+        .bar-count {
+            width: 40px;
+            text-align: right;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* FILTERS */
+        .filters-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .filters-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .filters-header h3 {
+            color: var(--dark);
+            font-size: 1.2rem;
+        }
+
+        .clear-filters {
+            color: var(--primary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* REVIEWS LIST */
+        .reviews-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .review-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .review-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .commerce-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .commerce-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .commerce-details h4 {
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .commerce-category {
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .review-meta {
+            text-align: right;
+        }
+
+        .review-rating {
+            color: var(--accent);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .review-date {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .review-content {
+            margin-bottom: 1.5rem;
+        }
+
+        .review-text {
+            color: var(--dark);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .review-images {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .review-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .review-image:hover {
+            transform: scale(1.05);
+        }
+
+        .review-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 2px solid var(--light);
+        }
+
+        .review-helpful {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .helpful-btn {
+            background: var(--light);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .helpful-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .helpful-count {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .review-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1a6a8f;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-danger {
+            background: transparent;
+            color: var(--danger);
+            border: 2px solid var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* PENDING REVIEWS */
+        .pending-reviews {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--warning);
+        }
+
+        .pending-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .pending-header h3 {
+            color: var(--dark);
+            font-size: 1.2rem;
+        }
+
+        .pending-count {
+            background: var(--warning);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .pending-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .pending-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--light);
+            border-radius: 8px;
+        }
+
+        .pending-commerce {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .pending-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .pending-details h4 {
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .pending-date {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .empty-state img {
+            width: 200px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .empty-state p {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        /* PAGINATION */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding: 1.5rem;
+        }
+
+        .page-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e9ecef;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .page-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .page-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .page-info {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .dashboard-page {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                padding: 1rem 0;
+            }
+
+            .sidebar-nav {
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 0 1rem;
+            }
+
+            .nav-item {
+                white-space: nowrap;
+            }
+
+            .user-profile {
+                text-align: left;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .user-avatar-large {
+                margin: 0;
+                width: 60px;
+                height: 60px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .dashboard-content {
+                padding: 1rem;
+            }
+
+            .content-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .header-actions {
+                width: 100%;
+            }
+
+            .search-bar {
+                min-width: auto;
+                flex: 1;
+            }
+
+            .reviews-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .review-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .review-meta {
+                text-align: left;
+            }
+
+            .review-actions {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .review-helpful {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .pending-item {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar-nav {
+                flex-direction: column;
+            }
+
+            .user-profile {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .reviews-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .commerce-info {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .review-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .pagination {
+                flex-wrap: wrap;
+            }
+
+            .review-images {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="../index.html" class="nav-brand">
+            <img src="../assets/logo.png" alt="ConectaBarrio">
+        </a>
+        
+        <div class="nav-links" id="navLinks">
+            <a href="../index.html">Inicio</a>
+            <a href="../commerce/commerce-list.html">Comercios</a>
+            <a href="../features/events.html">Eventos</a>
+            <a href="../features/offers.html">Ofertas</a>
+            <a href="../info/about.html">Sobre Nosotros</a>
+            <div class="user-menu">
+                <img src="../assets/user.png" alt="María González" class="user-avatar">
+                <span>María G.</span>
+            </div>
+        </div>
+        
+        <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    </nav>
+
+    <!-- DASHBOARD LAYOUT -->
+    <main class="dashboard-page">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="user-profile">
+                <img src="../assets/user.png" alt="María González" class="user-avatar-large">
+                <div class="user-info">
+                    <h4>María González</h4>
+                    <p>maria.gonzalez@email.com</p>
+                    <span class="user-badge">⭐ Reseñador Activo</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="user-dashboard.html" class="nav-item">
+                    📊 Dashboard
+                </a>
+                <a href="user-orders.html" class="nav-item">
+                    📦 Mis Pedidos
+                </a>
+                <a href="user-reviews.html" class="nav-item active">
+                    ⭐ Mis Reseñas
+                </a>
+                <a href="user-profile.html" class="nav-item">
+                    👤 Mi Perfil
+                </a>
+                <a href="../features/notifications.html" class="nav-item">
+                    🔔 Notificaciones
+                    <span class="notification-badge">3</span>
+                </a>
+                <a href="../auth/login.html" class="nav-item logout">
+                    🚪 Cerrar Sesión
+                </a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="dashboard-content">
+            <!-- HEADER -->
+            <div class="content-header">
+                <h1>⭐ Mis Reseñas</h1>
+                <div class="header-actions">
+                    <div class="search-bar">
+                        <input type="text" id="searchReviews" placeholder="Buscar en mis reseñas...">
+                        <button class="btn-search">🔍</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REVIEWS STATS -->
+            <div class="reviews-stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalReviews">12</div>
+                    <div class="stat-label">Total Reseñas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="avgRating">4.5</div>
+                    <div class="stat-label">Calificación Promedio</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="helpfulReviews">8</div>
+                    <div class="stat-label">Reseñas Útiles</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="pendingReviews">2</div>
+                    <div class="stat-label">Por Escribir</div>
+                </div>
+            </div>
+
+            <!-- RATING DISTRIBUTION -->
+            <section class="rating-distribution">
+                <div class="distribution-header">
+                    <h3>Distribución de Calificaciones</h3>
+                </div>
+                <div class="distribution-bars">
+                    <div class="distribution-bar">
+                        <div class="bar-label">5 estrellas</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 60%;"></div>
+                        </div>
+                        <div class="bar-count">6</div>
+                    </div>
+                    <div class="distribution-bar">
+                        <div class="bar-label">4 estrellas</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 25%;"></div>
+                        </div>
+                        <div class="bar-count">3</div>
+                    </div>
+                    <div class="distribution-bar">
+                        <div class="bar-label">3 estrellas</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 10%;"></div>
+                        </div>
+                        <div class="bar-count">2</div>
+                    </div>
+                    <div class="distribution-bar">
+                        <div class="bar-label">2 estrellas</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 3%;"></div>
+                        </div>
+                        <div class="bar-count">1</div>
+                    </div>
+                    <div class="distribution-bar">
+                        <div class="bar-label">1 estrella</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 2%;"></div>
+                        </div>
+                        <div class="bar-count">0</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PENDING REVIEWS -->
+            <section class="pending-reviews">
+                <div class="pending-header">
+                    <h3>📝 Reseñas Pendientes</h3>
+                    <span class="pending-count" id="pendingCount">2 pedidos</span>
+                </div>
+                <div class="pending-list">
+                    <div class="pending-item">
+                        <div class="pending-commerce">
+                            <img src="../assets/colmado-miguel.jpg" alt="Colmado San Miguel" class="pending-avatar">
+                            <div class="pending-details">
+                                <h4>Colmado San Miguel</h4>
+                                <div class="pending-date">Pedido #CB-001234 • 16 Oct 2024</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="writeReview('colmado-san-miguel')">
+                            ✍️ Escribir Reseña
+                        </button>
+                    </div>
+                    <div class="pending-item">
+                        <div class="pending-commerce">
+                            <img src="../assets/panaderia-rosa.jpg" alt="Panadería Doña Rosa" class="pending-avatar">
+                            <div class="pending-details">
+                                <h4>Panadería Doña Rosa</h4>
+                                <div class="pending-date">Pedido #CB-001233 • 15 Oct 2024</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="writeReview('panaderia-dona-rosa')">
+                            ✍️ Escribir Reseña
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FILTERS -->
+            <section class="filters-section">
+                <div class="filters-header">
+                    <h3>Filtrar Reseñas</h3>
+                    <button class="clear-filters" onclick="clearFilters()">Limpiar filtros</button>
+                </div>
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label class="filter-label">Calificación</label>
+                        <select class="filter-select" id="ratingFilter">
+                            <option value="">Todas las calificaciones</option>
+                            <option value="5">5 estrellas</option>
+                            <option value="4">4 estrellas</option>
+                            <option value="3">3 estrellas</option>
+                            <option value="2">2 estrellas</option>
+                            <option value="1">1 estrella</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Fecha</label>
+                        <select class="filter-select" id="dateFilter">
+                            <option value="">Cualquier fecha</option>
+                            <option value="today">Hoy</option>
+                            <option value="week">Esta semana</option>
+                            <option value="month">Este mes</option>
+                            <option value="last3months">Últimos 3 meses</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Comercio</label>
+                        <select class="filter-select" id="commerceFilter">
+                            <option value="">Todos los comercios</option>
+                            <option value="colmado-san-miguel">Colmado San Miguel</option>
+                            <option value="panaderia-dona-rosa">Panadería Doña Rosa</option>
+                            <option value="farmacia-esperanza">Farmacia La Esperanza</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Ordenar por</label>
+                        <select class="filter-select" id="sortFilter">
+                            <option value="newest">Más recientes primero</option>
+                            <option value="oldest">Más antiguos primero</option>
+                            <option value="rating-high">Mayor calificación</option>
+                            <option value="rating-low">Menor calificación</option>
+                            <option value="helpful">Más útiles</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- REVIEWS LIST -->
+            <div class="reviews-list" id="reviewsList">
+                <!-- Las reseñas se cargan dinámicamente aquí -->
+            </div>
+
+            <!-- PAGINATION -->
+            <div class="pagination">
+                <button class="page-btn" onclick="changePage(-1)">← Anterior</button>
+                <span class="page-info">Página <span id="currentPage">1</span> de <span id="totalPages">2</span></span>
+                <button class="page-btn" onclick="changePage(1)">Siguiente →</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DATOS DE RESEÑAS
+        const reviews = [
+            {
+                id: 1,
+                commerce: {
+                    name: "Colmado San Miguel",
+                    category: "Colmado",
+                    image: "../assets/colmado-miguel.jpg"
+                },
+                rating: 5,
+                date: "2024-10-14T16:30:00",
+                text: "Excelente servicio y productos de calidad. El delivery siempre llega a tiempo y los precios son justos. Recomendado 100%.",
+                images: [
+                    "../assets/arroz-blanco.jpg",
+                    "../assets/aceite-de-soja.jpg"
+                ],
+                helpful: 8,
+                orderId: "CB-001232"
+            },
+            {
+                id: 2,
+                commerce: {
+                    name: "Panadería Doña Rosa",
+                    category: "Panadería",
+                    image: "../assets/panaderia-rosa.jpg"
+                },
+                rating: 4,
+                date: "2024-10-12T09:15:00",
+                text: "Muy buen pan recién horneado. Los croissants son deliciosos. El único detalle es que a veces se agotan rápido.",
+                images: [
+                    "../assets/pan-de-agua.jpg"
+                ],
+                helpful: 5,
+                orderId: "CB-001231"
+            },
+            {
+                id: 3,
+                commerce: {
+                    name: "Farmacia La Esperanza",
+                    category: "Farmacia",
+                    image: "../assets/farmacia.jpg"
+                },
+                rating: 5,
+                date: "2024-10-10T14:20:00",
+                text: "Personal muy amable y profesional. Tienen todos los medicamentos que necesito y el servicio a domicilio es rápido.",
+                images: [],
+                helpful: 12,
+                orderId: "CB-001230"
+            },
+            {
+                id: 4,
+                commerce: {
+                    name: "Restaurante Sabores Criollos",
+                    category: "Restaurante",
+                    image: "../assets/supermercado.jpg"
+                },
+                rating: 3,
+                date: "2024-10-08T19:45:00",
+                text: "La comida está buena pero la demora fue excesiva. Pedí delivery y tardó más de una hora en llegar.",
+                images: [
+                    "../assets/arroz-blanco.jpg"
+                ],
+                helpful: 3,
+                orderId: "CB-001229"
+            },
+            {
+                id: 5,
+                commerce: {
+                    name: "Peluquería Estilo",
+                    category: "Peluquería",
+                    image: "../assets/peluqueria-estilo.jpg"
+                },
+                rating: 4,
+                date: "2024-10-05T11:30:00",
+                text: "Buen servicio de peluquería. Los estilistas son profesionales y el local está muy limpio. Precios razonables.",
+                images: [],
+                helpful: 6,
+                orderId: "CB-001228"
+            }
+        ];
+
+        // VARIABLES GLOBALES
+        let currentPage = 1;
+        const itemsPerPage = 5;
+        let filteredReviews = [...reviews];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initReviewsPage();
+            setupEventListeners();
+            renderReviews();
+            updateStats();
+        });
+
+        function initReviewsPage() {
+            // Cargar filtros guardados si existen
+            loadSavedFilters();
+        }
+
+        function setupEventListeners() {
+            // Navegación móvil
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+
+            // Búsqueda
+            const searchInput = document.getElementById('searchReviews');
+            searchInput.addEventListener('input', function() {
+                filterReviews();
+            });
+
+            // Filtros
+            document.getElementById('ratingFilter').addEventListener('change', filterReviews);
+            document.getElementById('dateFilter').addEventListener('change', filterReviews);
+            document.getElementById('commerceFilter').addEventListener('change', filterReviews);
+            document.getElementById('sortFilter').addEventListener('change', filterReviews);
+        }
+
+        function filterReviews() {
+            const searchTerm = document.getElementById('searchReviews').value.toLowerCase();
+            const ratingFilter = document.getElementById('ratingFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+            const commerceFilter = document.getElementById('commerceFilter').value;
+            const sortFilter = document.getElementById('sortFilter').value;
+
+            // Guardar filtros
+            saveFilters();
+
+            filteredReviews = reviews.filter(review => {
+                // Filtro de búsqueda
+                const matchesSearch = review.text.toLowerCase().includes(searchTerm) ||
+                                    review.commerce.name.toLowerCase().includes(searchTerm);
+                
+                // Filtro de calificación
+                const matchesRating = !ratingFilter || review.rating === parseInt(ratingFilter);
+                
+                // Filtro de fecha
+                const matchesDate = filterByDate(review.date, dateFilter);
+                
+                // Filtro de comercio
+                const matchesCommerce = !commerceFilter || 
+                                      review.commerce.name.toLowerCase().replace(/\s+/g, '-') === commerceFilter;
+
+                return matchesSearch && matchesRating && matchesDate && matchesCommerce;
+            });
+
+            // Ordenar
+            sortReviews(sortFilter);
+
+            // Resetear a primera página
+            currentPage = 1;
+            
+            // Renderizar resultados
+            renderReviews();
+            updateStats();
+        }
+
+        function filterByDate(reviewDate, filter) {
+            if (!filter) return true;
+            
+            const review = new Date(reviewDate);
+            const now = new Date();
+            
+            switch (filter) {
+                case 'today':
+                    return review.toDateString() === now.toDateString();
+                case 'week':
+                    const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                    return review >= weekAgo;
+                case 'month':
+                    const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+                    return review >= monthAgo;
+                case 'last3months':
+                    const threeMonthsAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+                    return review >= threeMonthsAgo;
+                default:
+                    return true;
+            }
+        }
+
+        function sortReviews(sortBy) {
+            filteredReviews.sort((a, b) => {
+                switch (sortBy) {
+                    case 'newest':
+                        return new Date(b.date) - new Date(a.date);
+                    case 'oldest':
+                        return new Date(a.date) - new Date(b.date);
+                    case 'rating-high':
+                        return b.rating - a.rating;
+                    case 'rating-low':
+                        return a.rating - b.rating;
+                    case 'helpful':
+                        return b.helpful - a.helpful;
+                    default:
+                        return new Date(b.date) - new Date(a.date);
+                }
+            });
+        }
+
+        function renderReviews() {
+            const container = document.getElementById('reviewsList');
+            
+            if (filteredReviews.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <img src="../assets/producto.png" alt="Sin reseñas">
+                        <h3>No se encontraron reseñas</h3>
+                        <p>Intenta ajustar los filtros de búsqueda</p>
+                        <button class="btn btn-primary" onclick="clearFilters()">
+                            🔄 Limpiar filtros
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            // Calcular paginación
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedReviews = filteredReviews.slice(startIndex, endIndex);
+            const totalPages = Math.ceil(filteredReviews.length / itemsPerPage);
+
+            // Actualizar paginación
+            document.getElementById('currentPage').textContent = currentPage;
+            document.getElementById('totalPages').textContent = totalPages;
+
+            container.innerHTML = paginatedReviews.map(review => `
+                <div class="review-card" data-review-id="${review.id}">
+                    <div class="review-header">
+                        <div class="commerce-info">
+                            <img src="${review.commerce.image}" alt="${review.commerce.name}" class="commerce-avatar" onerror="this.src='../assets/colmado-miguel.jpg'">
+                            <div class="commerce-details">
+                                <h4>${review.commerce.name}</h4>
+                                <div class="commerce-category">${review.commerce.category}</div>
+                            </div>
+                        </div>
+                        <div class="review-meta">
+                            <div class="review-rating">${getStarRating(review.rating)}</div>
+                            <div class="review-date">${formatDate(review.date)}</div>
+                            <div class="review-order">Pedido ${review.orderId}</div>
+                        </div>
+                    </div>
+
+                    <div class="review-content">
+                        <div class="review-text">${review.text}</div>
+                        ${review.images.length > 0 ? `
+                            <div class="review-images">
+                                ${review.images.map(img => `
+                                    <img src="${img}" alt="Imagen de reseña" class="review-image" onclick="viewImage('${img}')">
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <div class="review-actions">
+                        <div class="review-helpful">
+                            <button class="helpful-btn" onclick="markHelpful(${review.id})">
+                                👍 Útil
+                            </button>
+                            <span class="helpful-count">${review.helpful} personas encontraron esto útil</span>
+                        </div>
+                        <div class="review-buttons">
+                            <button class="btn btn-secondary" onclick="editReview(${review.id})">
+                                ✏️ Editar
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteReview(${review.id})">
+                                🗑️ Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateStats() {
+            const totalReviews = reviews.length;
+            const avgRating = reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews;
+            const helpfulReviews = reviews.filter(review => review.helpful > 0).length;
+
+            document.getElementById('totalReviews').textContent = totalReviews;
+            document.getElementById('avgRating').textContent = avgRating.toFixed(1);
+            document.getElementById('helpfulReviews').textContent = helpfulReviews;
+            document.getElementById('pendingReviews').textContent = 2; // Hardcoded por simplicidad
+        }
+
+        function changePage(direction) {
+            const totalPages = Math.ceil(filteredReviews.length / itemsPerPage);
+            const newPage = currentPage + direction;
+            
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentPage = newPage;
+                renderReviews();
+                
+                // Scroll suave hacia arriba
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function clearFilters() {
+            document.getElementById('searchReviews').value = '';
+            document.getElementById('ratingFilter').value = '';
+            document.getElementById('dateFilter').value = '';
+            document.getElementById('commerceFilter').value = '';
+            document.getElementById('sortFilter').value = 'newest';
+            
+            // Limpiar localStorage
+            localStorage.removeItem('reviewFilters');
+            
+            filterReviews();
+        }
+
+        function saveFilters() {
+            const filters = {
+                search: document.getElementById('searchReviews').value,
+                rating: document.getElementById('ratingFilter').value,
+                date: document.getElementById('dateFilter').value,
+                commerce: document.getElementById('commerceFilter').value,
+                sort: document.getElementById('sortFilter').value
+            };
+            
+            localStorage.setItem('reviewFilters', JSON.stringify(filters));
+        }
+
+        function loadSavedFilters() {
+            const savedFilters = localStorage.getItem('reviewFilters');
+            if (savedFilters) {
+                const filters = JSON.parse(savedFilters);
+                
+                document.getElementById('searchReviews').value = filters.search || '';
+                document.getElementById('ratingFilter').value = filters.rating || '';
+                document.getElementById('dateFilter').value = filters.date || '';
+                document.getElementById('commerceFilter').value = filters.commerce || '';
+                document.getElementById('sortFilter').value = filters.sort || 'newest';
+                
+                filterReviews();
+            }
+        }
+
+        // FUNCIONES AUXILIARES
+        function getStarRating(rating) {
+            const fullStars = Math.floor(rating);
+            const halfStar = rating % 1 >= 0.5;
+            const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+            
+            return '★'.repeat(fullStars) + (halfStar ? '½' : '') + '☆'.repeat(emptyStars);
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-ES', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        }
+
+        // FUNCIONES DE INTERACCIÓN
+        function writeReview(commerceId) {
+            showNotification(`Redirigiendo para escribir reseña...`, 'info');
+            // En una app real, esto abriría un formulario de reseña
+        }
+
+        function markHelpful(reviewId) {
+            const review = reviews.find(r => r.id === reviewId);
+            if (review) {
+                review.helpful++;
+                renderReviews();
+                showNotification('¡Gracias por tu feedback!', 'success');
+            }
+        }
+
+        function editReview(reviewId) {
+            const review = reviews.find(r => r.id === reviewId);
+            if (review) {
+                showNotification(`Editando reseña para ${review.commerce.name}...`, 'info');
+                // En una app real, esto abriría un editor de reseñas
+            }
+        }
+
+        function deleteReview(reviewId) {
+            const review = reviews.find(r => r.id === reviewId);
+            if (review && confirm(`¿Estás seguro de que quieres eliminar tu reseña de ${review.commerce.name}?`)) {
+                const index = reviews.findIndex(r => r.id === reviewId);
+                if (index !== -1) {
+                    reviews.splice(index, 1);
+                    filterReviews();
+                    showNotification('Reseña eliminada correctamente', 'success');
+                }
+            }
+        }
+
+        function viewImage(imageUrl) {
+            // En una app real, esto abriría un modal con la imagen
+            showNotification('Vista previa de imagen', 'info');
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()">×</button>
+            `;
+
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: ${getNotificationColor(type)};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                animation: slideInRight 0.3s ease;
+                max-width: 400px;
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 3000);
+        }
+
+        function getNotificationColor(type) {
+            const colors = {
+                success: '#28a745',
+                error: '#dc3545',
+                warning: '#ffc107',
+                info: '#17a2b8'
+            };
+            return colors[type] || colors.info;
+        }
+
+        // Agregar estilos para notificaciones
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+
+            .notification button {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.2rem;
+                cursor: pointer;
+                padding: 0;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0.8;
+            }
+
+            .notification button:hover {
+                opacity: 1;
+            }
+
+            .notification-badge {
+                background: var(--danger);
+                color: white;
+                border-radius: 50%;
+                width: 20px;
+                height: 20px;
+                font-size: 0.7rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-left: auto;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

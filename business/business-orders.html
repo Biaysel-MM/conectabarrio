@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Pedidos - ConectaBarrio</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* ESTILOS ESPECÍFICOS PARA BUSINESS ORDERS */
+        :root {
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f8f9fa;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-brand img {
+            height: 40px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .business-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .business-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* DASHBOARD LAYOUT */
+        .business-dashboard {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 300px;
+            background: white;
+            border-right: 1px solid #e9ecef;
+            padding: 2rem 0;
+            position: sticky;
+            top: 80px;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+
+        .business-profile {
+            padding: 0 2rem 2rem;
+            border-bottom: 1px solid #e9ecef;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .business-avatar-large {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            margin: 0 auto 1rem;
+        }
+
+        .business-info h4 {
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .business-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .business-status {
+            display: inline-block;
+            background: var(--success);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 0 1rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: var(--dark);
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-item.logout {
+            color: var(--danger);
+            margin-top: 1rem;
+            border-top: 1px solid #e9ecef;
+            padding-top: 1.5rem;
+        }
+
+        .nav-item.logout:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* MAIN CONTENT */
+        .dashboard-content {
+            flex: 1;
+            padding: 2rem;
+            background: #f8f9fa;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .content-header h1 {
+            color: var(--dark);
+            font-size: 2rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .date-filter {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .filter-select {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+        }
+
+        /* ORDERS STATS */
+        .orders-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .stat-change {
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            margin-top: 0.5rem;
+            display: inline-block;
+        }
+
+        .stat-change.positive {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+
+        .stat-change.negative {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+
+        /* FILTERS AND SEARCH */
+        .filters-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .filters-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .filters-header h3 {
+            color: var(--dark);
+            font-size: 1.2rem;
+        }
+
+        .clear-filters {
+            color: var(--primary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .search-bar {
+            display: flex;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 0.5rem;
+        }
+
+        .search-bar input {
+            flex: 1;
+            border: none;
+            padding: 0.5rem;
+            font-size: 1rem;
+            outline: none;
+            background: transparent;
+        }
+
+        .btn-search {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* ORDERS TABLE */
+        .orders-table-container {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .table-header h2 {
+            color: var(--dark);
+            font-size: 1.5rem;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .export-btn {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .export-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .orders-table th {
+            background: var(--light);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .orders-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e9ecef;
+            vertical-align: top;
+        }
+
+        .orders-table tr:hover {
+            background: rgba(46, 134, 171, 0.05);
+        }
+
+        .order-id {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .customer-info h4 {
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .customer-phone {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .order-items {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .order-total {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+
+        .status-confirmed {
+            background: rgba(46, 134, 171, 0.1);
+            color: var(--primary);
+        }
+
+        .status-preparing {
+            background: rgba(241, 143, 1, 0.1);
+            color: var(--accent);
+        }
+
+        .status-ready {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+
+        .status-delivering {
+            background: rgba(32, 201, 151, 0.1);
+            color: #20c997;
+        }
+
+        .status-delivered {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+
+        .status-cancelled {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+
+        .order-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1a6a8f;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: var(--dark);
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* PAGINATION */
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding: 1rem 0;
+        }
+
+        .pagination-info {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .pagination-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .page-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e9ecef;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .page-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .page-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray);
+        }
+
+        .empty-state img {
+            width: 200px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .business-dashboard {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                padding: 1rem 0;
+            }
+
+            .sidebar-nav {
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 0 1rem;
+            }
+
+            .nav-item {
+                white-space: nowrap;
+            }
+
+            .business-profile {
+                text-align: left;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .business-avatar-large {
+                margin: 0;
+                width: 60px;
+                height: 60px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .dashboard-content {
+                padding: 1rem;
+            }
+
+            .content-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .orders-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .orders-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .table-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .order-actions {
+                flex-direction: column;
+            }
+
+            .pagination {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar-nav {
+                flex-direction: column;
+            }
+
+            .business-profile {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .orders-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .orders-table td {
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .pagination-controls {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="../index.html" class="nav-brand">
+            <img src="../assets/logo.png" alt="ConectaBarrio">
+        </a>
+        
+        <div class="nav-links" id="navLinks">
+            <a href="../index.html">Inicio</a>
+            <a href="../commerce/commerce-list.html">Comercios</a>
+            <a href="../features/events.html">Eventos</a>
+            <a href="../features/offers.html">Ofertas</a>
+            <a href="../info/about.html">Sobre Nosotros</a>
+            <div class="business-menu">
+                <img src="../assets/user.png" alt="Colmado San Miguel" class="business-avatar">
+                <span>Colmado S.M.</span>
+            </div>
+        </div>
+        
+        <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    </nav>
+
+    <!-- DASHBOARD LAYOUT -->
+    <main class="business-dashboard">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="business-profile">
+                <img src="../assets/colmado-miguel.jpg" alt="Colmado San Miguel" class="business-avatar-large">
+                <div class="business-info">
+                    <h4>Colmado San Miguel</h4>
+                    <p>Miguel Ángel - Propietario</p>
+                    <span class="business-status">🟢 Abierto</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="business-dashboard.html" class="nav-item">
+                    📊 Dashboard
+                </a>
+                <a href="business-orders.html" class="nav-item active">
+                    📦 Pedidos
+                </a>
+                <a href="business-products.html" class="nav-item">
+                    🛍️ Productos
+                </a>
+                <a href="business-reviews.html" class="nav-item">
+                    ⭐ Reseñas
+                </a>
+                <a href="business-profile.html" class="nav-item">
+                    ⚙️ Configuración
+                </a>
+                <a href="../auth/login.html" class="nav-item logout">
+                    🚪 Cerrar Sesión
+                </a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="dashboard-content">
+            <!-- HEADER -->
+            <div class="content-header">
+                <h1>📦 Gestión de Pedidos</h1>
+                <div class="header-actions">
+                    <div class="date-filter">
+                        <select class="filter-select" id="timeFilter">
+                            <option value="today">Hoy</option>
+                            <option value="week" selected>Esta semana</option>
+                            <option value="month">Este mes</option>
+                            <option value="all">Todos</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ORDERS STATS -->
+            <div class="orders-stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalOrders">24</div>
+                    <div class="stat-label">Total Pedidos</div>
+                    <div class="stat-change positive">+12%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="pendingOrders">8</div>
+                    <div class="stat-label">Pendientes</div>
+                    <div class="stat-change negative">+3</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="revenue">$12,450 RD</div>
+                    <div class="stat-label">Ingresos</div>
+                    <div class="stat-change positive">+18%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="avgOrder">$518 RD</div>
+                    <div class="stat-label">Promedio por Pedido</div>
+                    <div class="stat-change positive">+5%</div>
+                </div>
+            </div>
+
+            <!-- FILTERS AND SEARCH -->
+            <section class="filters-section">
+                <div class="filters-header">
+                    <h3>Filtrar Pedidos</h3>
+                    <button class="clear-filters" onclick="clearFilters()">Limpiar filtros</button>
+                </div>
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label class="filter-label">Estado</label>
+                        <select class="filter-select" id="statusFilter">
+                            <option value="">Todos los estados</option>
+                            <option value="pending">Pendientes</option>
+                            <option value="confirmed">Confirmados</option>
+                            <option value="preparing">Preparando</option>
+                            <option value="ready">Listos</option>
+                            <option value="delivering">En entrega</option>
+                            <option value="delivered">Entregados</option>
+                            <option value="cancelled">Cancelados</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Fecha</label>
+                        <select class="filter-select" id="dateFilter">
+                            <option value="">Cualquier fecha</option>
+                            <option value="today">Hoy</option>
+                            <option value="yesterday">Ayer</option>
+                            <option value="week">Esta semana</option>
+                            <option value="month">Este mes</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Método de Pago</label>
+                        <select class="filter-select" id="paymentFilter">
+                            <option value="">Todos los métodos</option>
+                            <option value="cash">Efectivo</option>
+                            <option value="card">Tarjeta</option>
+                            <option value="transfer">Transferencia</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Buscar</label>
+                        <div class="search-bar">
+                            <input type="text" id="searchOrders" placeholder="Buscar por cliente o pedido...">
+                            <button class="btn-search">🔍</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ORDERS TABLE -->
+            <section class="orders-table-container">
+                <div class="table-header">
+                    <h2>📋 Lista de Pedidos</h2>
+                    <div class="table-actions">
+                        <button class="export-btn" onclick="exportOrders()">
+                            📄 Exportar
+                        </button>
+                    </div>
+                </div>
+
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Pedido</th>
+                            <th>Cliente</th>
+                            <th>Productos</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <!-- Los pedidos se cargan dinámicamente aquí -->
+                    </tbody>
+                </table>
+
+                <!-- PAGINATION -->
+                <div class="pagination">
+                    <div class="pagination-info">
+                        Mostrando <span id="showingStart">1</span>-<span id="showingEnd">10</span> de <span id="totalOrdersCount">24</span> pedidos
+                    </div>
+                    <div class="pagination-controls">
+                        <button class="page-btn" onclick="changePage(-1)">← Anterior</button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn" onclick="changePage(1)">Siguiente →</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // DATOS DE PEDIDOS
+        const orders = [
+            {
+                id: "CB-001245",
+                customer: {
+                    name: "Ana Rodríguez",
+                    phone: "(809) 555-0145"
+                },
+                items: [
+                    { name: "Arroz 5kg", quantity: 1, price: 250 },
+                    { name: "Aceite 1L", quantity: 2, price: 180 },
+                    { name: "Leche 1L", quantity: 3, price: 85 }
+                ],
+                total: 1150,
+                status: "pending",
+                payment: "card",
+                date: "2024-10-16T14:30:00",
+                deliveryAddress: "Calle Principal #123, Zona Colonial"
+            },
+            {
+                id: "CB-001244",
+                customer: {
+                    name: "Carlos Martínez",
+                    phone: "(809) 555-0144"
+                },
+                items: [
+                    { name: "Pan de agua", quantity: 4, price: 25 },
+                    { name: "Queso", quantity: 1, price: 200 },
+                    { name: "Jamón", quantity: 1, price: 180 },
+                    { name: "Huevos", quantity: 12, price: 120 },
+                    { name: "Mantequilla", quantity: 1, price: 85 }
+                ],
+                total: 850,
+                status: "confirmed",
+                payment: "cash",
+                date: "2024-10-16T13:15:00",
+                deliveryAddress: "Av. Independencia #456"
+            },
+            {
+                id: "CB-001243",
+                customer: {
+                    name: "María González",
+                    phone: "(809) 555-0143"
+                },
+                items: [
+                    { name: "Arroz 5kg", quantity: 2, price: 250 },
+                    { name: "Frijoles 1kg", quantity: 1, price: 150 },
+                    { name: "Aceite 1L", quantity: 1, price: 180 },
+                    { name: "Azúcar 2kg", quantity: 1, price: 120 }
+                ],
+                total: 950,
+                status: "preparing",
+                payment: "card",
+                date: "2024-10-16T12:45:00",
+                deliveryAddress: "Calle El Conde #789"
+            },
+            {
+                id: "CB-001242",
+                customer: {
+                    name: "Juan Pérez",
+                    phone: "(809) 555-0142"
+                },
+                items: [
+                    { name: "Refresco 2L", quantity: 2, price: 120 },
+                    { name: "Galletas", quantity: 3, price: 45 },
+                    { name: "Jugo 1L", quantity: 2, price: 95 }
+                ],
+                total: 645,
+                status: "ready",
+                payment: "cash",
+                date: "2024-10-16T11:30:00",
+                deliveryAddress: "Av. Bolívar #321"
+            },
+            {
+                id: "CB-001241",
+                customer: {
+                    name: "Laura Sánchez",
+                    phone: "(809) 555-0141"
+                },
+                items: [
+                    { name: "Leche 1L", quantity: 2, price: 85 },
+                    { name: "Cereal", quantity: 1, price: 220 }
+                ],
+                total: 390,
+                status: "delivering",
+                payment: "card",
+                date: "2024-10-16T10:15:00",
+                deliveryAddress: "Calle Las Damas #654"
+            },
+            {
+                id: "CB-001240",
+                customer: {
+                    name: "Roberto Díaz",
+                    phone: "(809) 555-0140"
+                },
+                items: [
+                    { name: "Arroz 5kg", quantity: 1, price: 250 },
+                    { name: "Aceite 1L", quantity: 1, price: 180 },
+                    { name: "Salsa de tomate", quantity: 2, price: 65 }
+                ],
+                total: 560,
+                status: "delivered",
+                payment: "transfer",
+                date: "2024-10-15T16:20:00",
+                deliveryAddress: "Av. George Washington #987"
+            },
+            {
+                id: "CB-001239",
+                customer: {
+                    name: "Sofía Hernández",
+                    phone: "(809) 555-0139"
+                },
+                items: [
+                    { name: "Pan integral", quantity: 2, price: 35 },
+                    { name: "Mermelada", quantity: 1, price: 120 }
+                ],
+                total: 190,
+                status: "cancelled",
+                payment: "card",
+                date: "2024-10-15T15:10:00",
+                deliveryAddress: "Calle Padre Billini #111"
+            }
+        ];
+
+        // VARIABLES GLOBALES
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let filteredOrders = [...orders];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initOrdersPage();
+            setupEventListeners();
+            renderOrdersTable();
+            updateStats();
+        });
+
+        function initOrdersPage() {
+            // Cargar filtros guardados si existen
+            loadSavedFilters();
+        }
+
+        function setupEventListeners() {
+            // Navegación móvil
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+
+            // Filtros
+            document.getElementById('timeFilter').addEventListener('change', filterOrders);
+            document.getElementById('statusFilter').addEventListener('change', filterOrders);
+            document.getElementById('dateFilter').addEventListener('change', filterOrders);
+            document.getElementById('paymentFilter').addEventListener('change', filterOrders);
+
+            // Búsqueda
+            const searchInput = document.getElementById('searchOrders');
+            searchInput.addEventListener('input', function() {
+                filterOrders();
+            });
+        }
+
+        function filterOrders() {
+            const timeFilter = document.getElementById('timeFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+            const paymentFilter = document.getElementById('paymentFilter').value;
+            const searchTerm = document.getElementById('searchOrders').value.toLowerCase();
+
+            // Guardar filtros
+            saveFilters();
+
+            filteredOrders = orders.filter(order => {
+                // Filtro de tiempo
+                const matchesTime = filterByTime(order.date, timeFilter);
+                
+                // Filtro de estado
+                const matchesStatus = !statusFilter || order.status === statusFilter;
+                
+                // Filtro de fecha específica
+                const matchesDate = filterBySpecificDate(order.date, dateFilter);
+                
+                // Filtro de método de pago
+                const matchesPayment = !paymentFilter || order.payment === paymentFilter;
+                
+                // Filtro de búsqueda
+                const matchesSearch = !searchTerm || 
+                                    order.id.toLowerCase().includes(searchTerm) ||
+                                    order.customer.name.toLowerCase().includes(searchTerm) ||
+                                    order.customer.phone.includes(searchTerm);
+
+                return matchesTime && matchesStatus && matchesDate && matchesPayment && matchesSearch;
+            });
+
+            // Resetear a primera página
+            currentPage = 1;
+            
+            // Renderizar resultados
+            renderOrdersTable();
+            updateStats();
+        }
+
+        function filterByTime(orderDate, filter) {
+            if (!filter || filter === 'all') return true;
+            
+            const order = new Date(orderDate);
+            const now = new Date();
+            
+            switch (filter) {
+                case 'today':
+                    return order.toDateString() === now.toDateString();
+                case 'week':
+                    const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                    return order >= weekAgo;
+                case 'month':
+                    const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+                    return order >= monthAgo;
+                default:
+                    return true;
+            }
+        }
+
+        function filterBySpecificDate(orderDate, filter) {
+            if (!filter) return true;
+            
+            const order = new Date(orderDate);
+            const now = new Date();
+            
+            switch (filter) {
+                case 'today':
+                    return order.toDateString() === now.toDateString();
+                case 'yesterday':
+                    const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+                    return order.toDateString() === yesterday.toDateString();
+                case 'week':
+                    const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                    return order >= weekAgo;
+                case 'month':
+                    const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+                    return order >= monthAgo;
+                default:
+                    return true;
+            }
+        }
+
+        function renderOrdersTable() {
+            const container = document.getElementById('ordersTableBody');
+            
+            if (filteredOrders.length === 0) {
+                container.innerHTML = `
+                    <tr>
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <img src="../assets/no-hay-productos.png" alt="Sin pedidos">
+                                <h3>No se encontraron pedidos</h3>
+                                <p>Intenta ajustar los filtros de búsqueda</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            // Calcular paginación
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedOrders = filteredOrders.slice(startIndex, endIndex);
+
+            // Actualizar información de paginación
+            document.getElementById('showingStart').textContent = startIndex + 1;
+            document.getElementById('showingEnd').textContent = Math.min(endIndex, filteredOrders.length);
+            document.getElementById('totalOrdersCount').textContent = filteredOrders.length;
+
+            container.innerHTML = paginatedOrders.map(order => `
+                <tr>
+                    <td>
+                        <div class="order-id">${order.id}</div>
+                        <div style="font-size: 0.8rem; color: var(--gray);">${formatDateTime(order.date)}</div>
+                    </td>
+                    <td>
+                        <div class="customer-info">
+                            <h4>${order.customer.name}</h4>
+                            <div class="customer-phone">${order.customer.phone}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="order-items">
+                            ${order.items.map(item => `
+                                <div>${item.quantity}x ${item.name}</div>
+                            `).join('')}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="order-total">$${order.total} RD</div>
+                        <div style="font-size: 0.8rem; color: var(--gray);">${getPaymentMethodText(order.payment)}</div>
+                    </td>
+                    <td>
+                        <span class="status ${getStatusClass(order.status)}">${getStatusText(order.status)}</span>
+                    </td>
+                    <td>
+                        <div class="order-actions">
+                            <button class="btn-small btn-primary" onclick="viewOrder('${order.id}')">
+                                👁️ Ver
+                            </button>
+                            ${getActionButtons(order.status, order.id)}
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function getActionButtons(status, orderId) {
+            switch (status) {
+                case 'pending':
+                    return `
+                        <button class="btn-small btn-success" onclick="confirmOrder('${orderId}')">
+                            ✅ Confirmar
+                        </button>
+                        <button class="btn-small btn-danger" onclick="cancelOrder('${orderId}')">
+                            ❌ Cancelar
+                        </button>
+                    `;
+                case 'confirmed':
+                    return `
+                        <button class="btn-small btn-warning" onclick="startPreparing('${orderId}')">
+                            👨‍🍳 Preparar
+                        </button>
+                    `;
+                case 'preparing':
+                    return `
+                        <button class="btn-small btn-success" onclick="markReady('${orderId}')">
+                            ✅ Listo
+                        </button>
+                    `;
+                case 'ready':
+                    return `
+                        <button class="btn-small btn-primary" onclick="startDelivery('${orderId}')">
+                            🚗 Entregar
+                        </button>
+                    `;
+                case 'delivering':
+                    return `
+                        <button class="btn-small btn-success" onclick="markDelivered('${orderId}')">
+                            🏠 Entregado
+                        </button>
+                    `;
+                case 'delivered':
+                    return `
+                        <button class="btn-small btn-outline" onclick="contactCustomer('${orderId}')">
+                            💬 Contactar
+                        </button>
+                    `;
+                case 'cancelled':
+                    return `
+                        <button class="btn-small btn-outline" onclick="viewOrder('${orderId}')">
+                            📋 Detalles
+                        </button>
+                    `;
+                default:
+                    return '';
+            }
+        }
+
+        function updateStats() {
+            const totalOrders = orders.length;
+            const pendingOrders = orders.filter(order => 
+                ['pending', 'confirmed', 'preparing', 'ready', 'delivering'].includes(order.status)
+            ).length;
+            
+            const revenue = orders
+                .filter(order => order.status !== 'cancelled')
+                .reduce((sum, order) => sum + order.total, 0);
+            
+            const avgOrder = totalOrders > 0 ? Math.round(revenue / totalOrders) : 0;
+
+            document.getElementById('totalOrders').textContent = totalOrders;
+            document.getElementById('pendingOrders').textContent = pendingOrders;
+            document.getElementById('revenue').textContent = `$${revenue.toLocaleString()} RD`;
+            document.getElementById('avgOrder').textContent = `$${avgOrder} RD`;
+        }
+
+        function changePage(direction) {
+            const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+            const newPage = currentPage + direction;
+            
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentPage = newPage;
+                renderOrdersTable();
+            }
+        }
+
+        function clearFilters() {
+            document.getElementById('timeFilter').value = 'week';
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('dateFilter').value = '';
+            document.getElementById('paymentFilter').value = '';
+            document.getElementById('searchOrders').value = '';
+            
+            // Limpiar localStorage
+            localStorage.removeItem('businessOrderFilters');
+            
+            filterOrders();
+        }
+
+        function saveFilters() {
+            const filters = {
+                time: document.getElementById('timeFilter').value,
+                status: document.getElementById('statusFilter').value,
+                date: document.getElementById('dateFilter').value,
+                payment: document.getElementById('paymentFilter').value,
+                search: document.getElementById('searchOrders').value
+            };
+            
+            localStorage.setItem('businessOrderFilters', JSON.stringify(filters));
+        }
+
+        function loadSavedFilters() {
+            const savedFilters = localStorage.getItem('businessOrderFilters');
+            if (savedFilters) {
+                const filters = JSON.parse(savedFilters);
+                
+                document.getElementById('timeFilter').value = filters.time || 'week';
+                document.getElementById('statusFilter').value = filters.status || '';
+                document.getElementById('dateFilter').value = filters.date || '';
+                document.getElementById('paymentFilter').value = filters.payment || '';
+                document.getElementById('searchOrders').value = filters.search || '';
+                
+                filterOrders();
+            }
+        }
+
+        // FUNCIONES AUXILIARES
+        function getStatusClass(status) {
+            const statusMap = {
+                'pending': 'status-pending',
+                'confirmed': 'status-confirmed',
+                'preparing': 'status-preparing',
+                'ready': 'status-ready',
+                'delivering': 'status-delivering',
+                'delivered': 'status-delivered',
+                'cancelled': 'status-cancelled'
+            };
+            return statusMap[status] || 'status-pending';
+        }
+
+        function getStatusText(status) {
+            const statusMap = {
+                'pending': 'Pendiente',
+                'confirmed': 'Confirmado',
+                'preparing': 'Preparando',
+                'ready': 'Listo',
+                'delivering': 'En entrega',
+                'delivered': 'Entregado',
+                'cancelled': 'Cancelado'
+            };
+            return statusMap[status] || 'Pendiente';
+        }
+
+        function getPaymentMethodText(payment) {
+            const paymentMap = {
+                'cash': 'Efectivo',
+                'card': 'Tarjeta',
+                'transfer': 'Transferencia'
+            };
+            return paymentMap[payment] || payment;
+        }
+
+        function formatDateTime(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-ES', {
+                day: 'numeric',
+                month: 'short',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // FUNCIONES DE INTERACCIÓN
+        function viewOrder(orderId) {
+            const order = orders.find(o => o.id === orderId);
+            if (order) {
+                showNotification(`Abriendo detalles del pedido ${orderId}...`, 'info');
+                // En una app real, esto abriría un modal o página de detalles
+            }
+        }
+
+        function confirmOrder(orderId) {
+            if (confirm(`¿Confirmar pedido ${orderId}?`)) {
+                updateOrderStatus(orderId, 'confirmed');
+                showNotification(`Pedido ${orderId} confirmado`, 'success');
+            }
+        }
+
+        function cancelOrder(orderId) {
+            if (confirm(`¿Cancelar pedido ${orderId}?`)) {
+                updateOrderStatus(orderId, 'cancelled');
+                showNotification(`Pedido ${orderId} cancelado`, 'info');
+            }
+        }
+
+        function startPreparing(orderId) {
+            updateOrderStatus(orderId, 'preparing');
+            showNotification(`Comenzando preparación del pedido ${orderId}`, 'info');
+        }
+
+        function markReady(orderId) {
+            updateOrderStatus(orderId, 'ready');
+            showNotification(`Pedido ${orderId} marcado como listo`, 'success');
+        }
+
+        function startDelivery(orderId) {
+            updateOrderStatus(orderId, 'delivering');
+            showNotification(`Iniciando entrega del pedido ${orderId}`, 'info');
+        }
+
+        function markDelivered(orderId) {
+            updateOrderStatus(orderId, 'delivered');
+            showNotification(`Pedido ${orderId} marcado como entregado`, 'success');
+        }
+
+        function contactCustomer(orderId) {
+            const order = orders.find(o => o.id === orderId);
+            if (order) {
+                showNotification(`Contactando a ${order.customer.name}...`, 'info');
+            }
+        }
+
+        function exportOrders() {
+            showNotification('Generando archivo de exportación...', 'info');
+            // En una app real, esto generaría un CSV o PDF
+            setTimeout(() => {
+                showNotification('Archivo exportado correctamente', 'success');
+            }, 2000);
+        }
+
+        function updateOrderStatus(orderId, newStatus) {
+            const order = orders.find(o => o.id === orderId);
+            if (order) {
+                order.status = newStatus;
+                renderOrdersTable();
+                updateStats();
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()">×</button>
+            `;
+
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: ${getNotificationColor(type)};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                animation: slideInRight 0.3s ease;
+                max-width: 400px;
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 3000);
+        }
+
+        function getNotificationColor(type) {
+            const colors = {
+                success: '#28a745',
+                error: '#dc3545',
+                warning: '#ffc107',
+                info: '#17a2b8'
+            };
+            return colors[type] || colors.info;
+        }
+
+        // Agregar estilos para notificaciones
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+
+            .notification button {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.2rem;
+                cursor: pointer;
+                padding: 0;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0.8;
+            }
+
+            .notification button:hover {
+                opacity: 1;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

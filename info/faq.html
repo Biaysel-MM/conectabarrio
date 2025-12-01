@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preguntas Frecuentes - ConectaBarrio</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* ESTILOS ESPECÍFICOS PARA FAQ */
+        :root {
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #fff;
+        }
+
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), #1a6a8f);
+            color: white;
+            padding: 3rem 5%;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* MAIN CONTENT */
+        .faq-page {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+        }
+
+        /* SEARCH BAR */
+        .search-section {
+            margin-bottom: 3rem;
+        }
+
+        .search-bar {
+            display: flex;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 50px;
+            padding: 0.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .search-bar input {
+            flex: 1;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            outline: none;
+            background: transparent;
+        }
+
+        .btn-search {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-search:hover {
+            background: #1a6a8f;
+        }
+
+        /* CATEGORIES */
+        .categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .category-btn {
+            background: var(--light);
+            border: 2px solid #e9ecef;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            color: var(--dark);
+        }
+
+        .category-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .category-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* FAQ SECTIONS */
+        .faq-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            color: var(--dark);
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        .faq-question:hover {
+            background: var(--light);
+        }
+
+        .faq-icon {
+            color: var(--primary);
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            color: var(--gray);
+            line-height: 1.6;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            max-height: 500px;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        /* CONTACT CTA */
+        .contact-cta {
+            background: var(--light);
+            padding: 3rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .contact-cta h2 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .contact-cta p {
+            color: var(--gray);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: #1a6a8f;
+            transform: translateY(-2px);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .categories {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+            }
+
+            .category-btn {
+                white-space: nowrap;
+            }
+
+            .faq-page {
+                padding: 2rem 1rem;
+            }
+
+            .contact-cta {
+                padding: 2rem 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 2rem 1rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .faq-question {
+                padding: 1rem;
+            }
+
+            .faq-answer {
+                padding: 0 1rem;
+            }
+
+            .faq-item.active .faq-answer {
+                padding: 0 1rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+<!-- En el body de cada página -->
+<div id="dynamic-navbar"></div>
+<!-- El resto del contenido de tu página -->
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <h1>Preguntas Frecuentes</h1>
+        <p>Encuentra respuestas rápidas a las dudas más comunes sobre ConectaBarrio</p>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="faq-page">
+        <!-- SEARCH -->
+        <div class="search-section">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Buscar en preguntas frecuentes...">
+                <button class="btn-search">🔍</button>
+            </div>
+        </div>
+
+        <!-- CATEGORIES -->
+        <div class="categories">
+            <button class="category-btn active" data-category="all">Todas</button>
+            <button class="category-btn" data-category="registration">Registro</button>
+            <button class="category-btn" data-category="orders">Pedidos</button>
+            <button class="category-btn" data-category="payments">Pagos</button>
+            <button class="category-btn" data-category="commerce">Comercios</button>
+            <button class="category-btn" data-category="technical">Problemas Técnicos</button>
+        </div>
+
+        <!-- FAQ CONTENT -->
+        <div class="faq-content">
+            <!-- REGISTRO -->
+            <section class="faq-section" data-category="registration">
+                <h2 class="section-title">📝 Registro y Cuenta</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            ¿Cómo me registro en ConectaBarrio?
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>El registro es simple y gratuito. Solo necesitas:</p>
+                            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                                <li>Tu dirección de email</li>
+                                <li>Crear una contraseña segura</li>
+                                <li>Completar algunos datos básicos</li>
+                            </ul>
+                            <p>Puedes registrarte como cliente o como comercio. El proceso toma menos de 5 minutos.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            ¿Puedo cambiar mi información personal después del registro?
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Sí, puedes actualizar tu información en cualquier momento desde la sección "Mi Perfil" en tu cuenta. Puedes modificar:</p>
+                            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                                <li>Nombre y apellido</li>
+                                <li>Dirección de entrega</li>
+                                <li>Número de teléfono</li>
+                                <li>Preferencias de notificación</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            ¿Qué necesito para registrar mi comercio?
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Para registrar tu comercio necesitas:</p>
+                            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                                <li>Nombre legal del negocio</li>
+                                <li>Documento de identificación del propietario</li>
+                                <li>Dirección comercial</li>
+                                <li>Número de teléfono de contacto</li>
+                                <li>Fotos del establecimiento y productos</li>
+                                <li>Horarios de atención</li>
+                            </ul>
+                            <p>El proceso de verificación puede tomar hasta 48 horas.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PEDIDOS -->
+            <section class="faq-section" data-category="orders">
+                <h2 class="section-title">🛒 Pedidos y Entregas</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            ¿Cómo realizo un pedido?
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Realizar un pedido es muy simple:</p>
+                            <ol style="margin: 1rem 0; padding-left: 1.5rem;">
+                                <li>Busca el comercio o producto que necesitas</li>
+                                <li>Agrega los productos al carrito</li>
+                                <li>Revisa tu pedido en el carrito</li>
+                                <li>Selecciona método de pago y dirección de entrega</li>
+                                <li>Confirma tu pedido</li>
+                            </ol>
+                            <p>Recibirás una confirmación por email y podrás seguir el estado de tu pedido.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            ¿Puedo modificar o cancelar mi pedido?
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Depende del estado de tu pedido:</p>
+                            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                                <li><strong>Pendiente:</strong> Puedes modificar o cancelar sin costo</li>
+                                <li><strong>Confirmado:</strong> Solo modificaciones menores, contacta al comercio</li>
+                                <li><strong>En preparación:</strong> No se permiten cambios</li>
+                                <li><strong>En camino:</strong> No se puede cancelar</li>
+                            </ul>
+                            <p>Para cancelaciones, contacta al servicio al cliente lo antes posible.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            ¿Cuál es el tiempo de entrega promedio?
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>El tiempo de entrega varía según:</p>
+                            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                                <li><strong>Ubicación:</strong> 30-60 minutos en la misma zona</li>
+                                <li><strong>Tipo de producto:</strong> Alimentos preparados vs. productos empaquetados</li>
+                                <li><strong>Horario:</strong> Tiempos pueden extenderse en horas pico</li>
+                                <li><strong>Condiciones climáticas:</strong> Puede haber demoras por mal tiempo</li>
+                            </ul>
+                            <p>Cada comercio muestra su tiempo estimado de entrega antes de que realices el pedido.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGOS -->
+            <section class="faq-section" data-category="payments">
+                <h2 class="section-title">💳 Pagos y Facturación</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            ¿Qué métodos de pago aceptan?
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Aceptamos múltiples métodos de pago seguros:</p>
+                            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                                <li><strong>Efectivo:</strong> Al momento de la entrega</li>
+                                <li><strong>Tarjetas:</strong> Crédito y débito (Visa, MasterCard, American Express)</li>
+                                <li><strong>Transferencias:</strong> Bancarias y por apps móviles</li>
+                                <li><strong>Billeteras digitales:</strong> Diversas opciones según el país</li>
+                            </ul>
+                            <p>Cada comercio puede especificar qué métodos acepta en su perfil.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            ¿Es seguro pagar con tarjeta en ConectaBarrio?
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Sí, la seguridad de tus pagos es nuestra prioridad:</p>
+                            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                                <li>Encriptación SSL de 256 bits para todos los datos</li>
+                                <li>Cumplimiento de estándares PCI DSS</li>
+                                <li>Procesamiento a través de pasarelas certificadas</li>
+                                <li>No almacenamos información sensible de tarjetas</li>
+                                <li>Verificación de dos factores opcional</li>
+                            </ul>
+                            <p>Tus datos financieros están protegidos en todo momento.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            ¿Puedo solicitar factura por mis compras?
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Sí, puedes solicitar factura por tus compras:</p>
+                            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                                <li>Durante el proceso de compra, selecciona "Necesito factura"</li>
+                                <li>Proporciona los datos fiscales requeridos</li>
+                                <li>Recibirás la factura por email en un plazo de 24-48 horas</li>
+                                <li>Para compras anteriores, contacta al servicio al cliente</li>
+                            </ul>
+                            <p>Todos los comercios están obligados a proporcionar facturas válidas.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- COMERCIOS -->
+            <section class="faq-section" data-category="commerce">
+                <h2 class="section-title">🏪 Para Comercios</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            ¿Cuánto cuesta vender en ConectaBarrio?
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Nuestro modelo de precios es simple y transparente:</p>
+                            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                                <li><strong>Registro:</strong> Completamente gratuito</li>
+                                <li><strong>Comisión por venta:</strong> 8-15% según el tipo de producto</li>
+                                <li><strong>Sin cuotas mensuales</strong></li>
+                                <li><strong>Sin cargos por cancelación</strong></li>
+                                <li><strong>Promociones especiales:</strong> Comisiones reducidas para nuevos comercios</li>
+                            </ul>
+                            <p>Solo pagas cuando vendes, sin costos ocultos.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            ¿Cómo recibo los pagos de mis ventas?
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Los pagos se procesan de la siguiente manera:</p>
+                            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                                <li>Los fondos se depositan en tu cuenta de ConectaBarrio</li>
+                                <li>Puedes retirar tu dinero cada 7 días</li>
+                                <li>Transferencias bancarias sin costo adicional</li>
+                                <li>Reportes detallados de todas las transacciones</li>
+                                <li>Soporte para múltiples cuentas bancarias</li>
+                            </ul>
+                            <p>El primer retiro puede tomar hasta 14 días por procesos de verificación.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            ¿Cómo gestiono mi inventario y pedidos?
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Disponemos de herramientas completas de gestión:</p>
+                            <ul style="margin: 1rem 0; padding-left: 1.5roll;">
+                                <li><strong>Panel de control intuitivo</strong> con métricas en tiempo real</li>
+                                <li><strong>Gestión de inventario</strong> con alertas de stock bajo</li>
+                                <li><strong>Notificaciones automáticas</strong> de nuevos pedidos</li>
+                                <li><strong>Sistema de etiquetas</strong> para organizar pedidos</li>
+                                <li><strong>App móvil</strong> para gestionar desde cualquier lugar</li>
+                                <li><strong>Reportes detallados</strong> de ventas y desempeño</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PROBLEMAS TÉCNICOS -->
+            <section class="faq-section" data-category="technical">
+                <h2 class="section-title">🔧 Problemas Técnicos</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            La app se cierra inesperadamente, ¿qué puedo hacer?
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Si experimentas cierres inesperados, prueba estos pasos:</p>
+                            <ol style="margin: 1rem 0; padding-left: 1.5rem;">
+                                <li>Cierra completamente la app y vuelve a abrirla</li>
+                                <li>Reinicia tu dispositivo móvil</li>
+                                <li>Verifica que tienes la última versión de la app</li>
+                                <li>Limpia la caché de la aplicación</li>
+                                <li>Desinstala y reinstala la app</li>
+                            </ol>
+                            <p>Si el problema persiste, contacta a nuestro soporte técnico.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            No recibo los códigos de verificación, ¿qué hago?
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Si no recibes los códigos de verificación:</p>
+                            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                                <li>Revisa tu carpeta de spam o correo no deseado</li>
+                                <li>Verifica que ingresaste el email correctamente</li>
+                                <li>Espera unos minutos, puede haber demoras del servidor</li>
+                                <li>Intenta solicitar un nuevo código</li>
+                                <li>Contacta a tu proveedor de email si usas filtros estrictos</li>
+                            </ul>
+                            <p>Para SMS, verifica que tu número esté correcto y tenga cobertura.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            ¿Qué navegadores son compatibles con ConectaBarrio?
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>ConectaBarrio es compatible con los siguientes navegadores:</p>
+                            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                                <li><strong>Chrome:</strong> Versión 80 o superior</li>
+                                <li><strong>Firefox:</strong> Versión 75 o superior</li>
+                                <li><strong>Safari:</strong> Versión 13 o superior</li>
+                                <li><strong>Edge:</strong> Versión 80 o superior</li>
+                                <li><strong>Opera:</strong> Versión 67 o superior</li>
+                            </ul>
+                            <p>Recomendamos mantener tu navegador actualizado para la mejor experiencia.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- CONTACT CTA -->
+        <div class="contact-cta">
+            <h2>¿No encontraste tu respuesta?</h2>
+            <p>Nuestro equipo de soporte está disponible para ayudarte con cualquier duda o problema que tengas.</p>
+            <a href="contact.html" class="btn-primary">Contactar Soporte</a>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navegación móvil
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+
+            // FAQ functionality
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                
+                question.addEventListener('click', function() {
+                    const isActive = item.classList.contains('active');
+                    
+                    // Close all FAQ items
+                    faqItems.forEach(faq => {
+                        faq.classList.remove('active');
+                    });
+                    
+                    // Open current if it was closed
+                    if (!isActive) {
+                        item.classList.add('active');
+                    }
+                });
+            });
+
+            // Category filter
+            const categoryBtns = document.querySelectorAll('.category-btn');
+            const faqSections = document.querySelectorAll('.faq-section');
+            
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    
+                    // Update active button
+                    categoryBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show/hide sections
+                    faqSections.forEach(section => {
+                        if (category === 'all' || section.getAttribute('data-category') === category) {
+                            section.style.display = 'block';
+                        } else {
+                            section.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Search functionality
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.querySelector('.btn-search');
+            
+            function performSearch() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                
+                if (searchTerm === '') {
+                    // Show all items if search is empty
+                    faqItems.forEach(item => {
+                        item.style.display = 'flex';
+                    });
+                    return;
+                }
+                
+                // Filter FAQ items
+                faqItems.forEach(item => {
+                    const question = item.querySelector('.faq-question').textContent.toLowerCase();
+                    const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                    
+                    if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                        item.style.display = 'flex';
+                        item.classList.add('active'); // Open matching items
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+            
+            searchInput.addEventListener('input', performSearch);
+            searchBtn.addEventListener('click', performSearch);
+            
+            // Open first FAQ item by default
+            if (faqItems.length > 0) {
+                faqItems[0].classList.add('active');
+            }
+        });
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

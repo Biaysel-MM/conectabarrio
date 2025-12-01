@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConectaBarrio - Tu barrio en línea</title>
+    <script src="https://code.iconify.design/1/1.0.0/iconify.min.js"></script>
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        /* ESTILOS ESPECÍFICOS PARA INDEX.HTML */
+        :root {
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #fff;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), #1a6a8f);
+            color: white;
+            padding: 4rem 5%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('assets/images/hero-pattern.svg') no-repeat center center;
+            opacity: 0.1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        /* BOTONES */
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary:hover {
+            background: #d97d01;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(241, 143, 1, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* CATEGORÍAS */
+        .categories {
+            padding: 4rem 5%;
+            background: var(--light);
+        }
+
+        .categories h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--dark);
+            font-size: 2rem;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .category-card svg {
+            font-size: 50px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: var(--light);
+        }
+
+        .category-card span {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* COMERCIOS DESTACADOS */
+        .featured-commerce {
+            padding: 4rem 5%;
+        }
+
+        .featured-commerce h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--dark);
+            font-size: 2rem;
+        }
+
+        .commerce-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .commerce-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .commerce-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .commerce-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .commerce-info {
+            padding: 1.5rem;
+        }
+
+        .commerce-info h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .rating {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .commerce-info p {
+            color: var(--gray);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-visit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+            width: 100%;
+        }
+
+        .btn-visit:hover {
+            background: #1a6a8f;
+        }
+
+        /* CÓMO FUNCIONA */
+        .how-it-works {
+            padding: 4rem 5%;
+            background: linear-gradient(135deg, var(--secondary), #8a2f5f);
+            color: white;
+            text-align: center;
+        }
+
+        .how-it-works h2 {
+            margin-bottom: 3rem;
+            font-size: 2rem;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .step h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        /* OFERTAS ESPECIALES */
+        .special-offers {
+            padding: 4rem 5%;
+            background: var(--light);
+        }
+
+        .special-offers h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--dark);
+            font-size: 2rem;
+        }
+
+        .offers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .offer-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .offer-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--danger);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .offer-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .offer-info {
+            padding: 1.5rem;
+        }
+
+        .offer-info h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .offer-price {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .current-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: var(--gray);
+        }
+
+        .offer-merchant {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        /* TESTIMONIOS */
+        .testimonials {
+            padding: 4rem 5%;
+        }
+
+        .testimonials h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--dark);
+            font-size: 2rem;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .testimonial-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1rem;
+            border: 3px solid var(--primary);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: var(--gray);
+        }
+
+        .testimonial-author {
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .testimonial-role {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* APP DOWNLOAD */
+        .app-download {
+            padding: 4rem 5%;
+            background: linear-gradient(135deg, var(--primary), #1a6a8f);
+            color: white;
+            text-align: center;
+        }
+
+        .app-download h2 {
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .app-download p {
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .download-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .download-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: white;
+            color: var(--dark);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .download-btn img {
+            width: 24px;
+            height: 24px;
+            width: fit-content;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 5%;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .footer-section p {
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        .footer-section a {
+            display: block;
+            color: #adb5bd;
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.7;
+        }
+
+        /* ANIMACIONES */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-buttons .btn-primary,
+            .hero-buttons .btn-secondary {
+                width: 100%;
+                max-width: 250px;
+            }
+
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .commerce-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .download-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .download-btn {
+                width: 100%;
+                max-width: 250px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+<!-- En el body de cada página -->
+<div id="dynamic-navbar"></div>
+<!-- El resto del contenido de tu página -->
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Tu barrio conectado</h1>
+            <p>Descubre y compra en los comercios de tu comunidad. Apoya lo local, fortalece tu vecindario.</p>
+            <div class="hero-buttons">
+                <a href="./commerce/commerce-list.html" class="btn-primary">Explorar Comercios</a>
+                <a href="./auth/register.html?type=commerce" class="btn-secondary">Registrar Mi Negocio</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CATEGORÍAS -->
+    <section class="categories">
+        <h2>Encuentra por categoría</h2>
+        <div class="category-grid">
+            <a href="./commerce/commerce-list.html?category=colmados" class="category-card">
+                <i class="iconify" data-icon="roentgen:food-court" data-inline="false"></i>
+                <span>Colmados</span>
+            </a>
+            <a href="./commerce/commerce-list.html?category=peluquerias" class="category-card">
+                <i class="iconify" data-icon="streamline-ultimate-color:hair-dress-barber" data-inline="false"></i>
+                <span>Peluquerías</span>
+            </a>
+            <a href="./commerce/commerce-list.html?category=panaderias" class="category-card">
+                <i class="iconify" data-icon="icon-park-twotone:bread" data-inline="false"></i>
+                <span>Panaderías</span>
+            </a>
+            <a href="./commerce/commerce-list.html?category=farmacias" class="category-card">
+                <i class="iconify" data-icon="streamline-color:pharmacy-flat" data-inline="false"></i>
+                <span>Farmacias</span>
+            </a>
+            <a href="./commerce/commerce-list.html?category=restaurantes" class="category-card">
+                <i class="iconify" data-icon="famicons:restaurant" data-inline="false"></i>
+                <span>Restaurantes</span>
+            </a>
+            <a href="./commerce/commerce-list.html?category=otros" class="category-card">
+                <i class="iconify" data-icon="ic:twotone-store-mall-directory" data-inline="false"></i>
+                <span>Otros</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- COMERCIOS DESTACADOS -->
+    <section class="featured-commerce">
+        <h2>Comercios Destacados</h2>
+        <div class="commerce-grid">
+            <div class="commerce-card">
+                <img src="./assets/colmado-miguel.jpg" alt="Colmado San Miguel">
+                <div class="commerce-info">
+                    <h3>Colmado San Miguel</h3>
+                    <div class="rating">★★★★☆ 4.2</div>
+                    <p>Productos de calidad y delivery rápido. Abierto hasta las 10pm.</p>
+                    <button class="btn-visit" data-commerce="colmado-san-miguel">Visitar Comercio</button>
+                </div>
+            </div>
+            
+            <div class="commerce-card">
+                <img src="./assets/panaderia-rosa.jpg" alt="Panadería Doña Rosa">
+                <div class="commerce-info">
+                    <h3>Panadería Doña Rosa</h3>
+                    <div class="rating">★★★★★ 4.8</div>
+                    <p>Pan recién horneado todos los días. Especialistas en postres tradicionales.</p>
+                    <button class="btn-visit" data-commerce="panaderia-dona-rosa">Visitar Comercio</button>
+                </div>
+            </div>
+            
+            <div class="commerce-card">
+                <img src="./assets/peluqueria-estilo.jpg" alt="Peluquería Estilo">
+                <div class="commerce-info">
+                    <h3>Peluquería Estilo</h3>
+                    <div class="rating">★★★★☆ 4.5</div>
+                    <p>Estilistas profesionales. Cortes modernos y servicios de belleza.</p>
+                    <button class="btn-visit" data-commerce="peluqueria-estilo">Visitar Comercio</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CÓMO FUNCIONA -->
+    <section class="how-it-works">
+        <h2>¿Cómo funciona ConectaBarrio?</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Explora Comercios</h3>
+                <p>Descubre los negocios locales en tu área y conoce sus productos y servicios.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Realiza tu Pedido</h3>
+                <p>Agrega productos a tu carrito y completa tu compra de forma segura.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Recibe en tu Casa</h3>
+                <p>Tu pedido será entregado directamente desde el comercio a tu domicilio.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- OFERTAS ESPECIALES -->
+    <section class="special-offers">
+        <h2>Ofertas Especiales</h2>
+        <div class="offers-grid">
+            <div class="offer-card">
+                <div class="offer-badge">-20%</div>
+                <img src="./assets/arroz-blanco.jpg" alt="Arroz">
+                <div class="offer-info">
+                    <h3>Arroz Blanco 5kg</h3>
+                    <div class="offer-price">
+                        <span class="current-price">$200 RD</span>
+                        <span class="original-price">$250 RD</span>
+                    </div>
+                    <p class="offer-merchant">Colmado San Miguel</p>
+                    <button class="btn-primary">Agregar al Carrito</button>
+                </div>
+            </div>
+            
+            <div class="offer-card">
+                <div class="offer-badge">2x1</div>
+                <img src="./assets/pan-de-agua.jpg" alt="Pan">
+                <div class="offer-info">
+                    <h3>Pan de Agua</h3>
+                    <div class="offer-price">
+                        <span class="current-price">$50 RD</span>
+                        <span class="original-price">$100 RD</span>
+                    </div>
+                    <p class="offer-merchant">Panadería Doña Rosa</p>
+                    <button class="btn-primary">Agregar al Carrito</button>
+                </div>
+            </div>
+            
+            <div class="offer-card">
+                <div class="offer-badge">-15%</div>
+                <img src="./assets/shampoo.jpg" alt="Shampoo">
+                <div class="offer-info">
+                    <h3>Shampoo Profesional</h3>
+                    <div class="offer-price">
+                        <span class="current-price">$340 RD</span>
+                        <span class="original-price">$400 RD</span>
+                    </div>
+                    <p class="offer-merchant">Peluquería Estilo</p>
+                    <button class="btn-primary">Agregar al Carrito</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIOS -->
+    <section class="testimonials">
+        <h2>Lo que dicen nuestros usuarios</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <img src="./assets/user.png" alt="María González" class="testimonial-avatar">
+                <p class="testimonial-text">"ConectaBarrio me ha salvado muchas veces cuando no puedo salir a comprar. Los comercios de mi barrio ahora están a un clic de distancia."</p>
+                <div class="testimonial-author">María González</div>
+                <div class="testimonial-role">Cliente frecuente</div>
+            </div>
+            
+            <div class="testimonial-card">
+                <img src="./assets/user.png" alt="Carlos Rodríguez" class="testimonial-avatar">
+                <p class="testimonial-text">"Como dueño de negocio, ConectaBarrio me ha permitido llegar a más clientes en mi comunidad. Las ventas han aumentado un 40%."</p>
+                <div class="testimonial-author">Carlos Rodríguez</div>
+                <div class="testimonial-role">Dueño de Colmado San Miguel</div>
+            </div>
+            
+            <div class="testimonial-card">
+                <img src="./assets/user.png" alt="Ana Martínez" class="testimonial-avatar">
+                <p class="testimonial-text">"Me encanta apoyar a los comercios de mi barrio. La plataforma es fácil de usar y el servicio al cliente es excelente."</p>
+                <div class="testimonial-author">Ana Martínez</div>
+                <div class="testimonial-role">Residente del barrio</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- APP DOWNLOAD -->
+    <section class="app-download">
+        <h2>Descarga nuestra app</h2>
+        <p>Lleva tu barrio contigo a donde vayas. Disponible en iOS y Android.</p>
+        <div class="download-buttons">
+            <a href="#" class="download-btn">
+                <img src="./assets/app-store.png" alt="Apple">
+                <span>App Store</span>
+            </a>
+            <a href="#" class="download-btn">
+                <img src="./assets/google-play.jpg" alt="Google Play">
+                <span>Google Play</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>ConectaBarrio</h4>
+                <p>Conectando tu comunidad con el comercio local. Juntos fortalecemos nuestra economía.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook">📘</a>
+                    <a href="#" aria-label="Instagram">📷</a>
+                    <a href="#" aria-label="Twitter">🐦</a>
+                    <a href="#" aria-label="WhatsApp">💬</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Enlaces Rápidos</h4>
+                <a href="./index.html">Inicio</a>
+                <a href="./commerce/commerce-list.html">Comercios</a>
+                <a href="./features/offers.html">Ofertas</a>
+                <a href="./features/events.html">Eventos</a>
+                <a href="./info/how-it-works.html">Cómo Funciona</a>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Para Comercios</h4>
+                <a href="./auth/register.html?type=commerce">Registrar Negocio</a>
+                <a href="./info/about.html#for-business">Beneficios</a>
+                <a href="./info/contact.html">Soporte Comercios</a>
+                <a href="./info/faq.html#business">Preguntas Frecuentes</a>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <a href="#">Términos y Condiciones</a>
+                <a href="#">Política de Privacidad</a>
+                <a href="#">Política de Cookies</a>
+                <a href="./info/contact.html">Contacto</a>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 ConectaBarrio. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // FUNCIONALIDADES JAVASCRIPT PARA INDEX.HTML
+        document.addEventListener('DOMContentLoaded', function() {
+            // Menú móvil
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+            
+            // Cerrar menú al hacer clic en un enlace
+            const navLinksItems = document.querySelectorAll('.nav-links a');
+            navLinksItems.forEach(link => {
+                link.addEventListener('click', function() {
+                    navLinks.classList.remove('active');
+                });
+            });
+            
+            // Botones "Visitar Comercio"
+            const visitButtons = document.querySelectorAll('.btn-visit');
+            visitButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const commerceId = this.getAttribute('data-commerce');
+                    window.location.href = `commerce/commerce-profile.html?id=${commerceId}`;
+                });
+            });
+            
+            // Botones "Agregar al Carrito" en ofertas
+            const addToCartButtons = document.querySelectorAll('.offer-card .btn-primary');
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const productCard = this.closest('.offer-card');
+                    const productName = productCard.querySelector('h3').textContent;
+                    
+                    // Mostrar notificación
+                    showNotification(`${productName} agregado al carrito`, 'success');
+                    
+                    // Aquí iría la lógica para agregar al carrito
+                    addToCart(productCard);
+                });
+            });
+            
+            // Contador de comercios (ejemplo dinámico)
+            updateCommerceStats();
+            
+            // Efectos de scroll para animaciones
+            initScrollAnimations();
+        });
+        
+        // Función para mostrar notificaciones
+        function showNotification(message, type = 'info') {
+            // Crear elemento de notificación
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()">×</button>
+            `;
+            
+            // Estilos para la notificación
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#17a2b8'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                animation: slideInRight 0.3s ease;
+            `;
+            
+            // Agregar al documento
+            document.body.appendChild(notification);
+            
+            // Auto-eliminar después de 4 segundos
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 4000);
+        }
+        
+        // Función para agregar producto al carrito (simulación)
+        function addToCart(productCard) {
+            // En una implementación real, aquí se enviaría la información al backend
+            // o se actualizaría el estado del carrito en el almacenamiento local
+            
+            console.log('Producto agregado al carrito:', {
+                name: productCard.querySelector('h3').textContent,
+                price: productCard.querySelector('.current-price').textContent,
+                merchant: productCard.querySelector('.offer-merchant').textContent
+            });
+            
+            // Actualizar contador del carrito en la navbar (si existe)
+            updateCartCounter();
+        }
+        
+        // Función para actualizar contador del carrito
+        function updateCartCounter() {
+            // Esta función actualizaría el contador de items en el carrito
+            // Por ahora es un placeholder
+            console.log('Actualizando contador del carrito...');
+        }
+        
+        // Función para actualizar estadísticas de comercios
+        function updateCommerceStats() {
+            // En una implementación real, esto vendría de una API
+            const stats = {
+                totalCommerce: 47,
+                activeUsers: 1234,
+                ordersToday: 89
+            };
+            
+            // Podríamos mostrar estas estadísticas en algún lugar de la página
+            console.log('Estadísticas actualizadas:', stats);
+        }
+        
+        // Función para animaciones al hacer scroll
+        function initScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeInUp 0.6s ease forwards';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            // Observar elementos para animar
+            const elementsToAnimate = document.querySelectorAll('.category-card, .commerce-card, .step, .offer-card, .testimonial-card');
+            elementsToAnimate.forEach(el => {
+                el.style.opacity = '0';
+                observer.observe(el);
+            });
+        }
+        
+        // Estilos CSS para animaciones de notificación
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            .notification button {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.2rem;
+                cursor: pointer;
+                padding: 0;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

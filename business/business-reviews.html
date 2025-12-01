@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reseñas - Panel Comercio - ConectaBarrio</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        :root {
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f8f9fa;
+        }
+
+        /* LAYOUT PRINCIPAL */
+
+        /* DASHBOARD LAYOUT */
+        .business-dashboard {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+
+
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-brand img {
+            height: 40px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .business-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .business-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* DASHBOARD LAYOUT */
+        .business-dashboard {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 300px;
+            background: white;
+            border-right: 1px solid #e9ecef;
+            padding: 2rem 0;
+            position: sticky;
+            top: 80px;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+
+        .business-profile {
+            padding: 0 2rem 2rem;
+            border-bottom: 1px solid #e9ecef;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .business-avatar-large {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            margin: 0 auto 1rem;
+        }
+
+        .business-info h4 {
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .business-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .business-status {
+            display: inline-block;
+            background: var(--success);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 0 1rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: var(--dark);
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-item.logout {
+            color: var(--danger);
+            margin-top: 1rem;
+            border-top: 1px solid #e9ecef;
+            padding-top: 1.5rem;
+        }
+
+        .nav-item.logout:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+
+        /* CONTENIDO PRINCIPAL */
+        .business-content {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .content-header h1 {
+            color: var(--dark);
+            font-size: 1.8rem;
+        }
+
+        .commerce-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .commerce-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .commerce-details h2 {
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .commerce-category {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* ESTADÍSTICAS DE RESEÑAS */
+        .reviews-stats {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 8px;
+            background: var(--light);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .rating-summary {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .overall-rating {
+            text-align: center;
+        }
+
+        .rating-score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .rating-stars {
+            color: var(--accent);
+            font-size: 1.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .rating-count {
+            color: var(--gray);
+        }
+
+        .rating-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .rating-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .bar-label {
+            width: 80px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .bar-container {
+            flex: 1;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 4px;
+        }
+
+        /* FILTROS */
+        .filters-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .filters-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-select {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .filter-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tag {
+            background: var(--light);
+            border: 1px solid #e9ecef;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-tag:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .filter-tag.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* LISTA DE RESEÑAS */
+        .reviews-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .review-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .reviewer-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .reviewer-details h4 {
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .review-date {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .review-rating {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .review-content {
+            margin-bottom: 1rem;
+        }
+
+        .review-text {
+            color: var(--dark);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .review-images {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .review-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .review-actions {
+            display: flex;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1a6a8f;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .response-section {
+            background: rgba(46, 134, 171, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .response-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .response-owner {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .response-date {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .response-text {
+            color: var(--dark);
+        }
+
+        .response-form {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* PAGINACIÓN */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .page-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e9ecef;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .page-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .page-numbers {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .page-number {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .page-number.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .page-number:hover {
+            border-color: var(--primary);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .business-layout {
+                flex-direction: column;
+            }
+
+            .business-sidebar {
+                width: 100%;
+                order: 2;
+            }
+
+            .business-content {
+                order: 1;
+            }
+
+            .rating-summary {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .business-content {
+                padding: 1rem;
+            }
+
+            .content-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .review-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .review-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand">
+            <img src="../assets/logo.png" alt="ConectaBarrio">
+        </a>
+        
+        <div class="nav-links" id="navLinks">
+            <a href="../index.html">Inicio</a>
+            <a href="../commerce/commerce-list.html">Comercios</a>
+            <a href="../features/events.html">Eventos</a>
+            <a href="../features/offers.html">Ofertas</a>
+            <a href="../info/about.html">Sobre Nosotros</a>
+            <div class="business-menu">
+                <img src="../assets/user.png" alt="Colmado San Miguel" class="business-avatar">
+                <span>Colmado S.M.</span>
+            </div>
+        </div>
+        
+        <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    </nav>
+
+    <!-- DASHBOARD LAYOUT -->
+    <main class="business-dashboard">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="business-profile">
+                <img src="../assets/user.png" alt="Colmado San Miguel" class="business-avatar-large">
+                <div class="business-info">
+                    <h4>Colmado San Miguel</h4>
+                    <p>Miguel Ángel - Propietario</p>
+                    <span class="business-status">🟢 Abierto</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="business-dashboard.html" class="nav-item">
+                    📊 Dashboard
+                </a>
+                <a href="business-orders.html" class="nav-item">
+                    📦 Pedidos
+                </a>
+                <a href="business-products.html" class="nav-item">
+                    🛍️ Productos
+                </a>
+                <a href="business-reviews.html" class="nav-item active">
+                    ⭐ Reseñas
+                </a>
+                <a href="business-profile.html" class="nav-item">
+                    ⚙️ Configuración
+                </a>
+                <a href="../auth/login.html" class="nav-item logout">
+                    🚪 Cerrar Sesión
+                </a>
+            </nav>
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="business-content">
+            <!-- HEADER -->
+            <div class="content-header">
+                <h1>⭐ Reseñas y Calificaciones</h1>
+                <div class="commerce-info">
+                    <img src="../assets/user.png" alt="Colmado San Miguel" class="commerce-avatar">
+                    <div class="commerce-details">
+                        <h2>Colmado San Miguel</h2>
+                        <div class="commerce-category">🏪 Colmado</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ESTADÍSTICAS -->
+            <section class="reviews-stats">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">4.2</div>
+                        <div class="stat-label">Calificación Promedio</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">128</div>
+                        <div class="stat-label">Reseñas Totales</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">24</div>
+                        <div class="stat-label">Respuestas Pendientes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">86%</div>
+                        <div class="stat-label">Reseñas Positivas</div>
+                    </div>
+                </div>
+
+                <div class="rating-summary">
+                    <div class="overall-rating">
+                        <div class="rating-score">4.2</div>
+                        <div class="rating-stars">★★★★☆</div>
+                        <div class="rating-count">128 reseñas</div>
+                    </div>
+                    <div class="rating-bars">
+                        <div class="rating-bar">
+                            <span class="bar-label">5 estrellas</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 60%;"></div>
+                            </div>
+                            <span>60%</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span class="bar-label">4 estrellas</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 25%;"></div>
+                            </div>
+                            <span>25%</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span class="bar-label">3 estrellas</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 10%;"></div>
+                            </div>
+                            <span>10%</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span class="bar-label">2 estrellas</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 3%;"></div>
+                            </div>
+                            <span>3%</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span class="bar-label">1 estrella</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 2%;"></div>
+                            </div>
+                            <span>2%</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FILTROS -->
+            <section class="filters-section">
+                <div class="filters-row">
+                    <div class="filter-group">
+                        <label>Ordenar por:</label>
+                        <select class="filter-select" id="sortFilter">
+                            <option value="newest">Más recientes</option>
+                            <option value="oldest">Más antiguas</option>
+                            <option value="highest">Mayor calificación</option>
+                            <option value="lowest">Menor calificación</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Filtrar por:</label>
+                        <select class="filter-select" id="ratingFilter">
+                            <option value="all">Todas las calificaciones</option>
+                            <option value="5">5 estrellas</option>
+                            <option value="4">4 estrellas</option>
+                            <option value="3">3 estrellas</option>
+                            <option value="2">2 estrellas</option>
+                            <option value="1">1 estrella</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-tags">
+                        <div class="filter-tag active" data-filter="all">Todas</div>
+                        <div class="filter-tag" data-filter="responded">Con respuesta</div>
+                        <div class="filter-tag" data-filter="pending">Sin respuesta</div>
+                        <div class="filter-tag" data-filter="with-images">Con imágenes</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- LISTA DE RESEÑAS -->
+            <section class="reviews-list" id="reviewsList">
+                <!-- Las reseñas se cargan dinámicamente aquí -->
+            </section>
+
+            <!-- PAGINACIÓN -->
+            <div class="pagination">
+                <button class="page-btn">← Anterior</button>
+                <div class="page-numbers">
+                    <div class="page-number active">1</div>
+                    <div class="page-number">2</div>
+                    <div class="page-number">3</div>
+                </div>
+                <button class="page-btn">Siguiente →</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // DATOS DE RESEÑAS (simulados)
+        const reviews = [
+            {
+                id: 1,
+                user: {
+                    name: "María González",
+                    avatar: "../assets/users/user1.jpg",
+                    orders: 12
+                },
+                rating: 5,
+                date: "2024-01-15",
+                text: "Excelente servicio y productos de calidad. El delivery siempre llega a tiempo y los precios son justos. Recomendado 100%.",
+                images: ["../assets/products/arroz.jpg", "../assets/aceite-de-soja.jpg"],
+                hasResponse: true,
+                response: {
+                    text: "¡Gracias por tu excelente reseña, María! Nos alegra saber que estás satisfecha con nuestro servicio. Seguiremos trabajando para mantener la calidad que mereces.",
+                    date: "2024-01-16"
+                }
+            },
+            {
+                id: 2,
+                user: {
+                    name: "Carlos Rodríguez",
+                    avatar: "../assets/user.png",
+                    orders: 5
+                },
+                rating: 4,
+                date: "2024-01-14",
+                text: "Buen colmado con variedad de productos. El delivery es rápido y el personal muy amable. Sigan así!",
+                images: [],
+                hasResponse: false
+            },
+            {
+                id: 3,
+                user: {
+                    name: "Ana Martínez",
+                    avatar: "../assets/user.png",
+                    orders: 8
+                },
+                rating: 3,
+                date: "2024-01-12",
+                text: "El producto llegó en buen estado pero con 15 minutos de retraso. La comunicación podría mejorar.",
+                images: ["../assets/lehce.jpg"],
+                hasResponse: false
+            },
+            {
+                id: 4,
+                user: {
+                    name: "José Pérez",
+                    avatar: "../assets/user.png",
+                    orders: 3
+                },
+                rating: 5,
+                date: "2024-01-10",
+                text: "Increíble servicio! Los productos siempre frescos y el delivery super rápido. Mi colmado de confianza.",
+                images: [],
+                hasResponse: true,
+                response: {
+                    text: "¡José, nos encanta ser tu colmado de confianza! Tu satisfacción es nuestra mayor motivación. ¡Gracias por elegirnos!",
+                    date: "2024-01-11"
+                }
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initReviewsPage();
+            setupEventListeners();
+            renderReviews(reviews);
+        });
+
+        function initReviewsPage() {
+            // Cargar estadísticas y configuraciones iniciales
+            updateReviewStats();
+        }
+
+        function setupEventListeners() {
+            // Filtros
+            document.getElementById('sortFilter').addEventListener('change', filterReviews);
+            document.getElementById('ratingFilter').addEventListener('change', filterReviews);
+            
+            // Filtros rápidos
+            const filterTags = document.querySelectorAll('.filter-tag');
+            filterTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    filterTags.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    filterReviews();
+                });
+            });
+        }
+
+        function renderReviews(reviewsToShow) {
+            const container = document.getElementById('reviewsList');
+            
+            if (reviewsToShow.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: var(--gray);">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">📝</div>
+                        <h3>No hay reseñas que coincidan con los filtros</h3>
+                        <p>Intenta ajustar los criterios de búsqueda</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = reviewsToShow.map(review => `
+                <div class="review-card" data-review-id="${review.id}">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <img src="${review.user.avatar}" alt="${review.user.name}" class="reviewer-avatar" onerror="this.src='../assets/user.png'">
+                            <div class="reviewer-details">
+                                <h4>${review.user.name}</h4>
+                                <div class="review-date">${formatDate(review.date)} • ${review.user.orders} pedidos</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">
+                            ${getStarRating(review.rating)} ${review.rating}/5
+                        </div>
+                    </div>
+
+                    <div class="review-content">
+                        <p class="review-text">${review.text}</p>
+                        
+                        ${review.images.length > 0 ? `
+                            <div class="review-images">
+                                ${review.images.map(img => `
+                                    <img src="${img}" alt="Imagen reseña" class="review-image" onerror="this.src='../assets/producto.png'">
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    ${review.hasResponse ? `
+                        <div class="response-section">
+                            <div class="response-header">
+                                <span class="response-owner">📣 Respuesta del comercio</span>
+                                <span class="response-date">${formatDate(review.response.date)}</span>
+                            </div>
+                            <p class="response-text">${review.response.text}</p>
+                        </div>
+                    ` : `
+                        <div class="review-actions">
+                            <button class="btn btn-primary" onclick="showResponseForm(${review.id})">
+                                💬 Responder
+                            </button>
+                            <button class="btn btn-outline" onclick="reportReview(${review.id})">
+                                🚩 Reportar
+                            </button>
+                        </div>
+                        
+                        <div class="response-form" id="responseForm-${review.id}">
+                            <div class="form-group">
+                                <textarea class="form-input" placeholder="Escribe tu respuesta..." id="responseText-${review.id}"></textarea>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn btn-success" onclick="submitResponse(${review.id})">
+                                    ✅ Enviar Respuesta
+                                </button>
+                                <button class="btn btn-outline" onclick="hideResponseForm(${review.id})">
+                                    ❌ Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    `}
+                </div>
+            `).join('');
+        }
+
+        function filterReviews() {
+            const sortBy = document.getElementById('sortFilter').value;
+            const ratingFilter = document.getElementById('ratingFilter').value;
+            const activeFilter = document.querySelector('.filter-tag.active').dataset.filter;
+
+            let filteredReviews = [...reviews];
+
+            // Filtro por calificación
+            if (ratingFilter !== 'all') {
+                filteredReviews = filteredReviews.filter(review => review.rating === parseInt(ratingFilter));
+            }
+
+            // Filtros rápidos
+            switch (activeFilter) {
+                case 'responded':
+                    filteredReviews = filteredReviews.filter(review => review.hasResponse);
+                    break;
+                case 'pending':
+                    filteredReviews = filteredReviews.filter(review => !review.hasResponse);
+                    break;
+                case 'with-images':
+                    filteredReviews = filteredReviews.filter(review => review.images.length > 0);
+                    break;
+            }
+
+            // Ordenar
+            switch (sortBy) {
+                case 'newest':
+                    filteredReviews.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    break;
+                case 'oldest':
+                    filteredReviews.sort((a, b) => new Date(a.date) - new Date(b.date));
+                    break;
+                case 'highest':
+                    filteredReviews.sort((a, b) => b.rating - a.rating);
+                    break;
+                case 'lowest':
+                    filteredReviews.sort((a, b) => a.rating - b.rating);
+                    break;
+            }
+
+            renderReviews(filteredReviews);
+        }
+
+        function showResponseForm(reviewId) {
+            document.getElementById(`responseForm-${reviewId}`).style.display = 'block';
+        }
+
+        function hideResponseForm(reviewId) {
+            document.getElementById(`responseForm-${reviewId}`).style.display = 'none';
+        }
+
+        function submitResponse(reviewId) {
+            const responseText = document.getElementById(`responseText-${reviewId}`).value.trim();
+            
+            if (!responseText) {
+                showNotification('Por favor escribe una respuesta', 'error');
+                return;
+            }
+
+            // Simular envío de respuesta
+            const review = reviews.find(r => r.id === reviewId);
+            if (review) {
+                review.hasResponse = true;
+                review.response = {
+                    text: responseText,
+                    date: new Date().toISOString().split('T')[0]
+                };
+                
+                showNotification('Respuesta enviada exitosamente', 'success');
+                renderReviews(reviews);
+                updateReviewStats();
+            }
+        }
+
+        function reportReview(reviewId) {
+            if (confirm('¿Estás seguro de que quieres reportar esta reseña? Un moderador la revisará.')) {
+                showNotification('Reseña reportada para revisión', 'info');
+            }
+        }
+
+        function updateReviewStats() {
+            // Actualizar estadísticas (en una app real, esto vendría del backend)
+            const totalReviews = reviews.length;
+            const averageRating = (reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews).toFixed(1);
+            const pendingResponses = reviews.filter(review => !review.hasResponse).length;
+            const positiveReviews = reviews.filter(review => review.rating >= 4).length;
+            const positivePercentage = ((positiveReviews / totalReviews) * 100).toFixed(0);
+
+            // Aquí actualizaríamos los elementos del DOM con las nuevas estadísticas
+            console.log('Estadísticas actualizadas:', {
+                averageRating,
+                totalReviews,
+                pendingResponses,
+                positivePercentage
+            });
+        }
+
+        // FUNCIONES AUXILIARES
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('es-ES', options);
+        }
+
+        function getStarRating(rating) {
+            return '★'.repeat(rating) + '☆'.repeat(5 - rating);
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()">×</button>
+            `;
+
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${getNotificationColor(type)};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                animation: slideInRight 0.3s ease;
+                max-width: 400px;
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 4000);
+        }
+
+        function getNotificationColor(type) {
+            const colors = {
+                success: '#28a745',
+                error: '#dc3545',
+                warning: '#ffc107',
+                info: '#17a2b8'
+            };
+            return colors[type] || colors.info;
+        }
+
+        // Agregar estilos para notificaciones
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+
+            .notification button {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.2rem;
+                cursor: pointer;
+                padding: 0;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0.8;
+            }
+
+            .notification button:hover {
+                opacity: 1;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

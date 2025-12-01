@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos del Barrio - ConectaBarrio</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        :root {
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #fff;
+        }
+
+        /* HERO SECTION */
+        .events-hero {
+            background: linear-gradient(135deg, var(--secondary), #8a2f5f);
+            color: white;
+            padding: 3rem 5%;
+            text-align: center;
+        }
+
+        .events-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .events-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* MAIN CONTENT */
+        .events-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 5%;
+        }
+
+        /* VIEW TOGGLE */
+        .view-toggle {
+            display: flex;
+            background: white;
+            border-radius: 12px;
+            padding: 0.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            gap: 0.25rem;
+        }
+
+        .view-option {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .view-option.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* FILTERS SECTION */
+        .filters-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .filters-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-select {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            min-width: 150px;
+        }
+
+        .filter-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tag {
+            background: var(--light);
+            border: 1px solid #e9ecef;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-tag:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .filter-tag.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* EVENTS GRID (Vista Tarjetas) */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .event-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        .event-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .event-content {
+            padding: 1.5rem;
+        }
+
+        .event-date {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .event-title {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+
+        .event-organizer {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .event-description {
+            color: var(--gray);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .event-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .event-attendees {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1a6a8f;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        /* EVENTS LIST (Vista Lista) */
+        .events-list {
+            display: none;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .event-list-item {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            display: grid;
+            grid-template-columns: 100px 1fr auto;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .event-list-item:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .event-date-circle {
+            width: 80px;
+            height: 80px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .event-day {
+            font-size: 1.5rem;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .event-month {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .event-list-info {
+            flex: 1;
+        }
+
+        .event-list-title {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .event-list-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* FEATURED EVENT */
+        .featured-event {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 3rem;
+            color: white;
+            position: relative;
+        }
+
+        .featured-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .featured-info {
+            padding: 2rem;
+        }
+
+        .featured-badge {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .featured-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .featured-description {
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .featured-details {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .featured-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .featured-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        /* COUNTDOWN */
+        .countdown {
+            background: rgba(255,255,255,0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .countdown-text {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .countdown-timer {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .countdown-unit {
+            text-align: center;
+        }
+
+        .countdown-number {
+            font-size: 1.8rem;
+        }
+
+        .countdown-label {
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+
+        /* CALENDAR VIEW */
+        .calendar-view {
+            display: none;
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .calendar-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .calendar-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #e9ecef;
+            border: 1px solid #e9ecef;
+        }
+
+        .calendar-day-header {
+            background: var(--light);
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .calendar-day {
+            background: white;
+            padding: 0.75rem;
+            min-height: 100px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .calendar-day:hover {
+            background: var(--light);
+        }
+
+        .calendar-day.other-month {
+            background: #f8f9fa;
+            color: var(--gray);
+        }
+
+        .calendar-day.has-events {
+            background: rgba(46, 134, 171, 0.05);
+        }
+
+        .day-number {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .day-events {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .day-event {
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--gray);
+        }
+
+        .empty-state img {
+            width: 200px;
+            margin-bottom: 2rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .featured-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .featured-image {
+                height: 250px;
+            }
+
+            .events-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .events-hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .filters-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .events-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .event-list-item {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .event-date-circle {
+                margin: 0 auto;
+            }
+
+            .event-list-meta {
+                justify-content: center;
+            }
+
+            .event-actions {
+                flex-direction: column;
+            }
+
+            .calendar-grid {
+                grid-template-columns: repeat(7, 1fr);
+                font-size: 0.8rem;
+            }
+
+            .calendar-day {
+                min-height: 80px;
+                padding: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .events-page {
+                padding: 1rem;
+            }
+
+            .featured-info {
+                padding: 1rem;
+            }
+
+            .featured-title {
+                font-size: 1.5rem;
+            }
+
+            .featured-details {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .countdown-timer {
+                font-size: 1.2rem;
+            }
+
+            .calendar-day-header {
+                padding: 0.5rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+<!-- En el body de cada página -->
+<div id="dynamic-navbar"></div>
+<!-- El resto del contenido de tu página -->
+
+    <!-- HERO SECTION -->
+    <section class="events-hero">
+        <h1>🎉 Eventos del Barrio</h1>
+        <p>Conéctate con tu comunidad y descubre los eventos más emocionantes cerca de ti</p>
+        
+        <div class="hero-actions">
+            <button class="btn btn-primary" onclick="showCreateEventModal()">
+                ➕ Crear Evento
+            </button>
+            <button class="btn btn-outline" style="background: rgba(255,255,255,0.2); color: white; border-color: white;" onclick="scrollToCalendar()">
+                📅 Ver Calendario
+            </button>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="events-page">
+        <!-- TOGGLE DE VISTA -->
+        <div class="view-toggle">
+            <button class="view-option active" data-view="grid">
+                🏠 Vista Grid
+            </button>
+            <button class="view-option" data-view="list">
+                📋 Vista Lista
+            </button>
+            <button class="view-option" data-view="calendar">
+                📅 Vista Calendario
+            </button>
+        </div>
+
+        <!-- FILTROS -->
+        <section class="filters-section">
+            <div class="filters-row">
+                <div class="filter-group">
+                    <label>Ordenar por:</label>
+                    <select class="filter-select" id="sortFilter">
+                        <option value="date">Próximos primero</option>
+                        <option value="popular">Más populares</option>
+                        <option value="newest">Más recientes</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Categoría:</label>
+                    <select class="filter-select" id="categoryFilter">
+                        <option value="all">Todas las categorías</option>
+                        <option value="food">Gastronomía</option>
+                        <option value="music">Música</option>
+                        <option value="sports">Deportes</option>
+                        <option value="arts">Arte y Cultura</option>
+                        <option value="community">Comunitario</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Fecha:</label>
+                    <select class="filter-select" id="dateFilter">
+                        <option value="all">Todas las fechas</option>
+                        <option value="today">Hoy</option>
+                        <option value="weekend">Este fin de semana</option>
+                        <option value="week">Esta semana</option>
+                        <option value="month">Este mes</option>
+                    </select>
+                </div>
+
+                <div class="filter-tags">
+                    <div class="filter-tag active" data-filter="all">Todos</div>
+                    <div class="filter-tag" data-filter="free">Gratis</div>
+                    <div class="filter-tag" data-filter="featured">Destacados</div>
+                    <div class="filter-tag" data-filter="nearby">Cercanos</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EVENTO DESTACADO -->
+        <section class="featured-event">
+            <div class="featured-content">
+                <div class="featured-info">
+                    <div class="featured-badge">EVENTO DESTACADO</div>
+                    <h2 class="featured-title">Fiesta Patronal del Barrio</h2>
+                    <p class="featured-description">Celebra con nosotros la tradicional fiesta patronal con música en vivo, comida típica, juegos tradicionales y mucha diversión para toda la familia.</p>
+                    
+                    <div class="featured-details">
+                        <div class="featured-detail">
+                            <span>📅</span>
+                            <span>Sábado, 20 de Enero 2024</span>
+                        </div>
+                        <div class="featured-detail">
+                            <span>🕒</span>
+                            <span>2:00 PM - 10:00 PM</span>
+                        </div>
+                        <div class="featured-detail">
+                            <span>📍</span>
+                            <span>Parque Central del Barrio</span>
+                        </div>
+                        <div class="featured-detail">
+                            <span>🎫</span>
+                            <span>Entrada Gratuita</span>
+                        </div>
+                    </div>
+
+                    <div class="countdown">
+                        <div class="countdown-text">El evento comienza en:</div>
+                        <div class="countdown-timer" id="featuredCountdown">
+                            <div class="countdown-unit">
+                                <div class="countdown-number" id="countdown-days">00</div>
+                                <div class="countdown-label">Días</div>
+                            </div>
+                            <div class="countdown-unit">
+                                <div class="countdown-number" id="countdown-hours">00</div>
+                                <div class="countdown-label">Horas</div>
+                            </div>
+                            <div class="countdown-unit">
+                                <div class="countdown-number" id="countdown-minutes">00</div>
+                                <div class="countdown-label">Min</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button class="btn btn-success" onclick="attendEvent(1)">
+                            ✅ Asistiré
+                        </button>
+                        <button class="btn btn-outline" style="background: rgba(255,255,255,0.2); color: white; border-color: white;" onclick="shareEvent(1)">
+                            📤 Compartir
+                        </button>
+                        <button class="btn btn-outline" style="background: rgba(255,255,255,0.2); color: white; border-color: white;" onclick="viewEvent(1)">
+                            👀 Ver Detalles
+                        </button>
+                    </div>
+                </div>
+                <img src="../assets/patronales.jpg" alt="Fiesta Patronal" class="featured-image">
+            </div>
+        </section>
+
+        <!-- VISTA GRID (Por defecto) -->
+        <div class="events-grid" id="eventsGrid">
+            <!-- Los eventos se cargan aquí dinámicamente -->
+        </div>
+
+        <!-- VISTA LISTA -->
+        <div class="events-list" id="eventsList">
+            <!-- Los eventos en vista lista se cargan aquí -->
+        </div>
+
+        <!-- VISTA CALENDARIO -->
+        <div class="calendar-view" id="calendarView">
+            <div class="calendar-header">
+                <div class="calendar-nav">
+                    <button class="btn btn-outline" onclick="changeMonth(-1)">←</button>
+                    <h2 class="calendar-title" id="calendarTitle">Enero 2024</h2>
+                    <button class="btn btn-outline" onclick="changeMonth(1)">→</button>
+                </div>
+                <button class="btn btn-primary" onclick="goToToday()">
+                    Hoy
+                </button>
+            </div>
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- El calendario se genera dinámicamente -->
+            </div>
+        </div>
+
+        <!-- MÁS EVENTOS PRÓXIMOS -->
+        <section style="margin-top: 3rem;">
+            <div class="section-header">
+                <h2>📅 Más Eventos Próximos</h2>
+                <a href="#" class="view-all">Ver todos</a>
+            </div>
+            <div class="events-grid" id="upcomingEvents">
+                <!-- Eventos adicionales se cargan aquí -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // DATOS DE EVENTOS (simulados)
+        const events = [
+            {
+                id: 1,
+                title: "Fiesta Patronal del Barrio",
+                description: "Celebración tradicional con música en vivo, comida típica y juegos para toda la familia.",
+                organizer: "Comité del Barrio",
+                category: "community",
+                date: "2024-01-20",
+                time: "14:00 - 22:00",
+                location: "Parque Central del Barrio",
+                address: "Calle Principal #123",
+                image: "../assets/patronales.jpg",
+                price: "Gratis",
+                attendees: 145,
+                maxAttendees: 500,
+                featured: true,
+                interested: 89,
+                isAttending: false
+            },
+            {
+                id: 2,
+                title: "Noche de Karaoke en Colmado San Miguel",
+                description: "Disfruta de una noche divertida de karaoke con promociones especiales en bebidas.",
+                organizer: "Colmado San Miguel",
+                category: "music",
+                date: "2024-01-18",
+                time: "20:00 - 23:00",
+                location: "Colmado San Miguel",
+                address: "Calle Principal #123",
+                image: "../assets/karaoke.jpg",
+                price: "Gratis",
+                attendees: 23,
+                maxAttendees: 50,
+                featured: false,
+                interested: 45,
+                isAttending: false
+            },
+            {
+                id: 3,
+                title: "Taller de Cocina Dominicana",
+                description: "Aprende a preparar los platos típicos dominicanos con chefs expertos.",
+                organizer: "Panadería Doña Rosa",
+                category: "food",
+                date: "2024-01-25",
+                time: "10:00 - 13:00",
+                location: "Panadería Doña Rosa",
+                address: "Av. Independencia #456",
+                image: "../assets/taller-de-cocina.jpg",
+                price: "$500 RD",
+                attendees: 12,
+                maxAttendees: 20,
+                featured: false,
+                interested: 34,
+                isAttending: false
+            },
+            {
+                id: 4,
+                title: "Torneo de Dominó Comunitario",
+                description: "Participa en nuestro torneo de dominó y gana premios increíbles.",
+                organizer: "Asociación de Vecinos",
+                category: "community",
+                date: "2024-01-22",
+                time: "16:00 - 20:00",
+                location: "Salón Comunitario",
+                address: "Calle Las Flores #789",
+                image: "../assets/torneo-de-domino.jpg",
+                price: "$100 RD",
+                attendees: 32,
+                maxAttendees: 64,
+                featured: false,
+                interested: 67,
+                isAttending: false
+            },
+            {
+                id: 5,
+                title: "Feria de Emprendedores Locales",
+                description: "Descubre productos únicos de emprendedores de tu comunidad.",
+                organizer: "ConectaBarrio",
+                category: "community",
+                date: "2024-01-27",
+                time: "09:00 - 17:00",
+                location: "Plaza del Mercado",
+                address: "Av. Bolívar #321",
+                image: "../assets/feria-de-emprendedores.jpg",
+                price: "Gratis",
+                attendees: 78,
+                maxAttendees: 200,
+                featured: false,
+                interested: 123,
+                isAttending: false
+            },
+            {
+                id: 6,
+                title: "Clase de Zumba al Aire Libre",
+                description: "Ejercítate y diviértete con nuestra clase de zumba gratuita.",
+                organizer: "Peluquería Estilo",
+                category: "sports",
+                date: "2024-01-19",
+                time: "07:00 - 08:00",
+                location: "Parque del Este",
+                address: "Calle del Parque #654",
+                image: "../assets/clase-de-zumba.jpg",
+                price: "Gratis",
+                attendees: 45,
+                maxAttendees: 100,
+                featured: false,
+                interested: 89,
+                isAttending: false
+            }
+        ];
+
+        // Variables para el calendario
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initEventsPage();
+            setupEventListeners();
+            renderEvents();
+            renderCalendar();
+            startFeaturedCountdown();
+        });
+
+        function initEventsPage() {
+            // Configuración inicial de la página
+            console.log('Página de eventos inicializada');
+        }
+
+        function setupEventListeners() {
+            // Navegación móvil
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+
+            // Toggle de vista
+            const viewOptions = document.querySelectorAll('.view-option');
+            viewOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const view = this.getAttribute('data-view');
+                    switchView(view);
+                });
+            });
+
+            // Filtros
+            document.getElementById('sortFilter').addEventListener('change', filterEvents);
+            document.getElementById('categoryFilter').addEventListener('change', filterEvents);
+            document.getElementById('dateFilter').addEventListener('change', filterEvents);
+
+            // Filtros rápidos
+            const filterTags = document.querySelectorAll('.filter-tag');
+            filterTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    filterTags.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    filterEvents();
+                });
+            });
+        }
+
+        function renderEvents() {
+            renderEventsGrid();
+            renderEventsList();
+        }
+
+        function renderEventsGrid() {
+            const container = document.getElementById('eventsGrid');
+            const nonFeaturedEvents = events.filter(event => !event.featured);
+            
+            container.innerHTML = nonFeaturedEvents.map(event => createEventCard(event)).join('');
+        }
+
+        function renderEventsList() {
+            const container = document.getElementById('eventsList');
+            const nonFeaturedEvents = events.filter(event => !event.featured);
+            
+            container.innerHTML = nonFeaturedEvents.map(event => createEventListItem(event)).join('');
+        }
+
+        function createEventCard(event) {
+            const eventDate = new Date(event.date);
+            const formattedDate = eventDate.toLocaleDateString('es-ES', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+
+            return `
+                <div class="event-card" data-event-id="${event.id}">
+                    ${event.featured ? `<div class="event-badge">⭐ Destacado</div>` : ''}
+                    <img src="${event.image}" alt="${event.title}" class="event-image" onerror="this.src='../assets/events/default.jpg'">
+                    
+                    <div class="event-content">
+                        <div class="event-date">
+                            <span>📅</span>
+                            <span>${formattedDate}</span>
+                        </div>
+
+                        <h3 class="event-title">${event.title}</h3>
+                        <div class="event-organizer">Organizado por: ${event.organizer}</div>
+
+                        <p class="event-description">${event.description}</p>
+
+                        <div class="event-meta">
+                            <div class="event-attendees">
+                                <span>👥</span>
+                                <span>${event.attendees}/${event.maxAttendees}</span>
+                            </div>
+                            <div>📍 ${event.location}</div>
+                        </div>
+
+                        <div class="event-actions">
+                            <button class="btn ${event.isAttending ? 'btn-success' : 'btn-primary'}" onclick="attendEvent(${event.id})">
+                                ${event.isAttending ? '✅ Asistes' : '👍 Asistiré'}
+                            </button>
+                            <button class="btn btn-outline" onclick="viewEvent(${event.id})">
+                                👀 Ver
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createEventListItem(event) {
+            const eventDate = new Date(event.date);
+            const day = eventDate.getDate();
+            const month = eventDate.toLocaleDateString('es-ES', { month: 'short' });
+
+            return `
+                <div class="event-list-item" data-event-id="${event.id}">
+                    <div class="event-date-circle">
+                        <div class="event-day">${day}</div>
+                        <div class="event-month">${month}</div>
+                    </div>
+                    
+                    <div class="event-list-info">
+                        <h3 class="event-list-title">${event.title}</h3>
+                        <div class="event-list-meta">
+                            <span>🕒 ${event.time}</span>
+                            <span>📍 ${event.location}</span>
+                            <span>🎫 ${event.price}</span>
+                        </div>
+                        <p class="event-description">${event.description}</p>
+                    </div>
+
+                    <div class="event-actions">
+                        <button class="btn ${event.isAttending ? 'btn-success' : 'btn-primary'}" onclick="attendEvent(${event.id})">
+                            ${event.isAttending ? '✅ Asistes' : '👍 Asistiré'}
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCalendar() {
+            const container = document.getElementById('calendarGrid');
+            const title = document.getElementById('calendarTitle');
+            
+            // Configurar título
+            const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                               "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+            title.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+            // Generar días de la semana
+            const dayNames = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+            let calendarHTML = '';
+
+            // Encabezados de días
+            dayNames.forEach(day => {
+                calendarHTML += `<div class="calendar-day-header">${day}</div>`;
+            });
+
+            // Obtener primer día del mes
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const startingDay = firstDay.getDay();
+
+            // Obtener último día del mes
+            const lastDay = new Date(currentYear, currentMonth + 1, 0);
+            const daysInMonth = lastDay.getDate();
+
+            // Días del mes anterior
+            const prevMonthLastDay = new Date(currentYear, currentMonth, 0).getDate();
+            for (let i = startingDay - 1; i >= 0; i--) {
+                const day = prevMonthLastDay - i;
+                calendarHTML += `<div class="calendar-day other-month">${day}</div>`;
+            }
+
+            // Días del mes actual
+            for (let day = 1; day <= daysInMonth; day++) {
+                const hasEvents = events.some(event => {
+                    const eventDate = new Date(event.date);
+                    return eventDate.getDate() === day && 
+                           eventDate.getMonth() === currentMonth && 
+                           eventDate.getFullYear() === currentYear;
+                });
+
+                const isToday = day === new Date().getDate() && 
+                               currentMonth === new Date().getMonth() && 
+                               currentYear === new Date().getFullYear();
+
+                const dayEvents = events.filter(event => {
+                    const eventDate = new Date(event.date);
+                    return eventDate.getDate() === day && 
+                           eventDate.getMonth() === currentMonth && 
+                           eventDate.getFullYear() === currentYear;
+                });
+
+                calendarHTML += `
+                    <div class="calendar-day ${hasEvents ? 'has-events' : ''} ${isToday ? 'today' : ''}" 
+                         onclick="showDayEvents(${day}, ${currentMonth}, ${currentYear})">
+                        <div class="day-number">${day}</div>
+                        <div class="day-events">
+                            ${dayEvents.slice(0, 2).map(event => `
+                                <div class="day-event" title="${event.title}">${event.title}</div>
+                            `).join('')}
+                            ${dayEvents.length > 2 ? `<div class="day-event">+${dayEvents.length - 2} más</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Días del próximo mes
+            const totalCells = 42; // 6 semanas
+            const remainingCells = totalCells - (startingDay + daysInMonth);
+            for (let day = 1; day <= remainingCells; day++) {
+                calendarHTML += `<div class="calendar-day other-month">${day}</div>`;
+            }
+
+            container.innerHTML = calendarHTML;
+        }
+
+        function switchView(view) {
+            // Ocultar todas las vistas
+            document.getElementById('eventsGrid').style.display = 'none';
+            document.getElementById('eventsList').style.display = 'none';
+            document.getElementById('calendarView').style.display = 'none';
+
+            // Mostrar vista seleccionada
+            switch(view) {
+                case 'grid':
+                    document.getElementById('eventsGrid').style.display = 'grid';
+                    break;
+                case 'list':
+                    document.getElementById('eventsList').style.display = 'flex';
+                    break;
+                case 'calendar':
+                    document.getElementById('calendarView').style.display = 'block';
+                    break;
+            }
+
+            // Actualizar botones activos
+            document.querySelectorAll('.view-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            document.querySelector(`[data-view="${view}"]`).classList.add('active');
+        }
+
+        function changeMonth(direction) {
+            currentMonth += direction;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            } else if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar();
+        }
+
+        function goToToday() {
+            const today = new Date();
+            currentMonth = today.getMonth();
+            currentYear = today.getFullYear();
+            renderCalendar();
+        }
+
+        function showDayEvents(day, month, year) {
+            const dayEvents = events.filter(event => {
+                const eventDate = new Date(event.date);
+                return eventDate.getDate() === day && 
+                       eventDate.getMonth() === month && 
+                       eventDate.getFullYear() === year;
+            });
+
+            if (dayEvents.length > 0) {
+                // Mostrar modal o redirigir a lista filtrada
+                console.log(`Eventos del ${day}/${month + 1}/${year}:`, dayEvents);
+                // Por ahora, solo mostramos en consola
+            }
+        }
+
+        function startFeaturedCountdown() {
+            const featuredEvent = events.find(event => event.featured);
+            if (featuredEvent) {
+                updateFeaturedCountdown();
+                setInterval(updateFeaturedCountdown, 1000);
+            }
+        }
+
+        function updateFeaturedCountdown() {
+            const featuredEvent = events.find(event => event.featured);
+            if (featuredEvent) {
+                const now = new Date();
+                const eventDate = new Date(featuredEvent.date + 'T14:00:00'); // Asumiendo 2:00 PM
+                const difference = eventDate - now;
+
+                if (difference > 0) {
+                    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+
+                    document.getElementById('countdown-days').textContent = days.toString().padStart(2, '0');
+                    document.getElementById('countdown-hours').textContent = hours.toString().padStart(2, '0');
+                    document.getElementById('countdown-minutes').textContent = minutes.toString().padStart(2, '0');
+                }
+            }
+        }
+
+        function filterEvents() {
+            const sortBy = document.getElementById('sortFilter').value;
+            const category = document.getElementById('categoryFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+            const activeFilter = document.querySelector('.filter-tag.active').dataset.filter;
+
+            let filteredEvents = events.filter(event => !event.featured);
+
+            // Filtro por categoría
+            if (category !== 'all') {
+                filteredEvents = filteredEvents.filter(event => event.category === category);
+            }
+
+            // Filtro por fecha
+            const now = new Date();
+            switch (dateFilter) {
+                case 'today':
+                    filteredEvents = filteredEvents.filter(event => {
+                        const eventDate = new Date(event.date);
+                        return eventDate.toDateString() === now.toDateString();
+                    });
+                    break;
+                case 'weekend':
+                    const nextSaturday = new Date(now);
+                    nextSaturday.setDate(now.getDate() + (6 - now.getDay()));
+                    const nextSunday = new Date(nextSaturday);
+                    nextSunday.setDate(nextSaturday.getDate() + 1);
+                    
+                    filteredEvents = filteredEvents.filter(event => {
+                        const eventDate = new Date(event.date);
+                        return eventDate >= nextSaturday && eventDate <= nextSunday;
+                    });
+                    break;
+                case 'week':
+                    const nextWeek = new Date(now);
+                    nextWeek.setDate(now.getDate() + 7);
+                    filteredEvents = filteredEvents.filter(event => {
+                        const eventDate = new Date(event.date);
+                        return eventDate >= now && eventDate <= nextWeek;
+                    });
+                    break;
+                case 'month':
+                    const nextMonth = new Date(now);
+                    nextMonth.setMonth(now.getMonth() + 1);
+                    filteredEvents = filteredEvents.filter(event => {
+                        const eventDate = new Date(event.date);
+                        return eventDate >= now && eventDate <= nextMonth;
+                    });
+                    break;
+            }
+
+            // Filtros rápidos
+            switch (activeFilter) {
+                case 'free':
+                    filteredEvents = filteredEvents.filter(event => event.price.toLowerCase() === 'gratis');
+                    break;
+                case 'featured':
+                    filteredEvents = filteredEvents.filter(event => event.featured);
+                    break;
+                case 'nearby':
+                    // Simular filtro por cercanía
+                    filteredEvents = filteredEvents.filter(event => event.attendees > 20);
+                    break;
+            }
+
+            // Ordenar
+            switch (sortBy) {
+                case 'date':
+                    filteredEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
+                    break;
+                case 'popular':
+                    filteredEvents.sort((a, b) => b.interested - a.interested);
+                    break;
+                case 'newest':
+                    filteredEvents.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    break;
+            }
+
+            // Re-renderizar eventos filtrados
+            const currentView = document.querySelector('.view-option.active').getAttribute('data-view');
+            if (currentView === 'grid') {
+                document.getElementById('eventsGrid').innerHTML = filteredEvents.map(event => createEventCard(event)).join('');
+            } else if (currentView === 'list') {
+                document.getElementById('eventsList').innerHTML = filteredEvents.map(event => createEventListItem(event)).join('');
+            }
+        }
+
+        // FUNCIONES DE INTERACCIÓN
+        function attendEvent(eventId) {
+            const event = events.find(e => e.id === eventId);
+            if (event) {
+                event.isAttending = !event.isAttending;
+                if (event.isAttending) {
+                    event.attendees++;
+                    showNotification(`¡Confirmaste tu asistencia a "${event.title}"!`, 'success');
+                } else {
+                    event.attendees--;
+                    showNotification(`Cancelaste tu asistencia a "${event.title}"`, 'info');
+                }
+                renderEvents();
+            }
+        }
+
+        function viewEvent(eventId) {
+            const event = events.find(e => e.id === eventId);
+            if (event) {
+                // En una app real, esto redirigiría a una página de detalles del evento
+                showNotification(`Viendo detalles de "${event.title}"`, 'info');
+                // window.location.href = `event-details.html?id=${eventId}`;
+            }
+        }
+
+        function shareEvent(eventId) {
+            const event = events.find(e => e.id === eventId);
+            if (event && navigator.share) {
+                navigator.share({
+                    title: event.title,
+                    text: `Mira este evento en ConectaBarrio: ${event.title} - ${event.date}`,
+                    url: window.location.href + `?event=${eventId}`
+                });
+            } else {
+                // Fallback
+                navigator.clipboard.writeText(`${event.title} - ${event.date} en ${event.location}`).then(() => {
+                    showNotification('Evento copiado al portapapeles', 'info');
+                });
+            }
+        }
+
+        function showCreateEventModal() {
+            showNotification('Función de crear evento disponible pronto', 'info');
+            // En una app real, esto abriría un modal para crear evento
+        }
+
+        function scrollToCalendar() {
+            document.getElementById('calendarView').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()">×</button>
+            `;
+
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: ${getNotificationColor(type)};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                animation: slideInRight 0.3s ease;
+                max-width: 400px;
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 4000);
+        }
+
+        function getNotificationColor(type) {
+            const colors = {
+                success: '#28a745',
+                error: '#dc3545',
+                warning: '#ffc107',
+                info: '#17a2b8'
+            };
+            return colors[type] || colors.info;
+        }
+
+        // Agregar estilos para notificaciones
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+
+            .notification button {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.2rem;
+                cursor: pointer;
+                padding: 0;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0.8;
+            }
+
+            .notification button:hover {
+                opacity: 1;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

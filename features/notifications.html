@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificaciones - ConectaBarrio</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        :root {
+            --primary: #2E86AB;
+            --secondary: #A23B72;
+            --accent: #F18F01;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f8f9fa;
+        }
+
+
+        /* MAIN CONTENT */
+        .notifications-page {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 5%;
+        }
+
+        /* HEADER */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            color: var(--dark);
+            font-size: 1.8rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* STATS CARDS */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* FILTERS */
+        .filters-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .filters-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tag {
+            background: var(--light);
+            border: 1px solid #e9ecef;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-tag:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .filter-tag.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* NOTIFICATIONS LIST */
+        .notifications-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .notifications-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notifications-header h2 {
+            color: var(--dark);
+            font-size: 1.2rem;
+        }
+
+        .notifications-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .notification-group {
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .group-header {
+            padding: 1rem 1.5rem;
+            background: var(--light);
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .group-date {
+            color: var(--gray);
+            font-size: 0.9rem;
+            font-weight: normal;
+        }
+
+        .notification-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1.5rem;
+            border-bottom: 1px solid #f8f9fa;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .notification-item:hover {
+            background: rgba(46, 134, 171, 0.02);
+        }
+
+        .notification-item.unread {
+            background: rgba(46, 134, 171, 0.05);
+        }
+
+        .notification-item.unread::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--primary);
+        }
+
+        .notification-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .notification-icon.order {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+
+        .notification-icon.offer {
+            background: rgba(241, 143, 1, 0.1);
+            color: var(--accent);
+        }
+
+        .notification-icon.event {
+            background: rgba(162, 59, 114, 0.1);
+            color: var(--secondary);
+        }
+
+        .notification-icon.system {
+            background: rgba(108, 117, 125, 0.1);
+            color: var(--gray);
+        }
+
+        .notification-icon.review {
+            background: rgba(46, 134, 171, 0.1);
+            color: var(--primary);
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+            line-height: 1.4;
+        }
+
+        .notification-message {
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+
+        .notification-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--gray);
+            font-size: 0.8rem;
+        }
+
+        .notification-time {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .notification-item:hover .notification-actions {
+            opacity: 1;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1a6a8f;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .btn-icon:hover {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--gray);
+        }
+
+        .empty-state img {
+            width: 150px;
+            margin-bottom: 2rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        /* SETTINGS PANEL */
+        .settings-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .settings-header h2 {
+            color: var(--dark);
+            font-size: 1.5rem;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .setting-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .setting-group h3 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .setting-info h4 {
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .setting-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--success);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        /* BULK ACTIONS */
+        .bulk-actions {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .bulk-actions.show {
+            display: flex;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateX(-50%) translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .selected-count {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .notifications-page {
+                padding: 1rem;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .stats-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .notification-item {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .notification-actions {
+                opacity: 1;
+                justify-content: flex-end;
+            }
+
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bulk-actions {
+                width: 90%;
+                flex-direction: column;
+                border-radius: 12px;
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .notification-meta {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+<!-- En el body de cada página -->
+<div id="dynamic-navbar"></div>
+<!-- El resto del contenido de tu página -->
+
+    <!-- MAIN CONTENT -->
+    <main class="notifications-page">
+        <!-- HEADER -->
+        <div class="page-header">
+            <h1>🔔 Centro de Notificaciones</h1>
+            <div class="header-actions">
+                <button class="btn btn-outline" onclick="markAllAsRead()">
+                    📪 Marcar todo como leído
+                </button>
+                <button class="btn btn-primary" onclick="toggleSettings()">
+                    ⚙️ Configuración
+                </button>
+            </div>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-cards">
+            <div class="stat-card">
+                <div class="stat-number" id="totalNotifications">24</div>
+                <div class="stat-label">Total</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="unreadNotifications">8</div>
+                <div class="stat-label">No leídas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="todayNotifications">5</div>
+                <div class="stat-label">Hoy</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="importantNotifications">3</div>
+                <div class="stat-label">Importantes</div>
+            </div>
+        </div>
+
+        <!-- FILTERS -->
+        <section class="filters-section">
+            <div class="filters-row">
+                <div class="filter-tags">
+                    <div class="filter-tag active" data-filter="all">Todas</div>
+                    <div class="filter-tag" data-filter="unread">No leídas</div>
+                    <div class="filter-tag" data-filter="orders">Pedidos</div>
+                    <div class="filter-tag" data-filter="offers">Ofertas</div>
+                    <div class="filter-tag" data-filter="events">Eventos</div>
+                    <div class="filter-tag" data-filter="system">Sistema</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NOTIFICATIONS LIST -->
+        <section class="notifications-container">
+            <div class="notifications-header">
+                <h2>Tus Notificaciones</h2>
+                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+                    <span style="font-size: 0.9rem; color: var(--gray);">Seleccionar todas</span>
+                </label>
+            </div>
+
+            <div class="notifications-list" id="notificationsList">
+                <!-- Las notificaciones se cargan dinámicamente aquí -->
+            </div>
+        </section>
+
+        <!-- SETTINGS PANEL -->
+        <section class="settings-panel" id="settingsPanel" style="display: none;">
+            <div class="settings-header">
+                <h2>⚙️ Configuración de Notificaciones</h2>
+                <button class="btn btn-outline" onclick="toggleSettings()">
+                    ❌ Cerrar
+                </button>
+            </div>
+
+            <div class="settings-grid">
+                <div class="setting-group">
+                    <h3>📱 Notificaciones Push</h3>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Notificaciones en navegador</h4>
+                            <p>Recibir notificaciones incluso cuando no estés en la página</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="pushNotifications" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h3>📧 Notificaciones por Email</h3>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Resumen diario</h4>
+                            <p>Recibir un resumen de actividades cada día</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="dailyDigest" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Notificaciones importantes</h4>
+                            <p>Solo notificaciones críticas y urgentes</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="importantOnly">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h3>🔔 Tipos de Notificaciones</h3>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Estado de pedidos</h4>
+                            <p>Actualizaciones sobre tus pedidos</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="orderNotifications" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Ofertas especiales</h4>
+                            <p>Promociones y descuentos</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="offerNotifications" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Eventos del barrio</h4>
+                            <p>Eventos y actividades cercanas</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="eventNotifications" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Reseñas y calificaciones</h4>
+                            <p>Cuando alguien comente en tus reseñas</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="reviewNotifications" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h3>⏰ Horario de Notificaciones</h3>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Modo nocturno</h4>
+                            <p>Silenciar notificaciones entre 10 PM y 7 AM</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="quietHours">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Notificaciones en fin de semana</h4>
+                            <p>Recibir notificaciones los sábados y domingos</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="weekendNotifications" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e9ecef;">
+                <button class="btn btn-outline" onclick="resetSettings()">
+                    🔄 Restablecer
+                </button>
+                <button class="btn btn-primary" onclick="saveSettings()">
+                    💾 Guardar Configuración
+                </button>
+            </div>
+        </section>
+
+        <!-- BULK ACTIONS -->
+        <div class="bulk-actions" id="bulkActions">
+            <span class="selected-count" id="selectedCount">0 notificaciones seleccionadas</span>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="btn btn-outline" onclick="markSelectedAsRead()">
+                    📪 Marcar como leído
+                </button>
+                <button class="btn btn-outline" onclick="deleteSelected()">
+                    🗑️ Eliminar
+                </button>
+                <button class="btn btn-icon" onclick="clearSelection()" title="Cancelar">
+                    ❌
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DATOS DE NOTIFICACIONES (simulados)
+        const notifications = [
+            {
+                id: 1,
+                type: 'order',
+                title: '¡Tu pedido está en camino!',
+                message: 'Tu pedido #12345 de Colmado San Miguel salió para entrega. Llegará en aproximadamente 30 minutos.',
+                timestamp: '2024-01-15T14:30:00',
+                read: false,
+                important: true,
+                action: {
+                    type: 'view_order',
+                    label: 'Ver Pedido',
+                    url: '../shopping/order-confirmed.html?id=12345'
+                }
+            },
+            {
+                id: 2,
+                type: 'offer',
+                title: 'Nueva oferta disponible',
+                message: 'Colmado San Miguel tiene un 20% de descuento en productos lácteos. Válido hasta mañana.',
+                timestamp: '2024-01-15T12:15:00',
+                read: false,
+                important: false,
+                action: {
+                    type: 'view_offer',
+                    label: 'Ver Oferta',
+                    url: 'offers.html?offer=2'
+                }
+            },
+            {
+                id: 3,
+                type: 'event',
+                title: 'Recordatorio de evento',
+                message: 'No te olvides del Torneo de Dominó Comunitario mañana a las 4:00 PM en el Salón Comunitario.',
+                timestamp: '2024-01-15T10:00:00',
+                read: true,
+                important: false,
+                action: {
+                    type: 'view_event',
+                    label: 'Ver Evento',
+                    url: 'events.html?event=4'
+                }
+            },
+            {
+                id: 4,
+                type: 'review',
+                title: 'Nueva respuesta a tu reseña',
+                message: 'Colmado San Miguel respondió a tu reseña: "¡Gracias por tus comentarios! Siempre trabajamos para mejorar."',
+                timestamp: '2024-01-14T16:45:00',
+                read: true,
+                important: false,
+                action: {
+                    type: 'view_review',
+                    label: 'Ver Respuesta',
+                    url: '../user/user-reviews.html'
+                }
+            },
+            {
+                id: 5,
+                type: 'system',
+                title: 'Actualización del sistema',
+                message: 'Hemos mejorado la experiencia de búsqueda. Ahora puedes filtrar por distancia y horarios.',
+                timestamp: '2024-01-14T09:30:00',
+                read: true,
+                important: false,
+                action: {
+                    type: 'learn_more',
+                    label: 'Saber más',
+                    url: '../info/how-it-works.html'
+                }
+            },
+            {
+                id: 6,
+                type: 'order',
+                title: 'Pedido entregado exitosamente',
+                message: 'Tu pedido #12344 fue entregado. ¡Esperamos que disfrutes tus productos!',
+                timestamp: '2024-01-13T18:20:00',
+                read: true,
+                important: false,
+                action: {
+                    type: 'rate_order',
+                    label: 'Calificar Pedido',
+                    url: '../user/user-orders.html'
+                }
+            },
+            {
+                id: 7,
+                type: 'offer',
+                title: 'Oferta por terminar',
+                message: 'La oferta 2x1 en panes de Panadería Doña Rosa termina en 2 horas. ¡No te la pierdas!',
+                timestamp: '2024-01-13T15:10:00',
+                read: true,
+                important: true,
+                action: {
+                    type: 'view_offer',
+                    label: 'Comprar Ahora',
+                    url: 'offers.html?offer=1'
+                }
+            },
+            {
+                id: 8,
+                type: 'event',
+                title: 'Nuevo evento en tu barrio',
+                message: 'Fiesta Patronal del Barrio este sábado con música en vivo y comida tradicional.',
+                timestamp: '2024-01-12T11:00:00',
+                read: true,
+                important: false,
+                action: {
+                    type: 'view_event',
+                    label: 'Ver Detalles',
+                    url: 'events.html?event=1'
+                }
+            }
+        ];
+
+        // Variables globales
+        let selectedNotifications = new Set();
+        let currentFilter = 'all';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initNotificationsPage();
+            setupEventListeners();
+            renderNotifications();
+            updateStats();
+        });
+
+        function initNotificationsPage() {
+            // Cargar configuración guardada
+            loadSettings();
+        }
+
+        function setupEventListeners() {
+            // Navegación móvil
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+
+            // Filtros
+            const filterTags = document.querySelectorAll('.filter-tag');
+            filterTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    currentFilter = this.getAttribute('data-filter');
+                    filterTags.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    renderNotifications();
+                });
+            });
+        }
+
+        function renderNotifications() {
+            const container = document.getElementById('notificationsList');
+            let filteredNotifications = [...notifications];
+
+            // Aplicar filtro
+            switch (currentFilter) {
+                case 'unread':
+                    filteredNotifications = filteredNotifications.filter(n => !n.read);
+                    break;
+                case 'orders':
+                    filteredNotifications = filteredNotifications.filter(n => n.type === 'order');
+                    break;
+                case 'offers':
+                    filteredNotifications = filteredNotifications.filter(n => n.type === 'offer');
+                    break;
+                case 'events':
+                    filteredNotifications = filteredNotifications.filter(n => n.type === 'event');
+                    break;
+                case 'system':
+                    filteredNotifications = filteredNotifications.filter(n => n.type === 'system');
+                    break;
+            }
+
+            // Agrupar por fecha
+            const groupedNotifications = groupNotificationsByDate(filteredNotifications);
+
+            if (filteredNotifications.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <img src="../assets/icons/no-notifications.svg" alt="Sin notificaciones">
+                        <h3>No hay notificaciones</h3>
+                        <p>No tienes notificaciones ${currentFilter !== 'all' ? 'con este filtro' : 'en este momento'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = Object.keys(groupedNotifications).map(date => `
+                <div class="notification-group">
+                    <div class="group-header">
+                        <span>${formatGroupDate(date)}</span>
+                        <span class="group-date">${formatDate(new Date(date))}</span>
+                    </div>
+                    ${groupedNotifications[date].map(notification => createNotificationItem(notification)).join('')}
+                </div>
+            `).join('');
+        }
+
+        function groupNotificationsByDate(notificationsList) {
+            const groups = {};
+            
+            notificationsList.forEach(notification => {
+                const date = new Date(notification.timestamp).toDateString();
+                if (!groups[date]) {
+                    groups[date] = [];
+                }
+                groups[date].push(notification);
+            });
+
+            // Ordenar grupos por fecha (más reciente primero)
+            const sortedGroups = {};
+            Object.keys(groups)
+                .sort((a, b) => new Date(b) - new Date(a))
+                .forEach(date => {
+                    // Ordenar notificaciones dentro del grupo (más reciente primero)
+                    groups[date].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                    sortedGroups[date] = groups[date];
+                });
+
+            return sortedGroups;
+        }
+
+        function createNotificationItem(notification) {
+            const iconConfig = {
+                'order': { icon: '📦', class: 'order' },
+                'offer': { icon: '🔥', class: 'offer' },
+                'event': { icon: '🎉', class: 'event' },
+                'system': { icon: '⚙️', class: 'system' },
+                'review': { icon: '⭐', class: 'review' }
+            };
+
+            const config = iconConfig[notification.type] || { icon: '🔔', class: 'system' };
+
+            return `
+                <div class="notification-item ${notification.read ? '' : 'unread'}" data-notification-id="${notification.id}">
+                    <div class="notification-icon ${config.class}">
+                        ${config.icon}
+                    </div>
+                    
+                    <div class="notification-content">
+                        <div class="notification-title">${notification.title}</div>
+                        <p class="notification-message">${notification.message}</p>
+                        
+                        <div class="notification-meta">
+                            <div class="notification-time">
+                                <span>🕒</span>
+                                <span>${formatTime(new Date(notification.timestamp))}</span>
+                            </div>
+                            ${notification.important ? '<span style="color: var(--accent);">⭐ Importante</span>' : ''}
+                        </div>
+                    </div>
+
+                    <div class="notification-actions">
+                        <input type="checkbox" class="notification-checkbox" onchange="toggleNotificationSelection(${notification.id})" 
+                               style="display: none;">
+                        ${notification.action ? `
+                            <button class="btn btn-primary" onclick="handleNotificationAction(${notification.id})">
+                                ${notification.action.label}
+                            </button>
+                        ` : ''}
+                        <button class="btn-icon" onclick="markAsRead(${notification.id})" title="Marcar como leído">
+                            📪
+                        </button>
+                        <button class="btn-icon" onclick="deleteNotification(${notification.id})" title="Eliminar">
+                            🗑️
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleNotificationSelection(notificationId) {
+            if (selectedNotifications.has(notificationId)) {
+                selectedNotifications.delete(notificationId);
+            } else {
+                selectedNotifications.add(notificationId);
+            }
+            updateBulkActions();
+        }
+
+        function toggleSelectAll() {
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.notification-checkbox');
+            
+            if (selectAll.checked) {
+                // Seleccionar todas las notificaciones visibles
+                const visibleNotifications = getFilteredNotifications();
+                visibleNotifications.forEach(notification => {
+                    selectedNotifications.add(notification.id);
+                });
+            } else {
+                selectedNotifications.clear();
+            }
+            
+            updateBulkActions();
+            // En una implementación real, aquí actualizarías los checkboxes visualmente
+        }
+
+        function updateBulkActions() {
+            const bulkActions = document.getElementById('bulkActions');
+            const selectedCount = document.getElementById('selectedCount');
+            
+            selectedCount.textContent = `${selectedNotifications.size} notificación${selectedNotifications.size !== 1 ? 'es' : ''} seleccionada${selectedNotifications.size !== 1 ? 's' : ''}`;
+            
+            if (selectedNotifications.size > 0) {
+                bulkActions.classList.add('show');
+            } else {
+                bulkActions.classList.remove('show');
+            }
+        }
+
+        function clearSelection() {
+            selectedNotifications.clear();
+            document.getElementById('selectAll').checked = false;
+            updateBulkActions();
+        }
+
+        function markSelectedAsRead() {
+            selectedNotifications.forEach(id => {
+                markAsRead(id, false);
+            });
+            selectedNotifications.clear();
+            updateBulkActions();
+            renderNotifications();
+            updateStats();
+            showNotification('Notificaciones marcadas como leídas', 'success');
+        }
+
+        function deleteSelected() {
+            if (confirm(`¿Estás seguro de que quieres eliminar ${selectedNotifications.size} notificación${selectedNotifications.size !== 1 ? 'es' : ''}?`)) {
+                selectedNotifications.forEach(id => {
+                    deleteNotification(id, false);
+                });
+                selectedNotifications.clear();
+                updateBulkActions();
+                renderNotifications();
+                updateStats();
+                showNotification('Notificaciones eliminadas', 'success');
+            }
+        }
+
+        function markAsRead(notificationId, showMessage = true) {
+            const notification = notifications.find(n => n.id === notificationId);
+            if (notification && !notification.read) {
+                notification.read = true;
+                if (showMessage) {
+                    showNotification('Notificación marcada como leída', 'success');
+                }
+                renderNotifications();
+                updateStats();
+            }
+        }
+
+        function markAllAsRead() {
+            notifications.forEach(notification => {
+                notification.read = true;
+            });
+            renderNotifications();
+            updateStats();
+            showNotification('Todas las notificaciones marcadas como leídas', 'success');
+        }
+
+        function deleteNotification(notificationId, showMessage = true) {
+            const index = notifications.findIndex(n => n.id === notificationId);
+            if (index !== -1) {
+                notifications.splice(index, 1);
+                if (showMessage) {
+                    showNotification('Notificación eliminada', 'success');
+                }
+                renderNotifications();
+                updateStats();
+            }
+        }
+
+        function handleNotificationAction(notificationId) {
+            const notification = notifications.find(n => n.id === notificationId);
+            if (notification && notification.action) {
+                // Marcar como leída al interactuar
+                markAsRead(notificationId, false);
+                // Redirigir a la acción
+                window.location.href = notification.action.url;
+            }
+        }
+
+        function updateStats() {
+            const total = notifications.length;
+            const unread = notifications.filter(n => !n.read).length;
+            const today = notifications.filter(n => {
+                const notificationDate = new Date(n.timestamp);
+                const today = new Date();
+                return notificationDate.toDateString() === today.toDateString();
+            }).length;
+            const important = notifications.filter(n => n.important && !n.read).length;
+
+            document.getElementById('totalNotifications').textContent = total;
+            document.getElementById('unreadNotifications').textContent = unread;
+            document.getElementById('todayNotifications').textContent = today;
+            document.getElementById('importantNotifications').textContent = important;
+        }
+
+        function getFilteredNotifications() {
+            switch (currentFilter) {
+                case 'unread':
+                    return notifications.filter(n => !n.read);
+                case 'orders':
+                    return notifications.filter(n => n.type === 'order');
+                case 'offers':
+                    return notifications.filter(n => n.type === 'offer');
+                case 'events':
+                    return notifications.filter(n => n.type === 'event');
+                case 'system':
+                    return notifications.filter(n => n.type === 'system');
+                default:
+                    return notifications;
+            }
+        }
+
+        // CONFIGURACIÓN
+        function toggleSettings() {
+            const panel = document.getElementById('settingsPanel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem('notificationSettings')) || {
+                pushNotifications: true,
+                dailyDigest: true,
+                importantOnly: false,
+                orderNotifications: true,
+                offerNotifications: true,
+                eventNotifications: true,
+                reviewNotifications: true,
+                quietHours: false,
+                weekendNotifications: true
+            };
+
+            // Aplicar configuración a los toggles
+            Object.keys(settings).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.checked = settings[key];
+                }
+            });
+        }
+
+        function saveSettings() {
+            const settings = {
+                pushNotifications: document.getElementById('pushNotifications').checked,
+                dailyDigest: document.getElementById('dailyDigest').checked,
+                importantOnly: document.getElementById('importantOnly').checked,
+                orderNotifications: document.getElementById('orderNotifications').checked,
+                offerNotifications: document.getElementById('offerNotifications').checked,
+                eventNotifications: document.getElementById('eventNotifications').checked,
+                reviewNotifications: document.getElementById('reviewNotifications').checked,
+                quietHours: document.getElementById('quietHours').checked,
+                weekendNotifications: document.getElementById('weekendNotifications').checked
+            };
+
+            localStorage.setItem('notificationSettings', JSON.stringify(settings));
+            showNotification('Configuración guardada exitosamente', 'success');
+        }
+
+        function resetSettings() {
+            if (confirm('¿Restablecer la configuración a los valores predeterminados?')) {
+                localStorage.removeItem('notificationSettings');
+                loadSettings();
+                showNotification('Configuración restablecida', 'info');
+            }
+        }
+
+        // FUNCIONES AUXILIARES
+        function formatGroupDate(dateString) {
+            const date = new Date(dateString);
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            if (date.toDateString() === today.toDateString()) {
+                return 'Hoy';
+            } else if (date.toDateString() === yesterday.toDateString()) {
+                return 'Ayer';
+            } else {
+                return formatDate(date);
+            }
+        }
+
+        function formatDate(date) {
+            return date.toLocaleDateString('es-ES', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        function formatTime(date) {
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / (1000 * 60));
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+            if (diffMins < 1) {
+                return 'Ahora mismo';
+            } else if (diffMins < 60) {
+                return `Hace ${diffMins} min`;
+            } else if (diffHours < 24) {
+                return `Hace ${diffHours} h`;
+            } else if (diffDays === 1) {
+                return 'Ayer';
+            } else if (diffDays < 7) {
+                return `Hace ${diffDays} días`;
+            } else {
+                return date.toLocaleDateString('es-ES');
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()">×</button>
+            `;
+
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: ${getNotificationColor(type)};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                animation: slideInRight 0.3s ease;
+                max-width: 400px;
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 4000);
+        }
+
+        function getNotificationColor(type) {
+            const colors = {
+                success: '#28a745',
+                error: '#dc3545',
+                warning: '#ffc107',
+                info: '#17a2b8'
+            };
+            return colors[type] || colors.info;
+        }
+
+        // Agregar estilos para notificaciones
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+
+            .notification button {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.2rem;
+                cursor: pointer;
+                padding: 0;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0.8;
+            }
+
+            .notification button:hover {
+                opacity: 1;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>
