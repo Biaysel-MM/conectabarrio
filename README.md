@@ -1,7 +1,7 @@
-# conectabarrio
+
 conectabarrio-frontend/
 │
-├── index.html                      (Home)
+├── index.html                      (Inicio)
 │
 ├── auth/
 │   ├── login.html
@@ -16,41 +16,42 @@ conectabarrio-frontend/
 ├── shopping/
 │   ├── cart.html
 │   ├── checkout.html
-│   └── order-confirmed.html
+│   └── pedido-confirmado.html
 │
-├── user/
-│   ├── user-dashboard.html
-│   ├── user-profile.html
-│   ├── user-reviews.html
-│   └── user-orders.html
+├── usuario/
+│   ├── panel-usuario.html
+│   ├── perfil-usuario.html
+│   ├── opiniones-usuario.html
+│   └── pedidos-usuario.html
 │
-├── business/
-│   ├── business-dashboard.html
-│   ├── business-products.html
-│   ├── business-orders.html
-│   ├── business-reviews.html
-│   └── business-profile.html
+├── negocio/
+│   ├── panel-negocio.html
+│   ├── productos-negocio.html
+│   ├── pedidos-negocio.html
+│   ├── opiniones-negocio.html
+│   └── perfil-negocio.html
 │
-├── features/
-│   ├── offers.html
-│   ├── events.html
-│   ├── notifications.html
-│   ├── neighborhood.html
-│   └── advanced-search.html
+├── características/
+│   ├── ofertas.html
+│   ├── eventos.html
+│   ├── notificaciones.html
+│   ├── barrio.html
+│   └── búsqueda-avanzada.html
 │
-├── info/
-│   ├── about.html
-│   ├── how-it-works.html
+├── información/
+│   ├── acerca-de.html
+│   ├── cómo-funciona.html
 │   ├── faq.html
-│   ├── support.html
-│   └── contact.html
+│   ├── soporte.html
+│   └── contacto.html
 │
 ├── css/
-│   └── style.css
+│   └── estilo.css
 │
 ├── js/
 │   └── main.js
 │
 └── assets/
-    └── todas las imagenes y iconos del programa
+    └── imágenes, íconos y recursos del programa
+
     
